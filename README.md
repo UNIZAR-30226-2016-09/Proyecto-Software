@@ -1,2 +1,2 @@
 # Proyecto-Software
-Trabajo de la asignatura de Poryecto Software de G9 15-16
+Trabajo de la asignatura de Proyecto Software de G9 15-16
