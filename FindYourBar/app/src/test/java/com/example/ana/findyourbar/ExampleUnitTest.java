@@ -1,4 +1,4 @@
-package com.g9.findyourbar;
+package com.example.ana.findyourbar;
 
 import org.junit.Test;
 
