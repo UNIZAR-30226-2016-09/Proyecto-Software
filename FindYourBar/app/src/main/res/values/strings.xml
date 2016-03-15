@@ -3,4 +3,5 @@
     <string name="find_bar">Buscar bar</string>
     <string name="app_description">Tu app para encontrar todos los bares de copas en Zaragoza</string>
     <string name="action_settings">Ajustes</string>
+    <string name="no_bar">No hay bares</string>
 </resources>
