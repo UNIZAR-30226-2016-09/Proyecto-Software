@@ -1,5 +1,6 @@
 package bar;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -7,13 +8,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TableLayout;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 
 /**
  * Created by Ana on 15/03/2016.
@@ -22,6 +19,7 @@ import java.util.ArrayList;
 public class SearchBar extends AppCompatActivity {
 
     private ListView mList;
+    private Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,9 +30,42 @@ public class SearchBar extends AppCompatActivity {
 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.searchIcon:
-                //Show side menu
-                fillData();
+            case R.id.menu_name:
+                dialog = new Dialog(this);
+                //Open dialog to allow filter by name
+                dialog.setTitle(R.string.menu_name);
+                dialog.setContentView(R.layout.dialog_namemenu);
+                dialog.show();
+                return true;
+            case R.id.nameAcept:
+                dialog.dismiss();
+            case R.id.menu_open:
+                dialog = new Dialog(this);
+                //Open dialog to allow filter by open hour
+                dialog.setTitle(R.string.menu_open);
+                dialog.setContentView(R.layout.dialog_openmenu);
+                dialog.show();
+                return true;
+            case R.id.menu_close:
+                dialog = new Dialog(this);
+                //Open dialog to allow filter by close hour
+                dialog.setTitle(R.string.menu_close);
+                dialog.setContentView(R.layout.dialog_closemenu);
+                dialog.show();
+                return true;
+            case R.id.menu_music:
+                dialog = new Dialog(this);
+                //Open dialog to allow filter by music genre
+                dialog.setTitle(R.string.menu_music);
+                dialog.setContentView(R.layout.dialog_musicmenu);
+                dialog.show();
+                return true;
+            case R.id.menu_age:
+                dialog = new Dialog(this);
+                //Open dialog to allow filter by legal age to access
+                dialog.setTitle(R.string.menu_age);
+                dialog.setContentView(R.layout.dialog_agemenu);
+                dialog.show();
                 return true;
             default:
                     return super.onOptionsItemSelected(item);
@@ -44,7 +75,7 @@ public class SearchBar extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.options_menu, menu);
+        inflater.inflate(R.menu.search_menu, menu);
         return true;
     }
 
@@ -53,30 +84,6 @@ public class SearchBar extends AppCompatActivity {
      */
     private void fillData() {
         mList.setVisibility(View.VISIBLE);
-/*
-        // Create an array to specify the fields we want to display in the list (only TITLE)
-        ArrayList<String> bar = new ArrayList();
-        bar.add("Bar1");
-        bar.add("Bar2");
-
-        // Create an array to specify the fields we want to display in the list (only TITLE)
-        ArrayList<Integer> barImage = new ArrayList();
-/*        ImageView bar1 = (ImageView)findViewById(R.id.image);
-        bar1.setImageResource(R.mipmap.drink);
-
-        ImageView bar2 = (ImageView)findViewById(R.id.image);
-        bar2.setImageResource(R.mipmap.tool);
-
-        barImage.add(R.mipmap.drink);
-        barImage.add(R.mipmap.tool);
-
-        // Now create an array adapter and set it to display using our row
-        ArrayAdapter<String> bars =
-                new ArrayAdapter(this, R.layout.activity_search, R.id.text, bar);
-        ArrayAdapter<Integer> barsImage =
-                new ArrayAdapter(this, R.layout.activity_search, R.id.image, barImage);
-        mList.setAdapter(bars);
-        mList.setAdapter(barsImage);*/
 
         final String[] web = {
                 "Bar1",
@@ -102,6 +109,5 @@ public class SearchBar extends AppCompatActivity {
 
             }
         });
-
     }
 }

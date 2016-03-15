@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:textSize="@dimen/text_size"
+        android:text="Seleccione una edad mínima de entrada al bar por la que que buscar:"/>
+
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp">
+
+        <RadioButton
+            android:id="@+id/age1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/age1" />
+
+        <RadioButton
+            android:id="@+id/age2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/age2" />
+
+        <RadioButton
+            android:id="@+id/age3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/age3" />
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/ageAcept"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/acept"
+        android:layout_margin="16dp"
+        android:textColor="@color/letter_actionBar"
+        android:layout_gravity="center"/>
+
+</LinearLayout>

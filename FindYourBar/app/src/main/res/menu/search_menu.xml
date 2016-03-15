@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/searchIcon"
+        android:title="search"
+        android:icon="@mipmap/tool_white"
+        app:showAsAction="ifRoom|withText">
+        <menu>
+            <item
+                android:id="@+id/menu_name"
+                android:title="@string/menu_name"/>
+            <item
+                android:id="@+id/menu_open"
+                android:title="@string/menu_open"/>
+            <item
+                android:id="@+id/menu_close"
+                android:title="@string/menu_close"/>
+            <item
+                android:id="@+id/menu_music"
+                android:title="@string/menu_music"/>
+            <item
+                android:id="@+id/menu_age"
+                android:title="@string/menu_age"/>
+            <item
+                android:id="@+id/searchM"
+                android:title="@string/searchI"/>
+        </menu>
+    </item>
+</menu>

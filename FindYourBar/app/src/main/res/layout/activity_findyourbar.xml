@@ -20,8 +20,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp"
-        android:text="@string/find_bar"
+        android:text="@string/search_bar"
         android:drawableLeft="@mipmap/tool"
+        android:background="@drawable/border"
         android:textSize="24sp"
         android:layout_gravity="center_vertical|center_horizontal"
         />
