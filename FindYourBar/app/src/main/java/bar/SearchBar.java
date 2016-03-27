@@ -1,74 +1,66 @@
 package bar;
 
-import android.app.Dialog;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.Toast;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
-
-/**
- * Created by Ana on 15/03/2016.
- */
+import java.util.ArrayList;
+import java.util.List;
 
 public class SearchBar extends AppCompatActivity {
 
-    private ListView mList;
-    private Dialog dialog;
+    private RecyclerView mList;
+    private BarAdapter mAdapter;
+    // Identificadores para los fragmentos
+    private static final String menu_name = "MENU_NAME";
+    private static final String menu_open = "MENU_OPEN";
+    private static final String menu_close = "MENU_CLOSE";
+    private static final String menu_music = "MENU_MUSIC";
+    private static final String menu_age = "MENU_AGE";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        mList = (ListView)findViewById(R.id.list);
+        mList = (RecyclerView) findViewById(R.id.recyclerlist);
+        mList.setLayoutManager(new LinearLayoutManager(this));
+        fillData();
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_name:
-                dialog = new Dialog(this);
-                //Open dialog to allow filter by name
-                dialog.setTitle(R.string.menu_name);
-                dialog.setContentView(R.layout.dialog_namemenu);
-                dialog.show();
+                DialogFragment name = new SearchNameDialogFragment();
+                name.show(getSupportFragmentManager(), menu_name);
                 return true;
-            case R.id.nameAcept:
-                dialog.dismiss();
             case R.id.menu_open:
-                dialog = new Dialog(this);
-                //Open dialog to allow filter by open hour
-                dialog.setTitle(R.string.menu_open);
-                dialog.setContentView(R.layout.dialog_openmenu);
-                dialog.show();
+                DialogFragment opening = new SearchOpeningDialogFragment();
+                opening.show(getSupportFragmentManager(), menu_open);
                 return true;
             case R.id.menu_close:
-                dialog = new Dialog(this);
-                //Open dialog to allow filter by close hour
-                dialog.setTitle(R.string.menu_close);
-                dialog.setContentView(R.layout.dialog_closemenu);
-                dialog.show();
+                DialogFragment closing = new SearchClosingDialogFragment();
+                closing.show(getSupportFragmentManager(), menu_close);
                 return true;
             case R.id.menu_music:
-                dialog = new Dialog(this);
-                //Open dialog to allow filter by music genre
-                dialog.setTitle(R.string.menu_music);
-                dialog.setContentView(R.layout.dialog_musicmenu);
-                dialog.show();
+                DialogFragment music = new SearchMusicDialogFragment();
+                music.show(getSupportFragmentManager(), menu_music);
                 return true;
             case R.id.menu_age:
-                dialog = new Dialog(this);
-                //Open dialog to allow filter by legal age to access
-                dialog.setTitle(R.string.menu_age);
-                dialog.setContentView(R.layout.dialog_agemenu);
-                dialog.show();
+                DialogFragment age = new SearchAgeDialogFragment();
+                age.show(getSupportFragmentManager(), menu_age);
                 return true;
             default:
-                    return super.onOptionsItemSelected(item);
+                return super.onOptionsItemSelected(item);
         }
     }
 
@@ -79,35 +71,52 @@ public class SearchBar extends AppCompatActivity {
         return true;
     }
 
+
     /**
-     * Show bars (stored in data base order alphabetically)
+     * Rellena el la lista de bares
      */
     private void fillData() {
-        mList.setVisibility(View.VISIBLE);
+        List<Bar> bares = new ArrayList<>();
+        for (int i = 0; i < 100; i++) {
+            bares.add(new Bar("Bar " + i, "Descripcion " + i));
+        }
+        mAdapter = new BarAdapter(bares);
+        mList.setAdapter(mAdapter);
+    }
 
-        final String[] web = {
-                "Bar1",
-                "Bar2",
-                "Bar3"
-        } ;
-        Integer[] imageId = {
-                R.mipmap.drink,
-                R.mipmap.drink,
-                R.mipmap.drink
-        };
+    private class BarHolder extends RecyclerView.ViewHolder {
+        public TextView mNombre;
 
-        CustomList adapter = new
-                CustomList(SearchBar.this, web, imageId);
-        mList = (ListView)findViewById(R.id.list);
-        mList.setAdapter(adapter);
-        mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        public BarHolder(View item) {
+            super(item);
+            mNombre = (TextView) item;
+        }
+    }
 
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-                Toast.makeText(SearchBar.this, "You Clicked at " + web[+position], Toast.LENGTH_SHORT).show();
+    private class BarAdapter extends RecyclerView.Adapter<BarHolder> {
+        private List<Bar> bares;
 
-            }
-        });
+        public BarAdapter(List<Bar> bares) {
+            this.bares = bares;
+        }
+
+        @Override
+        public BarHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            LayoutInflater li = LayoutInflater.from(SearchBar.this);
+            // TODO: crear un layout para mostrar tambein una imagen del bar junto al nombre
+            View view = li.inflate(android.R.layout.simple_list_item_1, parent, false);
+            return new BarHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(BarHolder holder, int position) {
+            Bar b = bares.get(position);
+            holder.mNombre.setText(b.getNombre());
+        }
+
+        @Override
+        public int getItemCount() {
+            return bares.size();
+        }
     }
 }

@@ -10,7 +10,8 @@
         android:allowBackup="true"
         android:label="@string/app_name"
         android:icon="@mipmap/drink"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme"
+        >
         <activity
             android:name=".FindYourBar"
             android:label="@string/app_name" >

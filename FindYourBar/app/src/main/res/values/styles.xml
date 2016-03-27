@@ -8,7 +8,7 @@
 <!-- Barra personalizada -->
 <style name="MyActionBar" parent="@style/Widget.AppCompat.ActionBar">
     <item name="background">@color/actionbar_background</item>
-    <item name="logo">@mipmap/drink</item>
+    <!--<item name="logo">@mipmap/drink</item>-->
     <item name="displayOptions">useLogo|showHome|showTitle</item>
 </style>
 

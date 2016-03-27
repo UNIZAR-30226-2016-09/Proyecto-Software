@@ -1,32 +1,44 @@
 <resources>
     <string name="app_name">FindYourBar</string>
     <string name="search_bar">Buscar bar</string>
+    <string name="menu_name_title">Nombre del bar</string>
+    <string name="menu_opening_title">Horario de apertura</string>
     <string name="searchI">-------BUSCAR-------</string>
     <string name="app_description">Tu app para encontrar todos los bares de copas en Zaragoza</string>
     <string name="action_settings">Ajustes</string>
     <string name="no_bar">No hay bares</string>
+    <string name="close_tip">Seleccione un horario de cierre por el que buscar:</string>
     <string name="menu_name">Nombre del bar</string>
-    <string name="in_name">Introduce el nombre del bar a buscar</string>
+    <string name="in_name">Introduzca el nombre del bar a buscar</string>
     <string name="menu_open">Horario de apertura</string>
-    <string name="open1">A partir de la 22:00 h</string>
-    <string name="open2">A partir de la 23:00 h</string>
-    <string name="open3">A partir de la 00:00 h</string>
+    <string-array name="opening_schedule">
+        <item>A partir de la 22:00 h</item>
+        <item>A partir de la 23:00 h</item>
+        <item>A partir de la 00:00 h</item>
+    </string-array>
+    <string-array name="closing_schedule">
+        <item>Antes de las 03:00 h</item>
+        <item>Entre las 03:01 h y las 04:00 h</item>
+        <item>Entre las 04:01 h y las 05:00 h</item>
+        <item>Entre las 05:01 h y las 06:00 h</item>
+    </string-array>
+    <string-array name="music_genre">
+        <item>Pop/Música comercial</item>
+        <item>Rap</item>
+        <item>Rock/Metal</item>
+        <item>Latina</item>
+        <item>Indie</item>
+        <item>Electrónica</item>
+        <item>60s - 80s</item>
+    </string-array>
+    <string-array name="age_groups">
+        <item>Mayores de 16 años</item>
+        <item>Mayores de 18 años</item>
+        <item>Mayores de 21 años</item>
+    </string-array>
     <string name="menu_close">Horario de cierre</string>
-    <string name="close1">Antes de las 03:00 h</string>
-    <string name="close2">Entre las 03:01 h y las 04:00 h</string>
-    <string name="close3">Entre las 04:01 h y las 05:00 h</string>
-    <string name="close4">Entre las 05:01 h y las 06:00 h</string>
     <string name="menu_music">Música</string>
-    <string name="music1">Pop/Música comercial</string>
-    <string name="music2">Rap</string>
-    <string name="music3">Rock/Metal</string>
-    <string name="music4">Latina</string>
-    <string name="music5">Indie</string>
-    <string name="music6">Electrónica</string>
-    <string name="music7">60s - 80s</string>
     <string name="menu_age">Edad</string>
-    <string name="age1">Mayores de 16 años</string>
-    <string name="age2">Mayores de 18 años</string>
-    <string name="age3">Mayores de 21 años</string>
     <string name="acept">Aceptar</string>
+
 </resources>
