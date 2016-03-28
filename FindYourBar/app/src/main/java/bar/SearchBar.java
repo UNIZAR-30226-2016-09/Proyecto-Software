@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class SearchBar extends AppCompatActivity {
@@ -76,20 +75,22 @@ public class SearchBar extends AppCompatActivity {
      * Rellena el la lista de bares
      */
     private void fillData() {
-        List<Bar> bares = new ArrayList<>();
-        for (int i = 0; i < 100; i++) {
-            bares.add(new Bar("Bar " + i, "Descripcion " + i));
-        }
-        mAdapter = new BarAdapter(bares);
+        mAdapter = new BarAdapter(ConjuntoBares.getInstance().getBares());
         mList.setAdapter(mAdapter);
     }
 
-    private class BarHolder extends RecyclerView.ViewHolder {
+    private class BarHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView mNombre;
 
         public BarHolder(View item) {
             super(item);
-            mNombre = (TextView) item;
+            mNombre = (TextView) item.findViewById(R.id.list_nombre_bar);
+            item.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            startActivity(BarActivity.newIntent(SearchBar.this, mNombre.getText().toString()));
         }
     }
 
@@ -104,7 +105,7 @@ public class SearchBar extends AppCompatActivity {
         public BarHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater li = LayoutInflater.from(SearchBar.this);
             // TODO: crear un layout para mostrar tambein una imagen del bar junto al nombre
-            View view = li.inflate(android.R.layout.simple_list_item_1, parent, false);
+            View view = li.inflate(R.layout.bar_list_item, parent, false);
             return new BarHolder(view);
         }
 
