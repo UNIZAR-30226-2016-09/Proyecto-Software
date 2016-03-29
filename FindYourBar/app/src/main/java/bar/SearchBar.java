@@ -1,5 +1,6 @@
 package bar;
 
+import android.app.ListActivity;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
@@ -11,9 +12,23 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.util.Log;
+import android.widget.ListAdapter;
+import android.widget.SimpleAdapter;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+
+import org.apache.http.NameValuePair;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class SearchBar extends AppCompatActivity {
 
@@ -26,11 +41,28 @@ public class SearchBar extends AppCompatActivity {
     private static final String menu_music = "MENU_MUSIC";
     private static final String menu_age = "MENU_AGE";
 
+ /*   private static final String TAG_SUCCESS = "success";
+    private static final String TAG_BARES = "bar";
+    private static final String TAG_NOMBRE = "nombre";
+    //private static final String TAG_IMAGEN = "imagen";
+
+    private static String url_all_bares = "http://localhost:5107/phpmyadmin/androidConnect/get_all_bares.php";
+    JSONArray bares = null;
+
+    private ProgressDialog pDialog;
+    // Creating JSON Parser object
+    JSONParser jParser = new JSONParser();
+    ArrayList<HashMap<String, String>> baresList;*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+        //Loading bares in in background and get list
+
+       // new LoadAllBares().execute();
+        //ListView lv = getListView();
+
         mList = (RecyclerView) findViewById(R.id.recyclerlist);
         mList.setLayoutManager(new LinearLayoutManager(this));
         fillData();
@@ -120,4 +152,91 @@ public class SearchBar extends AppCompatActivity {
             return bares.size();
         }
     }
-}
+/*
+    // Background Async Task to Load all product by making HTTP Request
+    class LoadAllBares extends AsyncTask<String, String, String> {
+
+        //Before starting background thread Show Progress Dialog
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pDialog = new ProgressDialog(SearchBar.this);
+            pDialog.setMessage("Loading bares. Please wait...");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+
+        //getting All bares from url
+        protected String doInBackground(String... args) {
+            // Building Parameters
+            List<NameValuePair> params = new ArrayList<NameValuePair>();
+            // getting JSON string from URL
+            JSONObject json = jParser.makeHttpRequest(url_all_bares, "GET", params);
+
+            // Check your log cat for JSON reponse
+            Log.d("All bares: ", json.toString());
+
+            try {
+                // Checking for SUCCESS TAG
+                int success = json.getInt(TAG_SUCCESS);
+
+                if (success == 1) {
+                    // bares found
+                    // Getting Array of bares
+                    bares = json.getJSONArray(TAG_BARES);
+
+                    // looping through All bares
+                    for (int i = 0; i < bares.length(); i++) {
+                        JSONObject c = bares.getJSONObject(i);
+
+                        // Storing each json item in variable
+                        String id = c.getString(TAG_NOMBRE);
+                        //String name = c.getString(TAG_NAME);
+
+                        // creating new HashMap
+                        HashMap<String, String> map = new HashMap<String, String>();
+
+                        // adding each child node to HashMap key => value
+                        map.put(TAG_NOMBRE, id);
+                        //map.put(TAG_NAME, name);
+
+                        // adding HashList to ArrayList
+                        baresList.add(map);
+                    }
+                } /*else {
+                    // no bares found
+                    // Launch Add New product Activity
+                    Intent i = new Intent(getApplicationContext(),
+                            NewProductActivity.class);
+                    // Closing all previous activities
+                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(i);
+                }*/
+ /*           } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        // After completing background task Dismiss the progress dialog
+        protected void onPostExecute(String file_url) {
+            // dismiss the dialog after getting all bares
+            pDialog.dismiss();
+            // updating UI from Background Thread
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    // Updating parsed JSON data into ListView
+                    ListAdapter adapter = new SimpleAdapter(
+                            SearchBar.this, baresList,
+  //                          R.layout.bar_list_item, new String[]{TAG_NOMBRE,/*TAG_NAME*/}
+ //                           new int[]{R.id.list_nombre_bar /*,R.id.name*/});
+                    // updating listview
+                    //setListAdapter(adapter);
+  /*              }
+            });
+
+        }
+    }
+}*/
