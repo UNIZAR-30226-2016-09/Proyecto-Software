@@ -20,12 +20,23 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ListAdapter;
 import android.widget.SimpleAdapter;
+import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,6 +51,10 @@ public class SearchBar extends AppCompatActivity {
     private static final String menu_close = "MENU_CLOSE";
     private static final String menu_music = "MENU_MUSIC";
     private static final String menu_age = "MENU_AGE";
+
+    private String jsonResult;
+    //private String url = "http://192.168.1.38/p.php";
+    private String url = "http://10.0.2.2:5107/p2.php";
 
  /*   private static final String TAG_SUCCESS = "success";
     private static final String TAG_BARES = "bar";
@@ -58,14 +73,11 @@ public class SearchBar extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        //Loading bares in in background and get list
-
-       // new LoadAllBares().execute();
-        //ListView lv = getListView();
-
+        accessWebService();
         mList = (RecyclerView) findViewById(R.id.recyclerlist);
         mList.setLayoutManager(new LinearLayoutManager(this));
         fillData();
+        ConjuntoBares.verBares();
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -152,6 +164,102 @@ public class SearchBar extends AppCompatActivity {
             return bares.size();
         }
     }
+
+    public void accessWebService() {
+        JsonReadTask task = new JsonReadTask();
+        // passes values for the urls string array
+        task.execute(new String[]{url});
+    }
+
+    // Async Task to access the web
+    private class JsonReadTask extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+
+            HttpClient httpclient = new DefaultHttpClient();
+            HttpPost httppost = new HttpPost(params[0]);
+            try {
+                HttpResponse response = httpclient.execute(httppost);
+                jsonResult = inputStreamToString(
+                        response.getEntity().getContent()).toString();
+                Log.e("jsonResult", jsonResult);
+            } catch (ClientProtocolException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        private StringBuilder inputStreamToString(InputStream is) {
+            String rLine = "";
+            StringBuilder answer = new StringBuilder();
+            BufferedReader rd = new BufferedReader(new InputStreamReader(is));
+            try {
+                while ((rLine = rd.readLine()) != null) {
+                    answer.append(rLine);
+                }
+            } catch (IOException e) {
+                // e.printStackTrace();
+                Toast.makeText(getApplicationContext(),
+                        "Error..." + e.toString(), Toast.LENGTH_LONG).show();
+            }
+            return answer;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            ListDrwaer();
+            fillData();
+        }
+    }// end async task
+
+    public void ListDrwaer() {
+        //List<Map<String, String>> BarList = new ArrayList<Map<String, String>>();
+
+        try {
+            JSONObject jsonResponse = new JSONObject(jsonResult);
+            JSONArray jsonMainNode = jsonResponse.optJSONArray("Bar");
+            for (int i = 0; i < jsonMainNode.length(); i++) {
+                JSONObject jsonChildNode = jsonMainNode.getJSONObject(i);
+                String name = jsonChildNode.optString("nombre");
+                String des = jsonChildNode.optString("descripcion");
+                /*String dir = jsonChildNode.optString("direccion");
+                String ed = jsonChildNode.optString("edad");
+                String ha = jsonChildNode.optString("horarioApertura");
+                String hc = jsonChildNode.optString("horarioCierre");
+                String e = jsonChildNode.optString("email");
+                String fb = jsonChildNode.optString("facebook");
+                String tl = jsonChildNode.optString("telefono");*/
+
+                /*String number = jsonChildNode.optString("employee no");
+                String outPut = name + "-" + number;*/
+                Log.e("nombre", name);
+
+                ConjuntoBares.addBar(new Bar(name, des));
+                //BarList.add(createBar("nombre", name));
+            }
+            ConjuntoBares.verBares();
+
+        } catch (JSONException e) {
+            Toast.makeText(getApplicationContext(), "Error" + e.toString(),
+                    Toast.LENGTH_SHORT).show();
+        }
+
+    }
+        private HashMap<String, String> createBar (String name, String number){
+            HashMap<String, String> bar = new HashMap<String, String>();
+            bar.put(name, number);
+            return bar;
+        }
+
+}
+
+/*
+        SimpleAdapter simpleAdapter = new SimpleAdapter(this, BarList,
+                android.R.layout.simple_list_item_1,
+                new String[]{"bares"}, new int[]{android.R.id.text1});
+        listView.setAdapter(simpleAdapter);
 /*
     // Background Async Task to Load all product by making HTTP Request
     class LoadAllBares extends AsyncTask<String, String, String> {
@@ -230,10 +338,10 @@ public class SearchBar extends AppCompatActivity {
                     // Updating parsed JSON data into ListView
                     ListAdapter adapter = new SimpleAdapter(
                             SearchBar.this, baresList,
-  //                          R.layout.bar_list_item, new String[]{TAG_NOMBRE,/*TAG_NAME*/}
- //                           new int[]{R.id.list_nombre_bar /*,R.id.name*/});
-                    // updating listview
-                    //setListAdapter(adapter);
+  //                          R.layout.bar_list_item, new String[]{TAG_NOMBRE,/*TAG_NAME*/
+        //                           new int[]{R.id.list_nombre_bar /*,R.id.name*/});
+        // updating listview
+        //setListAdapter(adapter);
   /*              }
             });
 
