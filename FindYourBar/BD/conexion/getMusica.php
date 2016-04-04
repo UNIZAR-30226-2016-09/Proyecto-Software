@@ -1,11 +1,11 @@
 <?php
 /**
- * Devuelve el bar buscado
+ * Devuelve los datos de todos los bares a partir del tpo de musica indicada de la base de datos
  */
 require_once __DIR__ . '/db_connect.php';
 $con = new DB_CONNECT();    //conexion con DB
 $parametro = $_REQUEST['nombre'];
-$sql = "select * from bar where nombre='".$parametro."'";
+$sql = "select distinct * from bar b, hay h where h.musica='".$parametro."' and h.nombre=b.nombre"; 
 $result = mysql_query($sql);
 $baresInt = array();
 if(mysql_num_rows($result)){

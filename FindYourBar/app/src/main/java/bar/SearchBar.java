@@ -1,6 +1,5 @@
 package bar;
 
-import android.app.ListActivity;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
@@ -44,18 +43,18 @@ public class SearchBar extends AppCompatActivity {
     private static final String menu_age = "MENU_AGE";
 
     private String jsonResult;
-    private String url = "http://192.168.0.19:5107/getBares.php";
+    //private String url = "http://ip:5107/getBares.php";
     //private String url = "http://ps1516.ddns.net:5107/getBares.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        accessWebService();
+        EnvioDatos.accessWebService();
         mList = (RecyclerView) findViewById(R.id.recyclerlist);
         mList.setLayoutManager(new LinearLayoutManager(this));
         fillData();
-        ConjuntoBares.verBares();
+        //ConjuntoBares.verBares();
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -142,7 +141,7 @@ public class SearchBar extends AppCompatActivity {
         }
     }
 
-    public void accessWebService() {
+    /*public void accessWebService() {
         JsonReadTask task = new JsonReadTask();
         // passes values for the urls string array
         task.execute(new String[]{url});
@@ -188,7 +187,7 @@ public class SearchBar extends AppCompatActivity {
             ListDrwaer();
             fillData();
         }
-    }// end async task
+    }
 
     public void ListDrwaer() {
         try {
@@ -208,23 +207,15 @@ public class SearchBar extends AppCompatActivity {
 
                 /*String number = jsonChildNode.optString("employee no");
                 String outPut = name + "-" + number;*/
-                Log.e("nombre", name);
+               /* Log.e("nombre", name);
 
                 ConjuntoBares.addBar(new Bar(name, des));
             }
-            ConjuntoBares.verBares();
 
         } catch (JSONException e) {
             Toast.makeText(getApplicationContext(), "Error" + e.toString(),
                     Toast.LENGTH_SHORT).show();
         }
 
-    }
+    }*/
 }
-
-/*
-        SimpleAdapter simpleAdapter = new SimpleAdapter(this, BarList,
-                android.R.layout.simple_list_item_1,
-                new String[]{"bares"}, new int[]{android.R.id.text1});
-        listView.setAdapter(simpleAdapter);
-*/

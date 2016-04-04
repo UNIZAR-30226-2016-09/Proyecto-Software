@@ -1,11 +1,12 @@
 <?php
 /**
- * Devuelve el bar buscado
+ * Devuelve los datos de todos los bares a partir de la edad indicada de la base de datos
  */
 require_once __DIR__ . '/db_connect.php';
 $con = new DB_CONNECT();    //conexion con DB
 $parametro = $_REQUEST['nombre'];
-$sql = "select * from bar where nombre='".$parametro."'";
+$parametro = (int) $parametro;
+$sql = "select * from bar where edad>='".$parametro."'"; 
 $result = mysql_query($sql);
 $baresInt = array();
 if(mysql_num_rows($result)){

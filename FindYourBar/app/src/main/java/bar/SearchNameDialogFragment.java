@@ -24,7 +24,7 @@ public class SearchNameDialogFragment extends DialogFragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //Quitarlo para no probar con la base de datos
-                EnvioDatos.enviarDatos("El Plata");
+                EnvioDatos.enviarBares("Cafe da Luxe");
             }
         });
         return builder.create();

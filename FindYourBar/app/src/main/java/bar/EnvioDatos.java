@@ -1,11 +1,7 @@
 package bar;
 
 import android.os.AsyncTask;
-import android.os.Message;
 import android.util.Log;
-import android.widget.Toast;
-
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -24,17 +20,69 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Handler;
 
-/**
- * Created by anicacortes on 04/04/2016.
- */
 public class EnvioDatos {
 
-    private static String url = "http://192.168.0.19:5107/getNames.php";
+    //private static String url = "http://ip:5107/getNames.php";
+    //private static String url = "http://ps1516.ddns.net:80/getNames.php";
     private static String jsonResult;
 
+    public static void accessWebService() {
+        String url = "http://ps1516.ddns.net:80/getBares.php";
+        JsonReadTask task = new JsonReadTask();
+        // passes values for the urls string array
+        task.execute(new String[]{url, "all"});
+    }
 
+    /**
+     * Recibe el bar a buscar en la base de datos
+     */
+    public static void enviarBares(String dato){
+        String url = "http://ps1516.ddns.net:80/getNames.php";
+        JsonReadTask task = new JsonReadTask();
+        // passes values for the urls string array
+        task.execute(new String[]{url, dato});
+    }
+
+    /**
+     * Recibe la edad
+     */
+    public static void enviarEdad(String dato){
+        String url = "http://ps1516.ddns.net:80/getEdad.php";
+        JsonReadTask task = new JsonReadTask();
+        // passes values for the urls string array
+        task.execute(new String[]{url, dato});
+    }
+
+    /**
+     * Recibe el tipo de musica
+     */
+    public static void enviarMusica(String dato){
+        String url = "http://192.168.1.38:5107/getMusica.php";
+        JsonReadTask task = new JsonReadTask();
+        // passes values for the urls string array
+        task.execute(new String[]{url, dato});
+    }
+
+    /**
+     * Recibe la hora de apertura
+     */
+    public static void enviarHoraApertura(String dato){
+        String url = "http://ps1516.ddns.net:80/getHA.php";
+        JsonReadTask task = new JsonReadTask();
+        // passes values for the urls string array
+        task.execute(new String[]{url, dato});
+    }
+
+    /**
+     * Recibe la hora de cierre
+     */
+    public static void enviarHoraCierre(String dato){
+        String url = "http://ps1516.ddns.net:80/getHC.php";
+        JsonReadTask task = new JsonReadTask();
+        // passes values for the urls string array
+        task.execute(new String[]{url, dato});
+    }
 
     // Async Task to access the web
     private static class JsonReadTask extends AsyncTask<String, Void, String> {
@@ -44,10 +92,12 @@ public class EnvioDatos {
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(params[0]);
             try {
-                List<NameValuePair> postValues = new ArrayList<NameValuePair>(2);
-                postValues.add(new BasicNameValuePair("nombre", params[1]));
-                //Encapsulamos
-                httppost.setEntity(new UrlEncodedFormEntity(postValues));
+                if(params[1]!="all") {
+                    List<NameValuePair> postValues = new ArrayList<NameValuePair>(2);
+                    postValues.add(new BasicNameValuePair("nombre", params[1]));
+                    //Encapsulamos
+                    httppost.setEntity(new UrlEncodedFormEntity(postValues));
+                }
                 HttpResponse response = httpclient.execute(httppost);
                 jsonResult = inputStreamToString(
                         response.getEntity().getContent()).toString();
@@ -77,9 +127,8 @@ public class EnvioDatos {
         protected void onPostExecute(String result) {
             ListDrwaer();
             //SearchBar.fillData();
-            Log.e("Post","execute");
         }
-    }// end async task
+    }
 
     public static void ListDrwaer() {
         try {
@@ -101,20 +150,12 @@ public class EnvioDatos {
 
                 ConjuntoBares.addBar(new Bar(name, des));
             }
-            ConjuntoBares.verBares();
 
         } catch (JSONException e) {
         }
 
     }
 
-    public static void enviarDatos(String dato){
-
-        JsonReadTask task = new JsonReadTask();
-        // passes values for the urls string array
-        task.execute(new String[]{url, dato});
-
-    }
     private static StringBuilder inputStreamToString(InputStream is) {
         String rLine = "";
         StringBuilder answer = new StringBuilder();

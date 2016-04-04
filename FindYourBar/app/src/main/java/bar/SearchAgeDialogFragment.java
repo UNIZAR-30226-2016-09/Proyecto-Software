@@ -26,7 +26,7 @@ public class SearchAgeDialogFragment extends DialogFragment {
         builder.setPositiveButton(R.string.acept, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
+                EnvioDatos.enviarEdad("16");
             }
         });
         return builder.create();
