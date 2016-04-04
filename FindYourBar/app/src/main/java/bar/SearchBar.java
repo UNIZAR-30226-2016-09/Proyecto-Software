@@ -53,21 +53,7 @@ public class SearchBar extends AppCompatActivity {
     private static final String menu_age = "MENU_AGE";
 
     private String jsonResult;
-    //private String url = "http://192.168.1.38/p.php";
-    private String url = "http://10.0.2.2:5107/p2.php";
-
- /*   private static final String TAG_SUCCESS = "success";
-    private static final String TAG_BARES = "bar";
-    private static final String TAG_NOMBRE = "nombre";
-    //private static final String TAG_IMAGEN = "imagen";
-
-    private static String url_all_bares = "http://localhost:5107/phpmyadmin/androidConnect/get_all_bares.php";
-    JSONArray bares = null;
-
-    private ProgressDialog pDialog;
-    // Creating JSON Parser object
-    JSONParser jParser = new JSONParser();
-    ArrayList<HashMap<String, String>> baresList;*/
+    private String url = "http://ps1516.ddns.net:80/getBares.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -224,13 +210,13 @@ public class SearchBar extends AppCompatActivity {
                 JSONObject jsonChildNode = jsonMainNode.getJSONObject(i);
                 String name = jsonChildNode.optString("nombre");
                 String des = jsonChildNode.optString("descripcion");
-                /*String dir = jsonChildNode.optString("direccion");
+                String dir = jsonChildNode.optString("direccion");
                 String ed = jsonChildNode.optString("edad");
                 String ha = jsonChildNode.optString("horarioApertura");
                 String hc = jsonChildNode.optString("horarioCierre");
                 String e = jsonChildNode.optString("email");
                 String fb = jsonChildNode.optString("facebook");
-                String tl = jsonChildNode.optString("telefono");*/
+                String tl = jsonChildNode.optString("telefono");
 
                 /*String number = jsonChildNode.optString("employee no");
                 String outPut = name + "-" + number;*/
@@ -260,91 +246,4 @@ public class SearchBar extends AppCompatActivity {
                 android.R.layout.simple_list_item_1,
                 new String[]{"bares"}, new int[]{android.R.id.text1});
         listView.setAdapter(simpleAdapter);
-/*
-    // Background Async Task to Load all product by making HTTP Request
-    class LoadAllBares extends AsyncTask<String, String, String> {
-
-        //Before starting background thread Show Progress Dialog
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            pDialog = new ProgressDialog(SearchBar.this);
-            pDialog.setMessage("Loading bares. Please wait...");
-            pDialog.setIndeterminate(false);
-            pDialog.setCancelable(false);
-            pDialog.show();
-        }
-
-        //getting All bares from url
-        protected String doInBackground(String... args) {
-            // Building Parameters
-            List<NameValuePair> params = new ArrayList<NameValuePair>();
-            // getting JSON string from URL
-            JSONObject json = jParser.makeHttpRequest(url_all_bares, "GET", params);
-
-            // Check your log cat for JSON reponse
-            Log.d("All bares: ", json.toString());
-
-            try {
-                // Checking for SUCCESS TAG
-                int success = json.getInt(TAG_SUCCESS);
-
-                if (success == 1) {
-                    // bares found
-                    // Getting Array of bares
-                    bares = json.getJSONArray(TAG_BARES);
-
-                    // looping through All bares
-                    for (int i = 0; i < bares.length(); i++) {
-                        JSONObject c = bares.getJSONObject(i);
-
-                        // Storing each json item in variable
-                        String id = c.getString(TAG_NOMBRE);
-                        //String name = c.getString(TAG_NAME);
-
-                        // creating new HashMap
-                        HashMap<String, String> map = new HashMap<String, String>();
-
-                        // adding each child node to HashMap key => value
-                        map.put(TAG_NOMBRE, id);
-                        //map.put(TAG_NAME, name);
-
-                        // adding HashList to ArrayList
-                        baresList.add(map);
-                    }
-                } /*else {
-                    // no bares found
-                    // Launch Add New product Activity
-                    Intent i = new Intent(getApplicationContext(),
-                            NewProductActivity.class);
-                    // Closing all previous activities
-                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(i);
-                }*/
- /*           } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            return null;
-        }
-
-        // After completing background task Dismiss the progress dialog
-        protected void onPostExecute(String file_url) {
-            // dismiss the dialog after getting all bares
-            pDialog.dismiss();
-            // updating UI from Background Thread
-            runOnUiThread(new Runnable() {
-                public void run() {
-                    // Updating parsed JSON data into ListView
-                    ListAdapter adapter = new SimpleAdapter(
-                            SearchBar.this, baresList,
-  //                          R.layout.bar_list_item, new String[]{TAG_NOMBRE,/*TAG_NAME*/
-        //                           new int[]{R.id.list_nombre_bar /*,R.id.name*/});
-        // updating listview
-        //setListAdapter(adapter);
-  /*              }
-            });
-
-        }
-    }
-}*/
+*/
