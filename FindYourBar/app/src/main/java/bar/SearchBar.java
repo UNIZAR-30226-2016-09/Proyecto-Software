@@ -44,7 +44,7 @@ public class SearchBar extends AppCompatActivity {
     private static final String menu_age = "MENU_AGE";
 
     private String jsonResult;
-    private String url = "http://ps1516.ddns.net:80/getBares.php";
+    private String url = "http://192.168.0.19:5107/getBares.php";
     //private String url = "http://ps1516.ddns.net:5107/getBares.php";
 
     @Override

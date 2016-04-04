@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
+import bar.EnvioDatos;
 
 /**
  * Dialogo sobre el nombre del bar
@@ -22,7 +23,8 @@ public class SearchNameDialogFragment extends DialogFragment {
         builder.setPositiveButton(R.string.acept, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
+                //Quitarlo para no probar con la base de datos
+                EnvioDatos.enviarDatos("El Plata");
             }
         });
         return builder.create();
