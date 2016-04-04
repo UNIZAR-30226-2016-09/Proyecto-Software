@@ -12,27 +12,18 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.ListAdapter;
-import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
@@ -54,6 +45,7 @@ public class SearchBar extends AppCompatActivity {
 
     private String jsonResult;
     private String url = "http://ps1516.ddns.net:80/getBares.php";
+    //private String url = "http://ps1516.ddns.net:5107/getBares.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +91,6 @@ public class SearchBar extends AppCompatActivity {
         inflater.inflate(R.menu.search_menu, menu);
         return true;
     }
-
 
     /**
      * Rellena el la lista de bares
@@ -186,7 +177,6 @@ public class SearchBar extends AppCompatActivity {
                     answer.append(rLine);
                 }
             } catch (IOException e) {
-                // e.printStackTrace();
                 Toast.makeText(getApplicationContext(),
                         "Error..." + e.toString(), Toast.LENGTH_LONG).show();
             }
@@ -201,8 +191,6 @@ public class SearchBar extends AppCompatActivity {
     }// end async task
 
     public void ListDrwaer() {
-        //List<Map<String, String>> BarList = new ArrayList<Map<String, String>>();
-
         try {
             JSONObject jsonResponse = new JSONObject(jsonResult);
             JSONArray jsonMainNode = jsonResponse.optJSONArray("Bar");
@@ -223,7 +211,6 @@ public class SearchBar extends AppCompatActivity {
                 Log.e("nombre", name);
 
                 ConjuntoBares.addBar(new Bar(name, des));
-                //BarList.add(createBar("nombre", name));
             }
             ConjuntoBares.verBares();
 
@@ -233,12 +220,6 @@ public class SearchBar extends AppCompatActivity {
         }
 
     }
-        private HashMap<String, String> createBar (String name, String number){
-            HashMap<String, String> bar = new HashMap<String, String>();
-            bar.put(name, number);
-            return bar;
-        }
-
 }
 
 /*
