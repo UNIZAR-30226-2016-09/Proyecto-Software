@@ -1,15 +1,15 @@
 <resources>
-<!-- Base application theme. -->
-<style name="AppTheme" parent="Theme.AppCompat">
-    <!-- Customize your theme here. -->
-    <item name="actionBarStyle">@style/MyActionBar</item>
-</style>
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat">
+        <!-- Customize your theme here. -->
+        <item name="actionBarStyle">@style/MyActionBar</item>
+    </style>
 
-<!-- Barra personalizada -->
-<style name="MyActionBar" parent="@style/Widget.AppCompat.ActionBar">
-    <item name="background">@color/actionbar_background</item>
-    <!--<item name="logo">@mipmap/drink</item>-->
-    <item name="displayOptions">useLogo|showHome|showTitle</item>
-</style>
+    <!-- Barra personalizada -->
+    <style name="MyActionBar" parent="@style/Widget.AppCompat.ActionBar">
+        <item name="background">@color/actionbar_background</item>
+        <!--<item name="logo">@mipmap/ic_launcher</item>-->
+        <item name="displayOptions">useLogo|showHome|showTitle</item>
+    </style>
 
 </resources>

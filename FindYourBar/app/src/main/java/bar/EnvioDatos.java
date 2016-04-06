@@ -2,6 +2,7 @@ package bar;
 
 import android.os.AsyncTask;
 import android.util.Log;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -29,131 +30,108 @@ public class EnvioDatos {
 
     public static void accessWebService() {
         String url = "http://ps1516.ddns.net:80/getBares.php";
-        JsonReadTask task = new JsonReadTask();
-        // passes values for the urls string array
-        task.execute(new String[]{url, "all"});
+        //JsonReadTask task = new JsonReadTask();
+        // passes values for the urls string arrayg
+        getJsonResult(new String[]{url, "all"});
+
     }
 
     /**
      * Recibe el bar a buscar en la base de datos
      */
-    public static void enviarBares(String dato){
+    public static void enviarBares(String dato) {
         String url = "http://ps1516.ddns.net:80/getNames.php";
-        JsonReadTask task = new JsonReadTask();
+        //JsonReadTask task = new JsonReadTask();
         // passes values for the urls string array
-        task.execute(new String[]{url, dato});
+        //task.execute(new String[]{url, dato});
     }
 
     /**
      * Recibe la edad
      */
-    public static void enviarEdad(String dato){
+    public static void enviarEdad(String dato) {
         String url = "http://ps1516.ddns.net:80/getEdad.php";
-        JsonReadTask task = new JsonReadTask();
+        //JsonReadTask task = new JsonReadTask();
         // passes values for the urls string array
-        task.execute(new String[]{url, dato});
+        //task.execute(new String[]{url, dato});
     }
 
     /**
      * Recibe el tipo de musica
      */
-    public static void enviarMusica(String dato){
+    public static void enviarMusica(String dato) {
         String url = "http://192.168.1.38:5107/getMusica.php";
-        JsonReadTask task = new JsonReadTask();
+        //JsonReadTask task = new JsonReadTask();
         // passes values for the urls string array
-        task.execute(new String[]{url, dato});
+        //task.execute(new String[]{url, dato});
     }
 
     /**
      * Recibe la hora de apertura
      */
-    public static void enviarHoraApertura(String dato){
+    public static void enviarHoraApertura(String dato) {
         String url = "http://ps1516.ddns.net:80/getHA.php";
-        JsonReadTask task = new JsonReadTask();
+        //JsonReadTask task = new JsonReadTask();
         // passes values for the urls string array
-        task.execute(new String[]{url, dato});
+        //task.execute(new String[]{url, dato});
     }
 
     /**
      * Recibe la hora de cierre
      */
-    public static void enviarHoraCierre(String dato){
+    public static void enviarHoraCierre(String dato) {
         String url = "http://ps1516.ddns.net:80/getHC.php";
-        JsonReadTask task = new JsonReadTask();
+        //JsonReadTask task = new JsonReadTask();
         // passes values for the urls string array
-        task.execute(new String[]{url, dato});
+        //task.execute(new String[]{url, dato});
     }
 
-    // Async Task to access the web
-    private static class JsonReadTask extends AsyncTask<String, Void, String> {
-        @Override
-        protected String doInBackground(String... params) {
 
-            HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httppost = new HttpPost(params[0]);
-            try {
-                if(params[1]!="all") {
-                    List<NameValuePair> postValues = new ArrayList<NameValuePair>(2);
-                    postValues.add(new BasicNameValuePair("nombre", params[1]));
-                    //Encapsulamos
-                    httppost.setEntity(new UrlEncodedFormEntity(postValues));
-                }
-                HttpResponse response = httpclient.execute(httppost);
-                jsonResult = inputStreamToString(
-                        response.getEntity().getContent()).toString();
-                Log.e("jsonResult", jsonResult);
-            } catch (ClientProtocolException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
+    private static String getJsonResult(String... params) {
 
-        private StringBuilder inputStreamToString(InputStream is) {
-            String rLine = "";
-            StringBuilder answer = new StringBuilder();
-            BufferedReader rd = new BufferedReader(new InputStreamReader(is));
-            try {
-                while ((rLine = rd.readLine()) != null) {
-                    answer.append(rLine);
-                }
-            } catch (IOException e) {
-            }
-            return answer;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            ListDrwaer();
-            //SearchBar.fillData();
-        }
-    }
-
-    public static void ListDrwaer() {
+        HttpClient httpclient = new DefaultHttpClient();
+        HttpPost httppost = new HttpPost(params[0]);
         try {
-            JSONObject jsonResponse = new JSONObject(jsonResult);
-            JSONArray jsonMainNode = jsonResponse.optJSONArray("Bar");
-            for (int i = 0; i < jsonMainNode.length(); i++) {
-                JSONObject jsonChildNode = jsonMainNode.getJSONObject(i);
-                String name = jsonChildNode.optString("nombre");
-                String des = jsonChildNode.optString("descripcion");
-                String dir = jsonChildNode.optString("direccion");
-                String ed = jsonChildNode.optString("edad");
-                String ha = jsonChildNode.optString("horarioApertura");
-                String hc = jsonChildNode.optString("horarioCierre");
-                String e = jsonChildNode.optString("email");
-                String fb = jsonChildNode.optString("facebook");
-                String tl = jsonChildNode.optString("telefono");
-
-                Log.e("nombre", name);
-
-                ConjuntoBares.addBar(new Bar(name, des));
+            if (!params[1].equals("all")) {
+                List<NameValuePair> postValues = new ArrayList<NameValuePair>(2);
+                postValues.add(new BasicNameValuePair("nombre", params[1]));
+                //Encapsulamos
+                httppost.setEntity(new UrlEncodedFormEntity(postValues));
             }
+            HttpResponse response = httpclient.execute(httppost);
+            jsonResult = inputStreamToString(
+                    response.getEntity().getContent()).toString();
+            Log.e("jsonResult", jsonResult);
 
-        } catch (JSONException e) {
+            // Parsing del json con la informacion de los bares
+            try {
+                JSONObject jsonResponse = new JSONObject(jsonResult);
+                JSONArray jsonMainNode = jsonResponse.optJSONArray("Bar");
+                for (int i = 0; i < jsonMainNode.length(); i++) {
+                    JSONObject jsonChildNode = jsonMainNode.getJSONObject(i);
+                    String name = jsonChildNode.optString("nombre");
+                    String des = jsonChildNode.optString("descripcion");
+                    String dir = jsonChildNode.optString("direccion");
+                    String ed = jsonChildNode.optString("edad");
+                    String ha = jsonChildNode.optString("horarioApertura");
+                    String hc = jsonChildNode.optString("horarioCierre");
+                    String e = jsonChildNode.optString("email");
+                    String fb = jsonChildNode.optString("facebook");
+                    String tl = jsonChildNode.optString("telefono");
+
+                    Log.e("nombre", name);
+
+                    ConjuntoBares.getInstance().addBar(new Bar(name, des, dir, tl, e, fb));
+                }
+
+            } catch (JSONException e) {
+            }
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
+        return null;
     }
 
     private static StringBuilder inputStreamToString(InputStream is) {
@@ -165,7 +143,6 @@ public class EnvioDatos {
                 answer.append(rLine);
             }
         } catch (IOException e) {
-            Log.e("ERROR","ERROR");
         }
         return answer;
     }

@@ -3,13 +3,18 @@
     <string name="search_bar">Buscar bar</string>
     <string name="menu_name_title">Nombre del bar</string>
     <string name="menu_opening_title">Horario de apertura</string>
-    <string name="searchI">-------BUSCAR-------</string>
     <string name="app_description">Tu app para encontrar todos los bares de copas en Zaragoza</string>
     <string name="action_settings">Ajustes</string>
     <string name="no_bar">No hay bares</string>
     <string name="close_tip">Seleccione un horario de cierre por el que buscar:</string>
     <string name="menu_name">Nombre del bar</string>
     <string name="in_name">Introduzca el nombre del bar a buscar</string>
+    <string name="titulo_bares">Bares</string>
+    <string name="bar_direccion">Dirección</string>
+    <string name="bar_contacto">Contacto</string>
+    <string name="bar_telefono">Teléfono:</string>
+    <string name="bar_email">Email:</string>
+    <string name="bar_facebook">Facebook:</string>
     <string name="menu_open">Horario de apertura</string>
     <string-array name="opening_schedule">
         <item>A partir de la 22:00 h</item>
