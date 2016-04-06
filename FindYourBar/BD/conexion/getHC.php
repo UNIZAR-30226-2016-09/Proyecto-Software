@@ -4,9 +4,11 @@
  */
 require_once __DIR__ . '/db_connect.php';
 $con = new DB_CONNECT();    //conexion con DB
-$parametro = $_REQUEST['nombre'];
-$parametro = (double) $parametro;
-$sql = "select * from bar where horarioCierre>='".$parametro."'";
+$parametro1 = $_REQUEST['hora1'];
+$parametro1 = (double) $parametro1;
+$parametro2 = $_REQUEST['hora2'];
+$parametro2 = (double) $parametro2;
+$sql = "select * from bar where horarioCierre>='".$parametro1."' and horarioCierre<='" .$parametro2. "'";
 $result = mysql_query($sql);
 $baresInt = array();
 if(mysql_num_rows($result)){

@@ -6,7 +6,7 @@ require_once __DIR__ . '/db_connect.php';
 $con = new DB_CONNECT();    //conexion con DB
 $parametro = $_REQUEST['nombre'];
 $parametro = (double) $parametro;
-$sql = "select * from bar where horarioApertura>='".$parametro."'";
+$sql = "select * from bar where horarioApertura>='".$parametro."' and horarioApertura<20";
 $result = mysql_query($sql);
 $baresInt = array();
 if(mysql_num_rows($result)){

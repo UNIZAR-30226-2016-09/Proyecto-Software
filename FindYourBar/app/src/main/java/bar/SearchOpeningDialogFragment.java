@@ -26,7 +26,7 @@ public class SearchOpeningDialogFragment extends DialogFragment {
         builder.setPositiveButton(R.string.acept, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
+                EnvioDatos.enviarHoraApertura("1.00");
             }
         });
         return builder.create();
