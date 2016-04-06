@@ -59,9 +59,9 @@ public class EnvioDatos {
     /**
      * Recibe el tipo de musica
      */
-    public static void enviarMusica(String dato) {
-        String url = "http://192.168.1.38:5107/getMusica.php";
-        //JsonReadTask task = new JsonReadTask();
+    public static void enviarMusica(String dato){
+        String url = "http://ps1516.ddns.net:80/getMusica.php";
+        JsonReadTask task = new JsonReadTask();
         // passes values for the urls string array
         //task.execute(new String[]{url, dato});
     }
@@ -69,21 +69,21 @@ public class EnvioDatos {
     /**
      * Recibe la hora de apertura
      */
-    public static void enviarHoraApertura(String dato) {
+    public static void enviarHoraApertura(String dato1){
         String url = "http://ps1516.ddns.net:80/getHA.php";
         //JsonReadTask task = new JsonReadTask();
         // passes values for the urls string array
-        //task.execute(new String[]{url, dato});
+        task.execute(new String[]{url, dato1});
     }
 
     /**
      * Recibe la hora de cierre
      */
-    public static void enviarHoraCierre(String dato) {
+    public static void enviarHoraCierre(String dato1, String dato2){
         String url = "http://ps1516.ddns.net:80/getHC.php";
         //JsonReadTask task = new JsonReadTask();
         // passes values for the urls string array
-        //task.execute(new String[]{url, dato});
+        task.execute(new String[]{url, "horas", dato1, dato2});
     }
 
 
