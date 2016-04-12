@@ -61,7 +61,7 @@ public class EnvioDatos {
      */
     public static void enviarMusica(String dato){
         String url = "http://ps1516.ddns.net:80/getMusica.php";
-        JsonReadTask task = new JsonReadTask();
+        //JsonReadTask task = new JsonReadTask();
         // passes values for the urls string array
         //task.execute(new String[]{url, dato});
     }
@@ -73,7 +73,7 @@ public class EnvioDatos {
         String url = "http://ps1516.ddns.net:80/getHA.php";
         //JsonReadTask task = new JsonReadTask();
         // passes values for the urls string array
-        task.execute(new String[]{url, dato1});
+        //task.execute(new String[]{url, dato1});
     }
 
     /**
@@ -83,7 +83,7 @@ public class EnvioDatos {
         String url = "http://ps1516.ddns.net:80/getHC.php";
         //JsonReadTask task = new JsonReadTask();
         // passes values for the urls string array
-        task.execute(new String[]{url, "horas", dato1, dato2});
+        //task.execute(new String[]{url, "horas", dato1, dato2});
     }
 
 
