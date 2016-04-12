@@ -1,97 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:visibility="visible"
+    android:baselineAligned="false">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <sliderTab.SlidingTabLayout
+        android:id="@+id/sliderTabs"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:baselineAligned="false"
-        android:orientation="vertical">
+        android:elevation="2dp"
+        android:background="@color/slider_background"/>
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:adjustViewBounds="true"
-            android:scaleType="fitCenter"
-            android:src="@drawable/bar" />
-
-        <TextView
-            android:id="@+id/bar_nombre_bar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:paddingTop="20dp"
-            android:textAllCaps="true"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@color/actionbar_background" />
-
-        <TextView
-            android:id="@+id/bar_descripcion_bar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="fill_horizontal"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp" />
-
-        <TextView
-            android:id="@+id/bar_direccion_titulo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:paddingTop="20dp"
-            android:text="@string/bar_direccion"
-            android:textAllCaps="true"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@color/actionbar_background" />
-
-        <TextView
-            android:id="@+id/bar_direccion"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="fill_horizontal"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp" />
-
-        <TextView
-            android:id="@+id/bar_contacto_titulo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:paddingTop="20dp"
-            android:text="@string/bar_contacto"
-            android:textAllCaps="true"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@color/actionbar_background" />
-
-        <TextView
-            android:id="@+id/bar_telefono"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="fill_horizontal"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:text="@string/bar_telefono" />
-
-        <TextView
-            android:id="@+id/bar_email"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="fill_horizontal"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:text="@string/bar_email" />
-
-        <TextView
-            android:id="@+id/bar_facebook"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="fill_horizontal"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:text="@string/bar_facebook" />
-
-    </LinearLayout>
-</ScrollView>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_weight="1"></android.support.v4.view.ViewPager>
+</LinearLayout>

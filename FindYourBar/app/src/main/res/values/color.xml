@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="actionbar_background">#2196F3</color>
+    <color name="slider_background">#42A5F5</color>
+    <color name="ColorPrimaryDark">#0D47A1</color>
     <color name="letter_actionBar">#FFFFFF</color>
 </resources>

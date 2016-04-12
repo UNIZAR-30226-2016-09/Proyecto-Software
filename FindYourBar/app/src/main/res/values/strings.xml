@@ -12,6 +12,7 @@
     <string name="titulo_bares">Bares</string>
     <string name="bar_direccion">Dirección</string>
     <string name="bar_contacto">Contacto</string>
+    <string name="bar_mapa">Localización en mapa</string>
     <string name="bar_telefono">Teléfono:</string>
     <string name="bar_email">Email:</string>
     <string name="bar_facebook">Facebook:</string>
@@ -45,5 +46,4 @@
     <string name="menu_music">Música</string>
     <string name="menu_age">Edad</string>
     <string name="acept">Aceptar</string>
-
 </resources>
