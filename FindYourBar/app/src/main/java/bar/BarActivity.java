@@ -25,10 +25,6 @@ public class BarActivity extends ActionBarActivity {
     CharSequence Titles[]={"Información","Contacto", "Eventos"};
     int Numboftabs =3;
 
-    static TextView dirBar;
-    static TextView tlfBar;
-    static TextView emailfBar;
-    static TextView fbBar;
     static String nombreBarElegido;
 
     @Override
@@ -36,20 +32,9 @@ public class BarActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bar);
 
-        dirBar = (TextView) findViewById(R.id.bar_direccion);
-        tlfBar = (TextView) findViewById(R.id.bar_telefono);
-        emailfBar = (TextView) findViewById(R.id.bar_email);
-        fbBar = (TextView) findViewById(R.id.bar_facebook);
-
         nombreBarElegido = getIntent().getCharSequenceExtra(BAR_ELEGIDO).toString();
         Bar bar = getNombreBar();
-
         setTitle(bar.getNombre());
-
-     /*   dirBar.setText(bar.getDireccion());
-        tlfBar.setText(tlfBar.getText() + " " +  bar.getTelefono());
-        emailfBar.setText(emailfBar.getText() + " " + bar.getEmail());
-        fbBar.setText(fbBar.getText() + " " + bar.getFacebook());*/
 
         // Creating The ViewPagerAdapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
         adapter =  new ViewPagerAdapter(getSupportFragmentManager(),Titles,Numboftabs);
@@ -84,22 +69,6 @@ public class BarActivity extends ActionBarActivity {
         Intent i = new Intent(context, BarActivity.class);
         i.putExtra(BAR_ELEGIDO, barElegido);
         return i;
-    }
-
-    public static String getDirBar (){
-        return dirBar.getText().toString();
-    }
-
-    public static String getEmailBar() {
-        return emailfBar.getText().toString();
-    }
-
-    public static String getTelefonoBar() {
-        return tlfBar.getText().toString();
-    }
-
-    public static String getFacebookBar() {
-        return fbBar.getText().toString();
     }
 
     public static Bar getNombreBar() {

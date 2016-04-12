@@ -18,17 +18,19 @@ import bar.R;
  */
 
 public class InformationTab extends Fragment{
-    public void onCreate(){
-        TextView tituloBar, descripcionBar;
-        tituloBar = (TextView)getView().findViewById(R.id.bar_nombre_bar);
-        descripcionBar = (TextView)getView().findViewById(R.id.bar_descripcion_bar);
+    Bar bar = BarActivity.getNombreBar();
+    TextView tituloBar, descripcionBar;
 
-        Bar bar = BarActivity.getNombreBar();
-        tituloBar.setText(bar.getNombre());
-    }
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v =inflater.inflate(R.layout.information_tab,container,false);
+
+        tituloBar = (TextView) v.findViewById(R.id.bar_nombre_bar);
+        descripcionBar = (TextView) v.findViewById(R.id.bar_descripcion_bar);
+
+        tituloBar.setText(bar.getNombre());
+        descripcionBar.setText(bar.getDescripcion());
+
         return v;
     }
 }
