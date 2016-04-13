@@ -18,15 +18,15 @@
     <string name="bar_facebook">Facebook:</string>
     <string name="menu_open">Horario de apertura</string>
     <string-array name="opening_schedule">
-        <item>A partir de la 22:00 h</item>
-        <item>A partir de la 23:00 h</item>
-        <item>A partir de la 00:00 h</item>
+        <item>Abierto a las 22:00 h</item>
+        <item>Abierto a las 23:00 h</item>
+        <item>Abierto a las 00:00 h</item>
     </string-array>
     <string-array name="closing_schedule">
-        <item>Antes de las 03:00 h</item>
-        <item>Entre las 03:01 h y las 04:00 h</item>
-        <item>Entre las 04:01 h y las 05:00 h</item>
-        <item>Entre las 05:01 h y las 06:00 h</item>
+        <item>Hasta las 03:00 h</item>
+        <item>Hasta las 04:00 h</item>
+        <item>Hasta las 05:00 h</item>
+        <item>Hasta las 06:30 h</item>
     </string-array>
     <string-array name="music_genre">
         <item>Pop/Música comercial</item>
