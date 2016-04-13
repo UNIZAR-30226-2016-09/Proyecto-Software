@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import bar.*;
@@ -55,12 +56,12 @@ public class ContactMapTab extends Fragment{
               }
         });
 
-        dirBar.setText(bar.getDireccion());
-        tlfBar.setText(bar.getTelefono());
-        emailfBar.setText(bar.getEmail());
-        fbBar.setText(bar.getFacebook());
-        return v;
-    }
+            dirBar.setText(bar.getDireccion());
+            tlfBar.setText(bar.getTelefono());
+            emailfBar.setText(bar.getEmail());
+            fbBar.setText(bar.getFacebook());
+            return v;
+        }
 
     private void openFacebook(){
         String facebook = bar.getFacebook();

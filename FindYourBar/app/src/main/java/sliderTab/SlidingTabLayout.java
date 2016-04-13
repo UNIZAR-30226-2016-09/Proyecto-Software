@@ -1,4 +1,3 @@
-package sliderTab;
 /*
  * Copyright 2014 Google Inc. All rights reserved.
  *
@@ -15,6 +14,8 @@ package sliderTab;
  * limitations under the License.
  */
 
+package sliderTab;
+
 import android.content.Context;
 import android.graphics.Typeface;
 import android.support.v4.view.PagerAdapter;
@@ -29,6 +30,8 @@ import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import bar.R;
 
 /**
  * To be used with ViewPager to provide a tab indicator component which give constant feedback as to
@@ -221,6 +224,8 @@ public class SlidingTabLayout extends HorizontalScrollView {
             if (i == mViewPager.getCurrentItem()) {
                 tabView.setSelected(true);
             }
+            tabTitleView.setTextColor(getResources().getColorStateList(R.color.white));
+            tabTitleView.setTextSize(14);
         }
     }
 
