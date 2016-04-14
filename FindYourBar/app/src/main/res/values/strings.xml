@@ -12,22 +12,23 @@
     <string name="titulo_bares">Bares</string>
     <string name="bar_direccion">Dirección</string>
     <string name="bar_contacto">Contacto</string>
+    <string name="bar_mapa">Localización en mapa</string>
     <string name="bar_telefono">Teléfono:</string>
     <string name="bar_email">Email:</string>
     <string name="bar_facebook">Facebook:</string>
     <string name="menu_open">Horario de apertura</string>
     <string-array name="opening_schedule">
         <item>Cualquiera</item>
-        <item>A partir de la 22:00 h</item>
-        <item>A partir de la 23:00 h</item>
-        <item>A partir de la 00:00 h</item>
+        <item>Abierto a las 22:00 h</item>
+        <item>Abierto a las 23:00 h</item>
+        <item>Abierto a las 00:00 h</item>
     </string-array>
     <string-array name="closing_schedule">
         <item>Cualquiera</item>
-        <item>Antes de las 03:00 h</item>
-        <item>Entre las 03:01 h y las 04:00 h</item>
-        <item>Entre las 04:01 h y las 05:00 h</item>
-        <item>Entre las 05:01 h y las 06:00 h</item>
+        <item>Hasta las 03:00 h</item>
+        <item>Hasta las 04:00 h</item>
+        <item>Hasta las 05:00 h</item>
+        <item>Hasta las 06:30 h</item>
     </string-array>
     <string-array name="music_genre">
         <item>Cualquiera</item>
@@ -56,6 +57,5 @@
     <string name="error_coger_datos">Ha ocurrido un error</string>
     <string name="reintentar">Reintentar</string>
     <string name="filtros">Filtros</string>
-
-
+    <string name="acept">Aceptar</string>
 </resources>

@@ -29,7 +29,8 @@ public class EnvioDatos {
     private static String jsonResult;
 
     public static void accessWebService() {
-        String url = "http://ps1516.ddns.net:80/getBares.php";
+        //String url = "http://ps1516.ddns.net:80/getBares.php";
+        String url = "http://10.1.48.46:5107/getBares.php";
         //JsonReadTask task = new JsonReadTask();
         // passes values for the urls string arrayg
         getJsonResult(new String[]{url, "all"});
@@ -40,7 +41,8 @@ public class EnvioDatos {
      * Recibe el bar a buscar en la base de datos
      */
     public static void enviarBares(String dato) {
-        String url = "http://ps1516.ddns.net:80/getNames.php";
+        //String url = "http://ps1516.ddns.net:80/getNames.php";
+        String url = "http://10.1.48.46:5107/getBares.php";
         //JsonReadTask task = new JsonReadTask();
         // passes values for the urls string array
         //task.execute(new String[]{url, dato});
@@ -50,7 +52,8 @@ public class EnvioDatos {
      * Recibe la edad
      */
     public static void enviarEdad(String dato) {
-        String url = "http://ps1516.ddns.net:80/getEdad.php";
+        //String url = "http://ps1516.ddns.net:80/getEdad.php";
+        String url = "http://10.1.48.46:5107/getBares.php";
         //JsonReadTask task = new JsonReadTask();
         // passes values for the urls string array
         //task.execute(new String[]{url, dato});
@@ -73,17 +76,17 @@ public class EnvioDatos {
         String url = "http://ps1516.ddns.net:80/getHA.php";
         //JsonReadTask task = new JsonReadTask();
         // passes values for the urls string array
-       //task.execute(new String[]{url, dato1});
+        //task.execute(new String[]{url, dato1});
     }
 
     /**
      * Recibe la hora de cierre
      */
-    public static void enviarHoraCierre(String dato1, String dato2){
+    public static void enviarHoraCierre(String dato){
         String url = "http://ps1516.ddns.net:80/getHC.php";
         //JsonReadTask task = new JsonReadTask();
         // passes values for the urls string array
-        //task.execute(new String[]{url, "horas", dato1, dato2});
+        //task.execute(new String[]{url, dato});
     }
 
 
@@ -118,10 +121,12 @@ public class EnvioDatos {
                     String e = jsonChildNode.optString("email");
                     String fb = jsonChildNode.optString("facebook");
                     String tl = jsonChildNode.optString("telefono");
+                    String ima = jsonChildNode.optString("imagenId");
 
                     Log.e("nombre", name);
+                    Log.e("imagen", ima);
 
-                    ConjuntoBares.getInstance().addBar(new Bar(name, des, dir, tl, e, fb));
+                    //ConjuntoBares.getInstance().addBar(new Bar(name, des, dir, tl, e, fb, ima));
                 }
 
             } catch (JSONException e) {

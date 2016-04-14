@@ -23,8 +23,7 @@
             android:label="@string/filtros" />
         <activity
             android:name=".SearchBar"
-            android:label="@string/app_name"
-            android:parentActivityName=".FindYourBar" />
+            android:label="@string/app_name" />
 
         <activity
             android:name=".SearchResultsActivity"
@@ -42,7 +41,6 @@
 
         <activity
             android:name=".BarActivity"
-            android:label="@string/app_name"
-            android:parentActivityName=".SearchBar" />
+            android:label="@string/app_name" />
     </application>
 </manifest>

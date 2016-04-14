@@ -4,7 +4,6 @@ import android.util.Log;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
@@ -117,6 +116,7 @@ public class ConjuntoBares {
         return jsonResult;
     }
 
+
     /**
      * Parse el json para
      *
@@ -126,6 +126,8 @@ public class ConjuntoBares {
      */
     private List<Bar> parseJson(String json) throws JSONException {
         List<Bar> bares = new ArrayList<>();
+        List<String> arrayImagenes = new ArrayList<>();
+        List<String> arrayEventos = new ArrayList<>();
         JSONObject jsonResponse = new JSONObject(json);
         JSONArray jsonMainNode = jsonResponse.optJSONArray("Bar");
         for (int i = 0; i < jsonMainNode.length(); i++) {
@@ -139,9 +141,25 @@ public class ConjuntoBares {
             String e = jsonChildNode.optString("email");
             String fb = jsonChildNode.optString("facebook");
             String tl = jsonChildNode.optString("telefono");
-            bares.add(new Bar(name, des, dir, tl, e, fb));
+            String imaPrincipal = jsonChildNode.optString("imagenId");
+            JSONArray imagenesArray = jsonChildNode.optJSONArray("secundaria");
+            //for (int j = 0; j < imagenesArray.length(); j++) {
+            //    String ruta = (String) imagenesArray.getString(j);
+            //    Log.e("ruta", ruta);
+            //    arrayImagenes.add(ruta);
+            // }
+            //JSONArray eventosArray = jsonChildNode.optJSONArray("eventos");
+            //for (int j = 0; j < eventosArray.length(); j++) {
+            //    String evento = (String) eventosArray.getString(j);
+            //    Log.e("evento", evento);
+            //    arrayEventos.add(evento);
+            //}
+            Log.e("nombre", name);
+            Log.e("imagen", imaPrincipal);
+            bares.add(new Bar(name, des, dir, tl, e, fb, imaPrincipal, arrayImagenes, arrayEventos));
         }
         return bares;
+
     }
 
     /**

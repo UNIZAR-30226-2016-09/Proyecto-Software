@@ -21,8 +21,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:drawableLeft="@drawable/ic_search_blue"
-        android:padding="16dp"
+        android:drawableLeft="@drawable/ic_search_white_24dp"
+        android:padding="24dp"
         android:text="@string/search_bar"
         android:textSize="24sp" />
 </LinearLayout>
