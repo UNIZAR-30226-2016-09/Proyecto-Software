@@ -18,6 +18,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,13 +68,16 @@ public class ConjuntoBares {
 
     private List<Bar> accessWebService() {
         String url = "http://ps1516.ddns.net:80/getBares.php";
+        //String url = "http://10.1.62.22:5107/getBares.php";
         return getJsonResult(new String[]{url, "all"});
     }
 
     public List<Bar> enviarBares(String dato) {
+        //String url = "http://10.1.62.22:5107/getBares.php";
         String url = "http://ps1516.ddns.net:80/getNames.php";
         return getJsonResult(new String[]{url, dato});
     }
+
 
 
     private List<Bar> getJsonResult(String... params) {
@@ -95,6 +99,8 @@ public class ConjuntoBares {
 
             // Parsing del json con la informacion de los bares
 
+            List<String> arrayImagenes = new ArrayList<>();
+            List<String> arrayEventos = new ArrayList<>();
             JSONObject jsonResponse = new JSONObject(jsonResult);
             JSONArray jsonMainNode = jsonResponse.optJSONArray("Bar");
             for (int i = 0; i < jsonMainNode.length(); i++) {
@@ -108,9 +114,22 @@ public class ConjuntoBares {
                 String e = jsonChildNode.optString("email");
                 String fb = jsonChildNode.optString("facebook");
                 String tl = jsonChildNode.optString("telefono");
-
+                String imaPrincipal = jsonChildNode.optString("imagenId");
+                JSONArray imagenesArray = jsonChildNode.optJSONArray("secundaria");
+                for (int j = 0; j < imagenesArray.length(); j++) {
+                    String ruta = (String) imagenesArray.getString(j);
+                    Log.e("ruta",ruta);
+                    arrayImagenes.add(ruta);
+                }
+                JSONArray eventosArray = jsonChildNode.optJSONArray("eventos");
+                for (int j = 0; j < eventosArray.length(); j++) {
+                    String evento = (String) eventosArray.getString(j);
+                    Log.e("evento",evento);
+                    arrayEventos.add(evento);
+                }
                 Log.e("nombre", name);
-                bares.add(new Bar(name, des, dir, tl, e, fb));
+                Log.e("imagen", imaPrincipal);
+                bares.add(new Bar(name, des, dir, tl, e, fb,imaPrincipal, arrayImagenes, arrayEventos));
             }
 
         } catch (ClientProtocolException e) {

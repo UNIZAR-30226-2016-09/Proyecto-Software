@@ -1,8 +1,12 @@
 package bar;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Clase que repsresenta un bar y toda la infomarcion asociada a el
- * TODO: falta poner un campo para las imagenes
+ *
  */
 public class Bar {
     private String nombre;
@@ -23,15 +27,46 @@ public class Bar {
 
     private String telefono;
     private String email;
-    private String facebook;
 
-    public Bar(String nombre, String descripcion, String direccion, String telefono, String email, String facebook) {
+    public String getPrincipal() {
+        return principal;
+    }
+
+    public void setPrincipal(String principal) {
+        this.principal = principal;
+    }
+
+    public List getSecundaria() {
+        return secundaria;
+    }
+
+    public void setSecundaria(List secundaria) {
+        this.secundaria = secundaria;
+    }
+
+    public List getEventos() {
+        return eventos;
+    }
+
+    public void setEventos(List eventos) {
+        this.eventos = eventos;
+    }
+
+    private String facebook;
+    private String principal;
+    private List<String> secundaria;
+    private List<String> eventos;
+
+    public Bar(String nombre, String descripcion, String direccion, String telefono, String email, String facebook, String principal, List secundaria, List eventos) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.direccion = direccion;
         this.telefono = telefono;
         this.email = email;
         this.facebook = facebook;
+        this.principal = principal;
+        this.secundaria = secundaria;
+        this.eventos = eventos;
     }
 
     /**
