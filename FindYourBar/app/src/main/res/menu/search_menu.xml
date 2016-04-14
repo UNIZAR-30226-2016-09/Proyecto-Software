@@ -1,28 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/searchIcon"
-        android:title="search"
         android:icon="@drawable/ic_search_white_24dp"
-        app:showAsAction="ifRoom|withText">
-        <menu>
-            <item
-                android:id="@+id/menu_name"
-                android:title="@string/menu_name"/>
-            <item
-                android:id="@+id/menu_open"
-                android:title="@string/menu_open"/>
-            <item
-                android:id="@+id/menu_close"
-                android:title="@string/menu_close"/>
-            <item
-                android:id="@+id/menu_music"
-                android:title="@string/menu_music"/>
-            <item
-                android:id="@+id/menu_age"
-                android:title="@string/menu_age"/>
-        </menu>
-    </item>
+        android:title="@string/buscar"
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        app:showAsAction="ifRoom|collapseActionView" />
+
+    <item
+        android:id="@+id/filterIcon"
+        android:icon="@drawable/ic_filter_outline_white_24dp"
+        android:title="@string/quitar_filtros"
+        app:showAsAction="ifRoom" />
 </menu>

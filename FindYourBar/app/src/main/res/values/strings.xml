@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">FindYourBar</string>
-    <string name="search_bar">Buscar bar</string>
     <string name="menu_name_title">Nombre del bar</string>
+    <string name="search_bar">Buscar bar</string>
     <string name="menu_opening_title">Horario de apertura</string>
     <string name="app_description">Tu app para encontrar todos los bares de copas en Zaragoza</string>
     <string name="action_settings">Ajustes</string>
@@ -17,17 +17,20 @@
     <string name="bar_facebook">Facebook:</string>
     <string name="menu_open">Horario de apertura</string>
     <string-array name="opening_schedule">
+        <item>Cualquiera</item>
         <item>A partir de la 22:00 h</item>
         <item>A partir de la 23:00 h</item>
         <item>A partir de la 00:00 h</item>
     </string-array>
     <string-array name="closing_schedule">
+        <item>Cualquiera</item>
         <item>Antes de las 03:00 h</item>
         <item>Entre las 03:01 h y las 04:00 h</item>
         <item>Entre las 04:01 h y las 05:00 h</item>
         <item>Entre las 05:01 h y las 06:00 h</item>
     </string-array>
     <string-array name="music_genre">
+        <item>Cualquiera</item>
         <item>Pop/Música comercial</item>
         <item>Rap</item>
         <item>Rock/Metal</item>
@@ -37,6 +40,7 @@
         <item>60s - 80s</item>
     </string-array>
     <string-array name="age_groups">
+        <item>Cualquiera</item>
         <item>Mayores de 16 años</item>
         <item>Mayores de 18 años</item>
         <item>Mayores de 21 años</item>
@@ -44,6 +48,14 @@
     <string name="menu_close">Horario de cierre</string>
     <string name="menu_music">Música</string>
     <string name="menu_age">Edad</string>
-    <string name="acept">Aceptar</string>
+    <string name="aplicar">Aplicar</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="quitar_filtros">Quitar filtros</string>
+    <string name="buscar">Buscar</string>
+
+    <string name="error_coger_datos">Ha ocurrido un error</string>
+    <string name="reintentar">Reintentar</string>
+    <string name="filtros">Filtros</string>
+
 
 </resources>

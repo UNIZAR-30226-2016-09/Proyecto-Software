@@ -51,12 +51,36 @@ public class ConjuntoBares {
         return sConjuntoBares;
     }
 
-    public List<Bar> getBares() {
-        mBares = accessWebService();
+    public List<Bar> getBares() throws IOException, JSONException {
+        String url = "http://ps1516.ddns.net:80/getBares.php";
+        String json = getJson(new String[]{url, "all"});
+        mBares = parseJson(json);
         return mBares;
     }
 
-    public Bar getBar(String nombre) {
+    /**
+     * Devuelve una lista con bares cuyos nombres contienen el parametro "nombre"
+     *
+     * @param nombre String por la que se buscan los bares
+     * @return lista de bares
+     */
+    public List<Bar> getBar(String nombre) {
+        List<Bar> aux = new ArrayList<>();
+        for (Bar b : mBares) {
+            if (b.getNombre().toLowerCase().contains(nombre.toLowerCase())) {
+                aux.add(b);
+            }
+        }
+        return aux;
+    }
+
+    /**
+     * Devuelve el bar que tiene el nombre igual que el parametro "nombre"
+     *
+     * @param nombre String, nombre del bar
+     * @return null o Bar
+     */
+    public Bar getBarExact(String nombre) {
         for (Bar b : mBares) {
             if (b.getNombre().equals(nombre)) {
                 return b;
@@ -65,64 +89,67 @@ public class ConjuntoBares {
         return null;
     }
 
-    private List<Bar> accessWebService() {
-        String url = "http://ps1516.ddns.net:80/getBares.php";
-        return getJsonResult(new String[]{url, "all"});
-    }
-
-    public List<Bar> enviarBares(String dato) {
+    public List<Bar> enviarBares(String dato) throws IOException, JSONException {
         String url = "http://ps1516.ddns.net:80/getNames.php";
-        return getJsonResult(new String[]{url, dato});
+        String json = getJson(new String[]{url, dato});
+        return parseJson(json);
     }
 
-
-    private List<Bar> getJsonResult(String... params) {
-
+    /**
+     * Pide al servidor el json con la informacion de los bares
+     *
+     * @param params array con la url del servidor y que informacion pedir
+     * @return json con la infomacion del servidor
+     * @throws IOException
+     */
+    private String getJson(String... params) throws IOException {
         HttpClient httpclient = new DefaultHttpClient();
         HttpPost httppost = new HttpPost(params[0]);
+        if (!params[1].equals("all")) {
+            List<NameValuePair> postValues = new ArrayList<NameValuePair>(2);
+            postValues.add(new BasicNameValuePair("nombre", params[1]));
+            //Encapsulamos
+            httppost.setEntity(new UrlEncodedFormEntity(postValues));
+        }
+        HttpResponse response = httpclient.execute(httppost);
+        String jsonResult = inputStreamToString(
+                response.getEntity().getContent()).toString();
+        return jsonResult;
+    }
+
+    /**
+     * Parse el json para
+     *
+     * @param json cadena a parsear
+     * @return lista de los bares
+     * @throws JSONException
+     */
+    private List<Bar> parseJson(String json) throws JSONException {
         List<Bar> bares = new ArrayList<>();
-        try {
-            if (!params[1].equals("all")) {
-                List<NameValuePair> postValues = new ArrayList<NameValuePair>(2);
-                postValues.add(new BasicNameValuePair("nombre", params[1]));
-                //Encapsulamos
-                httppost.setEntity(new UrlEncodedFormEntity(postValues));
-            }
-            HttpResponse response = httpclient.execute(httppost);
-            String jsonResult = inputStreamToString(
-                    response.getEntity().getContent()).toString();
-            Log.e("jsonResult", jsonResult);
-
-            // Parsing del json con la informacion de los bares
-
-            JSONObject jsonResponse = new JSONObject(jsonResult);
-            JSONArray jsonMainNode = jsonResponse.optJSONArray("Bar");
-            for (int i = 0; i < jsonMainNode.length(); i++) {
-                JSONObject jsonChildNode = jsonMainNode.getJSONObject(i);
-                String name = jsonChildNode.optString("nombre");
-                String des = jsonChildNode.optString("descripcion");
-                String dir = jsonChildNode.optString("direccion");
-                String ed = jsonChildNode.optString("edad");
-                String ha = jsonChildNode.optString("horarioApertura");
-                String hc = jsonChildNode.optString("horarioCierre");
-                String e = jsonChildNode.optString("email");
-                String fb = jsonChildNode.optString("facebook");
-                String tl = jsonChildNode.optString("telefono");
-
-                Log.e("nombre", name);
-                bares.add(new Bar(name, des, dir, tl, e, fb));
-            }
-
-        } catch (ClientProtocolException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
+        JSONObject jsonResponse = new JSONObject(json);
+        JSONArray jsonMainNode = jsonResponse.optJSONArray("Bar");
+        for (int i = 0; i < jsonMainNode.length(); i++) {
+            JSONObject jsonChildNode = jsonMainNode.getJSONObject(i);
+            String name = jsonChildNode.optString("nombre");
+            String des = jsonChildNode.optString("descripcion");
+            String dir = jsonChildNode.optString("direccion");
+            String ed = jsonChildNode.optString("edad");
+            String ha = jsonChildNode.optString("horarioApertura");
+            String hc = jsonChildNode.optString("horarioCierre");
+            String e = jsonChildNode.optString("email");
+            String fb = jsonChildNode.optString("facebook");
+            String tl = jsonChildNode.optString("telefono");
+            bares.add(new Bar(name, des, dir, tl, e, fb));
         }
         return bares;
     }
 
+    /**
+     * Transforma un InputStream a una string
+     *
+     * @param is InputStream a transformar
+     * @return String del InputStream
+     */
     private StringBuilder inputStreamToString(InputStream is) {
         String rLine = "";
         StringBuilder answer = new StringBuilder();

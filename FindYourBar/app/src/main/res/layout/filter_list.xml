@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/botones_aplicar_cancelar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="16dp"
+                android:paddingTop="20dp"
+                android:text="@string/menu_music"
+                android:textAppearance="?android:textAppearanceMedium" />
+
+            <Spinner
+                android:id="@+id/spinner_music"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="25dp"
+                android:paddingLeft="16dp"
+                android:paddingTop="16dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="16dp"
+                android:text="@string/menu_age"
+                android:textAppearance="?android:textAppearanceMedium" />
+
+            <Spinner
+                android:id="@+id/spinner_age"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="25dp"
+                android:paddingLeft="16dp"
+                android:paddingTop="16dp" />
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="16dp"
+                android:text="@string/menu_open"
+                android:textAppearance="?android:textAppearanceMedium" />
+
+            <Spinner
+                android:id="@+id/spinner_close"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="25dp"
+                android:paddingLeft="16dp"
+                android:paddingTop="16dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="16dp"
+
+                android:text="@string/menu_close"
+                android:textAppearance="?android:textAppearanceMedium" />
+
+            <Spinner
+                android:id="@+id/spinner_open"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="25dp"
+                android:paddingLeft="16dp"
+                android:paddingTop="16dp" />
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/botones_aplicar_cancelar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <Button
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.50"
+            android:text="@string/cancelar" />
+
+        <Button
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.50"
+            android:text="@string/aplicar" />
+    </LinearLayout>
+</RelativeLayout>

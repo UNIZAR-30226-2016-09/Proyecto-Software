@@ -1,7 +1,6 @@
 package bar;
 
 import android.app.SearchManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,44 +14,56 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.os.AsyncTask;
 
-import org.json.JSONException;
-
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
-
-public class SearchBar extends AppCompatActivity {
-
+/**
+ * TODO: cambiar esta clase para mejorar la reutilizacion de codigo con lo que hhay en SearchBar.java
+ */
+public class SearchResultsActivity extends AppCompatActivity {
     private RecyclerView mList;
     private BarAdapter mAdapter;
-    private ProgressBar mProgress;
-    private MenuItem mSearchMenuItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search);
-        setTitle(R.string.titulo_bares);
+        mAdapter = null;
+        setContentView(R.layout.activity_search_results);
         mList = (RecyclerView) findViewById(R.id.recyclerlist);
         mList.setLayoutManager(new LinearLayoutManager(this));
-        mProgress = (ProgressBar) findViewById(R.id.progressbar);
-        mProgress.setVisibility(View.VISIBLE);
-        new getListaBares().execute();
+        handleIntent(getIntent());
     }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        setIntent(intent);
+        handleIntent(intent);
+    }
+
+    private void handleIntent(Intent intent) {
+
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            setTitle("Resultados de \"" + query + "\"");
+            if (mAdapter == null) {
+                mAdapter = new BarAdapter(ConjuntoBares.getInstance().getBar(query));
+                mList.setAdapter(mAdapter);
+            } else {
+                mAdapter.setBares(ConjuntoBares.getInstance().getBar(query));
+                mAdapter.notifyDataSetChanged();
+            }
+        }
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.search_menu, menu);
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        mSearchMenuItem = menu.findItem(R.id.searchIcon);
-        SearchView searchView = (SearchView) mSearchMenuItem.getActionView();
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(new ComponentName(this, SearchResultsActivity.class)));
+        SearchView searchView = (SearchView) menu.findItem(R.id.searchIcon).getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         return true;
     }
 
@@ -65,41 +76,6 @@ public class SearchBar extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        mSearchMenuItem.collapseActionView();
-    }
-
-    private class getListaBares extends AsyncTask<Void, Void, List<Bar>> {
-
-        @Override
-        protected List<Bar> doInBackground(Void... params) {
-            List<Bar> aux = new ArrayList<>();
-            try {
-                aux = ConjuntoBares.getInstance().getBares();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return aux;
-        }
-
-        @Override
-        protected void onPostExecute(List<Bar> result) {
-            mProgress.setVisibility(View.GONE);
-            if (mAdapter == null) {
-                mAdapter = new BarAdapter(result);
-                mList.setAdapter(mAdapter);
-            } else {
-                mAdapter.setBares(result);
-                mAdapter.notifyDataSetChanged();
-            }
-        }
-    }
-
-
     private class BarHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView mNombre;
 
@@ -111,7 +87,7 @@ public class SearchBar extends AppCompatActivity {
 
         @Override
         public void onClick(View v) {
-            startActivity(BarActivity.newIntent(SearchBar.this, mNombre.getText().toString()));
+            startActivity(BarActivity.newIntent(SearchResultsActivity.this, mNombre.getText().toString()));
         }
     }
 
@@ -124,7 +100,7 @@ public class SearchBar extends AppCompatActivity {
 
         @Override
         public BarHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            LayoutInflater li = LayoutInflater.from(SearchBar.this);
+            LayoutInflater li = LayoutInflater.from(SearchResultsActivity.this);
             // TODO: crear un layout para mostrar tambein una imagen del bar junto al nombre
             View view = li.inflate(R.layout.bar_list_item, parent, false);
             return new BarHolder(view);
@@ -145,4 +121,5 @@ public class SearchBar extends AppCompatActivity {
             this.bares = bares;
         }
     }
+
 }

@@ -27,19 +27,20 @@ public class BarActivity extends AppCompatActivity {
         TextView fbBar = (TextView) findViewById(R.id.bar_facebook);
 
         String nombreBarElegido = getIntent().getCharSequenceExtra(BAR_ELEGIDO).toString();
-        Bar bar = ConjuntoBares.getInstance().getBar(nombreBarElegido);
+        Bar bar = ConjuntoBares.getInstance().getBarExact(nombreBarElegido);
         setTitle(bar.getNombre());
         tituloBar.setText(bar.getNombre());
         descripcionBar.setText(bar.getDescripcion());
         dirBar.setText(bar.getDireccion());
-        tlfBar.setText(tlfBar.getText() + " " +  bar.getTelefono());
+        tlfBar.setText(tlfBar.getText() + " " + bar.getTelefono());
         emailfBar.setText(emailfBar.getText() + " " + bar.getEmail());
         fbBar.setText(fbBar.getText() + " " + bar.getFacebook());
     }
 
     /**
      * Crea un nuevo intent con la informacion necesaria para el comienzo de esta actividad
-     * @param context contexto
+     *
+     * @param context    contexto
      * @param barElegido nombre del bar elegido
      * @return un intent con la informacion sobre el bar que se ha elegido
      */
