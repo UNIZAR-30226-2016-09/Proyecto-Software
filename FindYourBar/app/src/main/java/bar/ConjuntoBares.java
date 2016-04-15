@@ -133,6 +133,7 @@ public class ConjuntoBares {
         List<Bar> bares = new ArrayList<>();
         List<String> arrayImagenes = new ArrayList<>();
         List<String> arrayEventos = new ArrayList<>();
+        List<String> arrayMusica = new ArrayList<>();
         JSONObject jsonResponse = new JSONObject(json);
         JSONArray jsonMainNode = jsonResponse.optJSONArray("Bar");
         for (int i = 0; i < jsonMainNode.length(); i++) {
@@ -159,10 +160,16 @@ public class ConjuntoBares {
                 Log.e("evento", evento);
                 arrayEventos.add(evento);
             }
+            JSONArray musicaArray = jsonChildNode.optJSONArray("musica");
+            for (int k = 0; k < musicaArray.length(); k++) {
+                String musica = (String) eventosArray.getString(k);
+                Log.e("musica", musica);
+                arrayMusica.add(musica);
+            }
             Log.e("nombre", name);
             Log.e("imagen", imaPrincipal);
             bares.add(new Bar(name, des, dir, tl, e, fb, imaPrincipal, arrayImagenes, arrayEventos,
-                    Integer.parseInt(ed), Float.parseFloat(hc), Float.parseFloat(ha)));
+                    Integer.parseInt(ed), Float.parseFloat(hc), Float.parseFloat(ha), arrayMusica));
         }
         return bares;
 

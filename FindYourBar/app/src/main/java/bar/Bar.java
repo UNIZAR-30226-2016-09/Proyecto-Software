@@ -19,10 +19,13 @@ public class Bar {
     private int edad;
     private float horaCierre;
     private float horaApertura;
+    private List<String> musica;
+
+
 
     public Bar(String nombre, String descripcion, String direccion, String telefono, String email,
                String facebook, String principal, List secundaria, List eventos, int edad,
-               float horaCierre, float horaApertura) {
+               float horaCierre, float horaApertura, List musica) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.direccion = direccion;
@@ -35,6 +38,7 @@ public class Bar {
         this.edad = edad;
         this.horaCierre = horaCierre;
         this.horaApertura = horaApertura;
+        this.musica = musica;
     }
 
     /**
@@ -115,5 +119,8 @@ public class Bar {
         return horaApertura;
     }
 
+    public List getMusica() {return musica;}
+
+    public void setMusica(List musica) {this.musica = musica;}
 
 }
