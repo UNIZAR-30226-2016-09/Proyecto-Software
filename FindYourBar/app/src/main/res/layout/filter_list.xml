@@ -49,7 +49,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingLeft="16dp"
-                android:text="@string/menu_open"
+                android:text="@string/menu_close"
                 android:textAppearance="?android:textAppearanceMedium" />
 
             <Spinner
@@ -65,7 +65,7 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="16dp"
 
-                android:text="@string/menu_close"
+                android:text="@string/menu_open"
                 android:textAppearance="?android:textAppearanceMedium" />
 
             <Spinner
@@ -87,6 +87,7 @@
         android:weightSum="1">
 
         <Button
+            android:id="@+id/filters_button_cancel"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -94,6 +95,7 @@
             android:text="@string/cancelar" />
 
         <Button
+            android:id="@+id/filters_button_apply"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

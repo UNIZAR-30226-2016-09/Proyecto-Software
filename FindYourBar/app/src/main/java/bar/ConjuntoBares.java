@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -35,6 +36,10 @@ public class ConjuntoBares {
 
     public void addBar(Bar b) {
         mBares.add(b);
+    }
+
+    public List<Bar> getLocalBarList() {
+        return mBares;
     }
 
     public static void verBares() {
@@ -143,20 +148,21 @@ public class ConjuntoBares {
             String tl = jsonChildNode.optString("telefono");
             String imaPrincipal = jsonChildNode.optString("imagenId");
             JSONArray imagenesArray = jsonChildNode.optJSONArray("secundaria");
-            //for (int j = 0; j < imagenesArray.length(); j++) {
-            //    String ruta = (String) imagenesArray.getString(j);
-            //    Log.e("ruta", ruta);
-            //    arrayImagenes.add(ruta);
-            // }
-            //JSONArray eventosArray = jsonChildNode.optJSONArray("eventos");
-            //for (int j = 0; j < eventosArray.length(); j++) {
-            //    String evento = (String) eventosArray.getString(j);
-            //    Log.e("evento", evento);
-            //    arrayEventos.add(evento);
-            //}
+            for (int j = 0; j < imagenesArray.length(); j++) {
+                String ruta = (String) imagenesArray.getString(j);
+                Log.e("ruta", ruta);
+                arrayImagenes.add(ruta);
+            }
+            JSONArray eventosArray = jsonChildNode.optJSONArray("eventos");
+            for (int j = 0; j < eventosArray.length(); j++) {
+                String evento = (String) eventosArray.getString(j);
+                Log.e("evento", evento);
+                arrayEventos.add(evento);
+            }
             Log.e("nombre", name);
             Log.e("imagen", imaPrincipal);
-            bares.add(new Bar(name, des, dir, tl, e, fb, imaPrincipal, arrayImagenes, arrayEventos));
+            bares.add(new Bar(name, des, dir, tl, e, fb, imaPrincipal, arrayImagenes, arrayEventos,
+                    Integer.parseInt(ed), Float.parseFloat(hc), Float.parseFloat(ha)));
         }
         return bares;
 

@@ -5,24 +5,31 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.os.AsyncTask;
+import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -31,7 +38,8 @@ public class SearchBar extends AppCompatActivity {
     private RecyclerView mList;
     private BarAdapter mAdapter;
     private ProgressBar mProgress;
-    private MenuItem mSearchMenuItem;
+    private static final int CHOOSE_FILTERS = 1;
+    private List<Bar> mBares;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +50,7 @@ public class SearchBar extends AppCompatActivity {
         mList.setLayoutManager(new LinearLayoutManager(this));
         mProgress = (ProgressBar) findViewById(R.id.progressbar);
         mProgress.setVisibility(View.VISIBLE);
+        handleIntent(getIntent());
         new getListaBares().execute();
     }
 
@@ -50,26 +59,122 @@ public class SearchBar extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.search_menu, menu);
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        mSearchMenuItem = menu.findItem(R.id.searchIcon);
-        SearchView searchView = (SearchView) mSearchMenuItem.getActionView();
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(new ComponentName(this, SearchResultsActivity.class)));
+        MenuItem searchMenuItem = menu.findItem(R.id.searchIcon);
+        MenuItemCompat.setOnActionExpandListener(searchMenuItem, new MenuItemCompat.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                if (mAdapter == null) {
+                    mAdapter = new BarAdapter(ConjuntoBares.getInstance().getLocalBarList());
+                    mList.setAdapter(mAdapter);
+                } else {
+                    mAdapter.setBares(ConjuntoBares.getInstance().getLocalBarList());
+                    mAdapter.notifyDataSetChanged();
+                }
+                return true;
+            }
+        });
+        SearchView searchView = (SearchView) searchMenuItem.getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         return true;
     }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        setIntent(intent);
+        handleIntent(intent);
+    }
+
+    private void handleIntent(Intent intent) {
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            List<Bar> bares = ConjuntoBares.getInstance().getBar(query);
+            mBares = bares;
+            if (mAdapter == null) {
+                mAdapter = new BarAdapter(bares);
+                mList.setAdapter(mAdapter);
+            } else {
+                mAdapter.setBares(bares);
+                mAdapter.notifyDataSetChanged();
+            }
+        }
+    }
+
 
     public boolean onOptionsItemSelected(MenuItem item) {
 
         if (item.getItemId() == R.id.filterIcon) {
-            Intent intent = new Intent(this, FiltersActivity.class);
-            startActivity(intent);
+            getFilters();
         }
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        mSearchMenuItem.collapseActionView();
+    public void getFilters() {
+        Intent pickContactIntent = new Intent(this, FiltersActivity.class);
+        startActivityForResult(pickContactIntent, CHOOSE_FILTERS);
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == CHOOSE_FILTERS) {
+            if (resultCode == RESULT_OK) {
+                HashMap<String, String> map = FiltersActivity.whatFiltersWhereSelected(data);
+                List<Bar> baresFiltrados = filtrar(mBares, map.get("Musica"),
+                        map.get("Edad"), map.get("HoraCierre"), map.get("HoraApertura"));
+                mAdapter.setBares(baresFiltrados);
+                mAdapter.notifyDataSetChanged();
+            }
+        }
+    }
+
+    // TODO: mejorar este metodo
+    public List<Bar> filtrar(List<Bar> bares, String musica, String edad, String horaCierre, String horaApertura) {
+        List<Bar> aux = bares;
+        List<Bar> aux1 = new ArrayList<>();
+        if (!musica.equals("all")) {
+            for (Bar b : aux) {
+
+            }
+            aux = aux1;
+            aux1 = new ArrayList<>();
+        }
+        if (!edad.equals("all")) {
+            for (Bar b : aux) {
+                if (b.getEdad() >= Integer.parseInt(edad)) {
+                    aux1.add(b);
+
+                }
+            }
+            aux = aux1;
+            aux1 = new ArrayList<>();
+        }
+
+        if (!horaCierre.equals("all")) {
+            for (Bar b : aux) {
+                if (b.getHoraCierre() >= Float.parseFloat(horaCierre)) {
+                    aux1.add(b);
+                }
+            }
+            aux = aux1;
+            aux1 = new ArrayList<>();
+        }
+
+        if (!horaApertura.equals("all")) {
+            for (Bar b : aux) {
+                if (b.getHoraApertura() <= Float.parseFloat(horaApertura)) {
+                    aux1.add(b);
+                }
+            }
+            aux = aux1;
+        }
+
+        return aux;
+    }
+
 
     private class getListaBares extends AsyncTask<Void, Void, List<Bar>> {
 
@@ -88,6 +193,7 @@ public class SearchBar extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(List<Bar> result) {
+            mBares = result;
             mProgress.setVisibility(View.GONE);
             if (mAdapter == null) {
                 mAdapter = new BarAdapter(result);
@@ -102,18 +208,22 @@ public class SearchBar extends AppCompatActivity {
 
     private class BarHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView mNombre;
+        public ImageView mImagen;
 
         public BarHolder(View item) {
             super(item);
             mNombre = (TextView) item.findViewById(R.id.list_nombre_bar);
+            mImagen = (ImageView) item.findViewById(R.id.list_imagen_bar);
             item.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-            startActivity(BarActivity.newIntent(SearchBar.this, mNombre.getText().toString()));
+            startActivity(BarActivity2.newIntent(SearchBar.this, mNombre.getText().toString()));
         }
     }
+
+    private static final String baseUrl = "http://ps1516.ddns.net/images";
 
     private class BarAdapter extends RecyclerView.Adapter<BarHolder> {
         private List<Bar> bares;
@@ -134,6 +244,7 @@ public class SearchBar extends AppCompatActivity {
         public void onBindViewHolder(BarHolder holder, int position) {
             Bar b = bares.get(position);
             holder.mNombre.setText(b.getNombre());
+            Picasso.with(SearchBar.this).load(baseUrl + b.getPrincipal()).into(holder.mImagen);
         }
 
         @Override
