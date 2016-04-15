@@ -162,7 +162,7 @@ public class ConjuntoBares {
             }
             JSONArray musicaArray = jsonChildNode.optJSONArray("musica");
             for (int k = 0; k < musicaArray.length(); k++) {
-                String musica = (String) eventosArray.getString(k);
+                String musica = (String) musicaArray.getString(k);
                 Log.e("musica", musica);
                 arrayMusica.add(musica);
             }

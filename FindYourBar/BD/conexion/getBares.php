@@ -4,7 +4,7 @@
  */
 require_once __DIR__ . '/db_connect.php';
 $con = new DB_CONNECT();    //conexion con DB
-$sql = "select nombre,descripcion,direccion,edad,horarioApertura,horarioCierre,telefono,email,facebook,i.imagenId from bar b,tiene t, imagen i where i.tipo='principal' and b.nombre=t.nombreId and t.imagenId=i.imagenId";
+$sql = "select distinct b.nombre,descripcion,direccion,edad,horarioApertura,horarioCierre,telefono,email,facebook,i.imagenId from bar b,tiene t, imagen i where i.tipo='principal' and b.nombre=t.nombreId and t.imagenId=i.imagenId";
 
 $result = mysql_query($sql);
 $baresInt = array();
@@ -22,7 +22,7 @@ if(mysql_num_rows($result)){
              }
          }
         
-        $sqlEventos = "select h.evento from hace h where h.nombre='".$nombre."'";
+        $sqlEventos = "select distinct h.evento from hace h where h.nombre='".$nombre."'";
         $resultEventos = mysql_query($sqlEventos);
         $eventosArray = array();
         if(mysql_num_rows($resultEventos)){
@@ -30,6 +30,16 @@ if(mysql_num_rows($result)){
             while($row2=mysql_fetch_assoc($resultEventos)){   
                 $evento = $row2['evento'];
                 array_push($eventosArray, $evento);
+             }
+         }
+
+        $sqlMusica = "select distinct m.musica from hay m where m.nombre='".$nombre."'";
+        $resultMusica = mysql_query($sqlMusica);
+        $musicaArray = array();
+        if(mysql_num_rows($resultMusica)){
+            while($row2=mysql_fetch_assoc($resultMusica)){   
+                $musica = $row2['musica'];
+                array_push($musicaArray, $musica);
              }
          }
 
@@ -45,13 +55,13 @@ if(mysql_num_rows($result)){
             'facebook' => $row["facebook"],
             'imagenId' => $row["imagenId"],
             'secundaria' => $imagenesArray,
-            'eventos' => $eventosArray);
+            'eventos' => $eventosArray,
+            'musica' => $musicaArray);
         array_push($baresInt, $bar);       
 	}
 }
 $bares = array("Bar" => $baresInt);
 
 echo json_encode($bares);
-//echo json_encode($imagenesArray);
 mysql_close($con);
 ?>

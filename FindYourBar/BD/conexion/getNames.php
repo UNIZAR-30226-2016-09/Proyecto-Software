@@ -34,6 +34,16 @@ if(mysql_num_rows($result)){
              }
          }
 
+        $sqlMusica = "select distinct m.musica from hay m where m.nombre='".$nombre."'";
+        $resultMusica = mysql_query($sqlMusica);
+        $musicaArray = array();
+        if(mysql_num_rows($resultMusica)){
+            while($row2=mysql_fetch_assoc($resultMusica)){   
+                $musica = $row2['musica'];
+                array_push($musicaArray, $musica);
+             }
+         }
+
         $bar = array (    
             'nombre' => $row['nombre'],               
             'descripcion' => $row['descripcion'],                
