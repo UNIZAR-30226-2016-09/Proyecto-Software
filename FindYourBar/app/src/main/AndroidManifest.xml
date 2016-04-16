@@ -12,7 +12,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".FindYourBar"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -20,11 +21,13 @@
         </activity>
         <activity
             android:name=".FiltersActivity"
-            android:label="@string/filtros" />
+            android:label="@string/filtros"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".SearchBar"
             android:label="@string/app_name"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
@@ -36,8 +39,11 @@
 
         <activity
             android:name=".BarActivity"
-            android:label="@string/app_name" />
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" />
 
-        <activity android:name=".BarActivity2" />
+        <activity
+            android:name=".BarActivity2"
+            android:screenOrientation="portrait" />
     </application>
 </manifest>

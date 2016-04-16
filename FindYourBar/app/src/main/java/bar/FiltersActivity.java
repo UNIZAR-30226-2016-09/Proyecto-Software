@@ -1,5 +1,6 @@
 package bar;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -24,28 +25,25 @@ public class FiltersActivity extends AppCompatActivity {
     private Spinner mSpinnerClose;
     private Spinner mSpinnerOpen;
 
-    private Button mButtonApply;
-    private Button mButtonCancel;
-
     private static final String MUSIC_SELECTED = "MUSIC_SELECTED";
     private static final String AGE_SELECTED = "AGE_SELECTED";
     private static final String CLOSE_SELECTED = "CLOSE_SELECTED";
     private static final String OPEN_SELECTED = "OPEN_SELECTED";
+    private static final String NEW_LIST = "NEW_LIST";
 
+    // Valores de las distinas posiciones de los spinner
     private static final String[] edad = {"all", "16", "18", "21"};
-
-    private static final String[] horaCierre = {"all", "3", "4", "5", "7"};
-
+    private static final String[] horaCierre = {"all", "3", "4", "5", "6.3"};
     private static final String[] horaApertura = {"all", "22", "23", "0"};
+    private static final String[] music = {"all", "Pop/musica comercial", "Rap", "Rock/Heavy", "Latina", "Indie", "Electronica", "Años 60-80"};
 
-    private static final String[] music = {"all"};
+    private static int[] previousSpinnerPositions = {0, 0, 0, 0};
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.filter_list);
-
         mSpinnerMusic = (Spinner) findViewById(R.id.spinner_music);
         mSpinnerAge = (Spinner) findViewById(R.id.spinner_age);
         mSpinnerClose = (Spinner) findViewById(R.id.spinner_close);
@@ -54,18 +52,25 @@ public class FiltersActivity extends AppCompatActivity {
         setAdapterSpinner(mSpinnerAge, R.array.age_groups);
         setAdapterSpinner(mSpinnerClose, R.array.closing_schedule);
         setAdapterSpinner(mSpinnerOpen, R.array.opening_schedule);
-        mButtonApply = (Button) findViewById(R.id.filters_button_apply);
-        mButtonCancel = (Button) findViewById(R.id.filters_button_cancel);
+        boolean isNewList = getIntent().getBooleanExtra(NEW_LIST, true);
+        if (isNewList) {
+            setSpinnerPositionsToDefault();
+        } else {
+            setSpinnerPositionToPrevious();
+        }
+        Button buttonApply = (Button) findViewById(R.id.filters_button_apply);
+        Button buttonCancel = (Button) findViewById(R.id.filters_button_cancel);
 
-        mButtonApply.setOnClickListener(new View.OnClickListener() {
+        buttonApply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setPreviousSpinnerPositions();
                 setFiltersSelected();
                 finish();
             }
         });
 
-        mButtonCancel.setOnClickListener(new View.OnClickListener() {
+        buttonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setResult(RESULT_CANCELED);
@@ -75,6 +80,58 @@ public class FiltersActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Pone los spinner a la selecion por defecto
+     */
+    public void setSpinnerPositionsToDefault() {
+        mSpinnerMusic.setSelection(0);
+        mSpinnerAge.setSelection(0);
+        mSpinnerClose.setSelection(0);
+        mSpinnerOpen.setSelection(0);
+    }
+
+    /**
+     * Pone la posicion de los spinner a la posicion anterior
+     */
+    public void setSpinnerPositionToPrevious() {
+        mSpinnerMusic.setSelection(previousSpinnerPositions[0]);
+        mSpinnerAge.setSelection(previousSpinnerPositions[1]);
+        mSpinnerClose.setSelection(previousSpinnerPositions[2]);
+        mSpinnerOpen.setSelection(previousSpinnerPositions[3]);
+
+    }
+
+    /**
+     * Guarda la posicion actual de los spinner
+     */
+    public void setPreviousSpinnerPositions() {
+        previousSpinnerPositions[0] = mSpinnerMusic.getSelectedItemPosition();
+        previousSpinnerPositions[1] = mSpinnerAge.getSelectedItemPosition();
+        previousSpinnerPositions[2] = mSpinnerClose.getSelectedItemPosition();
+        previousSpinnerPositions[3] = mSpinnerOpen.getSelectedItemPosition();
+    }
+
+    /**
+     * Usado para la creacion del intent que para comunicarse con esta actividad
+     *
+     * @param context
+     * @param isNewList
+     * @return
+     */
+    public static Intent newIntent(Context context, boolean isNewList) {
+        Intent intent = new Intent(context, FiltersActivity.class);
+        intent.putExtra(NEW_LIST, isNewList);
+        return intent;
+    }
+
+    /**
+     * Devuelve un hasmap con los valores de los filtors selecionados. Las llaves son: "Musica", "Edad",
+     * "HoraCierre" y "HoraApertura". Un valor de "all" significa que al usuario le da igual ese parametro
+     * de filtro
+     *
+     * @param intent
+     * @return
+     */
     public static HashMap<String, String> whatFiltersWhereSelected(Intent intent) {
         HashMap<String, String> aux = new HashMap<>();
         aux.put("Musica", intent.getStringExtra(MUSIC_SELECTED));
@@ -84,9 +141,12 @@ public class FiltersActivity extends AppCompatActivity {
         return aux;
     }
 
+    /**
+     * Crea un intent con los filtos selecionados para comunicarse con la actividad padre
+     */
     public void setFiltersSelected() {
         Intent data = new Intent();
-        data.putExtra(MUSIC_SELECTED, edad[mSpinnerMusic.getSelectedItemPosition()]);
+        data.putExtra(MUSIC_SELECTED, music[mSpinnerMusic.getSelectedItemPosition()]);
         data.putExtra(AGE_SELECTED, edad[mSpinnerAge.getSelectedItemPosition()]);
         data.putExtra(CLOSE_SELECTED, horaCierre[mSpinnerClose.getSelectedItemPosition()]);
         data.putExtra(OPEN_SELECTED, horaApertura[mSpinnerOpen.getSelectedItemPosition()]);
@@ -94,6 +154,13 @@ public class FiltersActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * TODO: considerar coger los datos de la base de datos y no simples valores estaticos de XMl
+     * Añade un adapter a un spinner
+     *
+     * @param spinner     Spinner al cual queremos añadir el adapter
+     * @param stringArray id del recurso string array de XML
+     */
     private void setAdapterSpinner(Spinner spinner, int stringArray) {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 stringArray, android.R.layout.simple_spinner_item);
@@ -110,10 +177,7 @@ public class FiltersActivity extends AppCompatActivity {
 
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.quitar_filtros) {
-            mSpinnerMusic.setSelection(0);
-            mSpinnerAge.setSelection(0);
-            mSpinnerClose.setSelection(0);
-            mSpinnerOpen.setSelection(0);
+            setSpinnerPositionsToDefault();
             return true;
         }
         return super.onOptionsItemSelected(item);

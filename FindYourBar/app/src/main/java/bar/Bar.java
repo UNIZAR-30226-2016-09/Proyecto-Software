@@ -1,7 +1,5 @@
 package bar;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,10 +20,9 @@ public class Bar {
     private List<String> musica;
 
 
-
     public Bar(String nombre, String descripcion, String direccion, String telefono, String email,
-               String facebook, String principal, List secundaria, List eventos, int edad,
-               float horaCierre, float horaApertura, List musica) {
+               String facebook, String principal, List<String> secundaria, List<String> eventos, int edad,
+               float horaCierre, float horaApertura, List<String> musica) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.direccion = direccion;
@@ -39,6 +36,16 @@ public class Bar {
         this.horaCierre = horaCierre;
         this.horaApertura = horaApertura;
         this.musica = musica;
+    }
+
+    /**
+     * Devuelve verdad si el bar contiene el tipo de musica especificado
+     *
+     * @param genre
+     * @return
+     */
+    public boolean hasMusicGenre(String genre) {
+        return musica.contains(genre);
     }
 
     /**
@@ -119,8 +126,12 @@ public class Bar {
         return horaApertura;
     }
 
-    public List getMusica() {return musica;}
+    public List getMusica() {
+        return musica;
+    }
 
-    public void setMusica(List musica) {this.musica = musica;}
+    public void setMusica(List musica) {
+        this.musica = musica;
+    }
 
 }

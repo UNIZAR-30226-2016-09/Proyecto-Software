@@ -40,10 +40,12 @@ public class SearchBar extends AppCompatActivity {
     private ProgressBar mProgress;
     private static final int CHOOSE_FILTERS = 1;
     private List<Bar> mBares;
+    private boolean isNewList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        isNewList = true;
         setContentView(R.layout.activity_search);
         setTitle(R.string.titulo_bares);
         mList = (RecyclerView) findViewById(R.id.recyclerlist);
@@ -68,11 +70,14 @@ public class SearchBar extends AppCompatActivity {
 
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
+                isNewList = true;
+                List<Bar> aux = ConjuntoBares.getInstance().getLocalBarList();
+                mBares = aux;
                 if (mAdapter == null) {
-                    mAdapter = new BarAdapter(ConjuntoBares.getInstance().getLocalBarList());
+                    mAdapter = new BarAdapter(aux);
                     mList.setAdapter(mAdapter);
                 } else {
-                    mAdapter.setBares(ConjuntoBares.getInstance().getLocalBarList());
+                    mAdapter.setBares(aux);
                     mAdapter.notifyDataSetChanged();
                 }
                 return true;
@@ -91,6 +96,7 @@ public class SearchBar extends AppCompatActivity {
 
     private void handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            isNewList = true;
             String query = intent.getStringExtra(SearchManager.QUERY);
             List<Bar> bares = ConjuntoBares.getInstance().getBar(query);
             mBares = bares;
@@ -106,7 +112,6 @@ public class SearchBar extends AppCompatActivity {
 
 
     public boolean onOptionsItemSelected(MenuItem item) {
-
         if (item.getItemId() == R.id.filterIcon) {
             getFilters();
         }
@@ -114,13 +119,15 @@ public class SearchBar extends AppCompatActivity {
     }
 
     public void getFilters() {
-        Intent pickContactIntent = new Intent(this, FiltersActivity.class);
-        startActivityForResult(pickContactIntent, CHOOSE_FILTERS);
+        Log.d("hi" + isNewList, "adf"+ isNewList);
+        Intent intent = FiltersActivity.newIntent(this, isNewList);
+        startActivityForResult(intent, CHOOSE_FILTERS);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CHOOSE_FILTERS) {
+            isNewList = false;
             if (resultCode == RESULT_OK) {
                 HashMap<String, String> map = FiltersActivity.whatFiltersWhereSelected(data);
                 List<Bar> baresFiltrados = filtrar(mBares, map.get("Musica"),
@@ -137,14 +144,17 @@ public class SearchBar extends AppCompatActivity {
         List<Bar> aux1 = new ArrayList<>();
         if (!musica.equals("all")) {
             for (Bar b : aux) {
-
+                if (b.hasMusicGenre(musica)) {
+                    aux1.add(b);
+                }
             }
             aux = aux1;
             aux1 = new ArrayList<>();
         }
         if (!edad.equals("all")) {
+            int edadI = Integer.parseInt(edad);
             for (Bar b : aux) {
-                if (b.getEdad() >= Integer.parseInt(edad)) {
+                if (b.getEdad() >= edadI) {
                     aux1.add(b);
 
                 }
@@ -154,8 +164,9 @@ public class SearchBar extends AppCompatActivity {
         }
 
         if (!horaCierre.equals("all")) {
+            float hc = Float.parseFloat(horaCierre);
             for (Bar b : aux) {
-                if (b.getHoraCierre() >= Float.parseFloat(horaCierre)) {
+                if (b.getHoraCierre() >= hc) {
                     aux1.add(b);
                 }
             }
@@ -164,10 +175,18 @@ public class SearchBar extends AppCompatActivity {
         }
 
         if (!horaApertura.equals("all")) {
+            float ha = Float.parseFloat(horaApertura);
             for (Bar b : aux) {
-                if (b.getHoraApertura() <= Float.parseFloat(horaApertura)) {
-                    aux1.add(b);
+                if (ha == 0) {
+                    if ((b.getHoraApertura() <= 24 && b.getHoraApertura() > 18) || b.getHoraApertura() == 0) {
+                        aux1.add(b);
+                    }
+                } else {
+                    if (b.getHoraApertura() <= ha && b.getHoraApertura() > 18) {
+                        aux1.add(b);
+                    }
                 }
+
             }
             aux = aux1;
         }
@@ -219,7 +238,7 @@ public class SearchBar extends AppCompatActivity {
 
         @Override
         public void onClick(View v) {
-            startActivity(BarActivity2.newIntent(SearchBar.this, mNombre.getText().toString()));
+            startActivity(BarActivity.newIntent(SearchBar.this, mNombre.getText().toString()));
         }
     }
 

@@ -131,12 +131,12 @@ public class ConjuntoBares {
      */
     private List<Bar> parseJson(String json) throws JSONException {
         List<Bar> bares = new ArrayList<>();
-        List<String> arrayImagenes = new ArrayList<>();
-        List<String> arrayEventos = new ArrayList<>();
-        List<String> arrayMusica = new ArrayList<>();
         JSONObject jsonResponse = new JSONObject(json);
         JSONArray jsonMainNode = jsonResponse.optJSONArray("Bar");
         for (int i = 0; i < jsonMainNode.length(); i++) {
+            List<String> arrayImagenes = new ArrayList<>();
+            List<String> arrayEventos = new ArrayList<>();
+            List<String> arrayMusica = new ArrayList<>();
             JSONObject jsonChildNode = jsonMainNode.getJSONObject(i);
             String name = jsonChildNode.optString("nombre");
             String des = jsonChildNode.optString("descripcion");
