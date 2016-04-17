@@ -44,21 +44,6 @@
                 android:paddingLeft="16dp"
                 android:paddingTop="16dp" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="16dp"
-
-                android:text="@string/menu_open"
-                android:textAppearance="?android:textAppearanceMedium" />
-
-            <Spinner
-                android:id="@+id/spinner_open"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="25dp"
-                android:paddingLeft="16dp"
-                android:paddingTop="16dp" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -69,6 +54,22 @@
 
             <Spinner
                 android:id="@+id/spinner_close"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="25dp"
+                android:paddingLeft="16dp"
+                android:paddingTop="16dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="16dp"
+
+                android:text="@string/menu_open"
+                android:textAppearance="?android:textAppearanceMedium" />
+
+            <Spinner
+                android:id="@+id/spinner_open"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="25dp"

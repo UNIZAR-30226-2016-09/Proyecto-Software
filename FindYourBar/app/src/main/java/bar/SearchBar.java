@@ -131,7 +131,7 @@ public class SearchBar extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 HashMap<String, String> map = FiltersActivity.whatFiltersWhereSelected(data);
                 List<Bar> baresFiltrados = filtrar(mBares, map.get("Musica"),
-                        map.get("Edad"), map.get("HoraApertura"), map.get("HoraCierre"));
+                        map.get("Edad"), map.get("HoraCierre"), map.get("HoraApertura"));
                 mAdapter.setBares(baresFiltrados);
                 mAdapter.notifyDataSetChanged();
             }
@@ -154,9 +154,20 @@ public class SearchBar extends AppCompatActivity {
         if (!edad.equals("all")) {
             int edadI = Integer.parseInt(edad);
             for (Bar b : aux) {
-                if (b.getEdad() <= edadI) {
+                if (b.getEdad() >= edadI) {
                     aux1.add(b);
 
+                }
+            }
+            aux = aux1;
+            aux1 = new ArrayList<>();
+        }
+
+        if (!horaCierre.equals("all")) {
+            float hc = Float.parseFloat(horaCierre);
+            for (Bar b : aux) {
+                if (b.getHoraCierre() >= hc) {
+                    aux1.add(b);
                 }
             }
             aux = aux1;
@@ -178,17 +189,6 @@ public class SearchBar extends AppCompatActivity {
 
             }
             aux = aux1;
-        }
-
-        if (!horaCierre.equals("all")) {
-            float hc = Float.parseFloat(horaCierre);
-            for (Bar b : aux) {
-                if (b.getHoraCierre() >= hc) {
-                    aux1.add(b);
-                }
-            }
-            aux = aux1;
-            aux1 = new ArrayList<>();
         }
 
         return aux;
