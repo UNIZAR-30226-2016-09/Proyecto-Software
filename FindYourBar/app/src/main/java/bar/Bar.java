@@ -1,6 +1,7 @@
 package bar;
 
 import java.util.List;
+import java.util.StringTokenizer;
 
 /**
  * Clase que repsresenta un bar y toda la infomarcion asociada a el
@@ -126,7 +127,7 @@ public class Bar {
         return horaApertura;
     }
 
-    public List getMusica() {
+    public List<String> getMusica() {
         return musica;
     }
 

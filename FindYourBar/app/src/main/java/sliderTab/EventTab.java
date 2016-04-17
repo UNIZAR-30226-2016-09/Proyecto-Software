@@ -10,8 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+
+import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -26,6 +29,7 @@ public class EventTab extends Fragment {
     private static final String baseUrl = "http://ps1516.ddns.net/images";
     Bar bar = BarActivity.getNombreBar();
     ImageView eventBar, right, left;
+    TextView textoEvento;
     int pos = 0;
     private List<String> imagenesEventos;
 
@@ -35,18 +39,24 @@ public class EventTab extends Fragment {
         imagenesEventos = bar.getEventos();
         Log.e("tamaño lista eventos", "onCreateView: " + imagenesEventos.size());
         eventBar = (ImageView) v.findViewById(R.id.eventView);
+        textoEvento = (TextView) v.findViewById(R.id.evento_texto);
+        right = (ImageView) v.findViewById(R.id.swipe_rightE);
+        left = (ImageView) v.findViewById(R.id.swipe_leftE);
+
         if (imagenesEventos.size() > 0) {
             Picasso.with(getContext()).load(baseUrl + imagenesEventos.get(0)).into(eventBar);
+            textoEvento.setVisibility(View.GONE);
+            eventBar.setVisibility(View.VISIBLE);
+        }else{
+            right.setVisibility(View.GONE);
+            left.setVisibility(View.GONE);
         }
-        right = (ImageView) v.findViewById(R.id.swipe_right);
         right.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 changeImage(1);
             }
         });
-
-        left = (ImageView) v.findViewById(R.id.swipe_left);
         left.setOnClickListener(new View.OnClickListener()
 
         {

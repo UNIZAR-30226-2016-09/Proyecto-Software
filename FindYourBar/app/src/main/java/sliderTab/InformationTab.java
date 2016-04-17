@@ -42,7 +42,20 @@ public class InformationTab extends Fragment { //implements View.OnTouchListener
         tituloBar = (TextView) v.findViewById(R.id.bar_nombre_bar);
         descripcionBar = (TextView) v.findViewById(R.id.bar_descripcion_bar);
         tituloBar.setText(bar.getNombre());
-        descripcionBar.setText(bar.getDescripcion());
+        String horaApertura = String.format("%.2f h", bar.getHoraApertura());
+        horaApertura = horaApertura.replace(",",":");
+        String horaCierre = String.format("%.2f h", bar.getHoraCierre());
+        horaCierre = horaCierre.replace(",",":");
+        String musica = "";
+        for (int i=0; i<bar.getMusica().size(); i++){
+            if(i<bar.getMusica().size()-1)
+                musica += bar.getMusica().get(i) + ", ";
+            else
+                musica += bar.getMusica().get(i);
+        }
+        descripcionBar.setText(bar.getDescripcion()+"\n\nEdad: "+bar.getEdad()+" años"
+                +"\nMúsica: "+ musica+"\nHora de apertura: "+horaApertura
+                +"\nHora de cierre: "+horaCierre);
         imagenesBar = new ArrayList<>();
         imagenesBar.add(bar.getPrincipal());
         imagenesBar.addAll(bar.getSecundaria());

@@ -44,12 +44,12 @@
                 android:paddingLeft="16dp"
                 android:paddingTop="16dp" />
 
-
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingLeft="16dp"
-                android:text="@string/menu_close"
+
+                android:text="@string/menu_open"
                 android:textAppearance="?android:textAppearanceMedium" />
 
             <Spinner
@@ -64,8 +64,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingLeft="16dp"
-
-                android:text="@string/menu_open"
+                android:text="@string/menu_close"
                 android:textAppearance="?android:textAppearanceMedium" />
 
             <Spinner

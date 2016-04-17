@@ -6,6 +6,7 @@
     <string name="app_description">Tu app para encontrar todos los bares de copas en Zaragoza</string>
     <string name="action_settings">Ajustes</string>
     <string name="no_bar">No hay bares</string>
+    <string name="no_eventos">No hay eventos</string>
     <string name="close_tip">Seleccione un horario de cierre por el que buscar:</string>
     <string name="menu_name">Nombre del bar</string>
     <string name="in_name">Introduzca el nombre del bar a buscar</string>
@@ -42,9 +43,9 @@
     </string-array>
     <string-array name="age_groups">
         <item>Cualquiera</item>
-        <item>Mayores de 16 años</item>
-        <item>Mayores de 18 años</item>
-        <item>Mayores de 21 años</item>
+        <item>A partir de 16 años</item>
+        <item>A partir de 18 años</item>
+        <item>A partir de 21 años</item>
     </string-array>
     <string name="menu_close">Horario de cierre</string>
     <string name="menu_music">Música</string>

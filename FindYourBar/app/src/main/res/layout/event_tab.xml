@@ -7,6 +7,14 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
 
+        <TextView android:id="@+id/evento_texto"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="@string/no_eventos"
+            android:gravity="center"
+                  android:layout_gravity="center"
+            android:textSize="30dp"/>
+
         <ImageView
             android:id="@+id/eventView"
             android:layout_width="fill_parent"
@@ -17,18 +25,20 @@
     </ViewFlipper>
 
     <ImageView
-        android:id="@+id/swipe_left"
+        android:id="@+id/swipe_leftE"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
+        android:visibility="visible"
         android:src="@drawable/swipe_left" />
 
     <ImageView
-        android:id="@+id/swipe_right"
+        android:id="@+id/swipe_rightE"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
+        android:visibility="visible"
         android:src="@drawable/swipe_right" />
 </RelativeLayout>
