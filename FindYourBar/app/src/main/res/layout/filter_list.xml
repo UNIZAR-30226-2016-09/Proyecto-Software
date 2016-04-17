@@ -53,7 +53,7 @@
                 android:textAppearance="?android:textAppearanceMedium" />
 
             <Spinner
-                android:id="@+id/spinner_close"
+                android:id="@+id/spinner_open"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="25dp"
@@ -68,7 +68,7 @@
                 android:textAppearance="?android:textAppearanceMedium" />
 
             <Spinner
-                android:id="@+id/spinner_open"
+                android:id="@+id/spinner_close"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="25dp"
