@@ -4,12 +4,18 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import bar.Bar;
 import bar.BarActivity;
@@ -20,26 +26,34 @@ import bar.R;
  * Created by Ana on 12/04/2016.
  */
 
-public class InformationTab extends Fragment{ //implements View.OnTouchListener {
-    public static final String[] IMAGE_NAME = {"bar1", "bar2", "bar3", "bar"};
+public class InformationTab extends Fragment { //implements View.OnTouchListener {
 
     Bar bar = BarActivity.getNombreBar();
+    private static final String baseUrl = "http://ps1516.ddns.net/images";
     TextView tituloBar, descripcionBar;
     ImageView imgBar, right, left;
+    List<String> imagenesBar;
     int pos = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v =inflater.inflate(R.layout.information_tab,container,false);
+        View v = inflater.inflate(R.layout.information_tab, container, false);
 
         tituloBar = (TextView) v.findViewById(R.id.bar_nombre_bar);
         descripcionBar = (TextView) v.findViewById(R.id.bar_descripcion_bar);
         tituloBar.setText(bar.getNombre());
         descripcionBar.setText(bar.getDescripcion());
+        imagenesBar = new ArrayList<>();
+        imagenesBar.add(bar.getPrincipal());
+        imagenesBar.addAll(bar.getSecundaria());
         imgBar = (ImageView) v.findViewById(R.id.imageView);
-        //imgBar.setOnTouchListener(this);
+        Log.e("tamaño lista imagenes", "onCreateView: " + imagenesBar.size());
+        if (imagenesBar.size() > 0) {
+            Picasso.with(getContext()).load(baseUrl + imagenesBar.get(0)).into(imgBar);
+        }
 
-        right  = (ImageView) v.findViewById(R.id.swipe_right);
+
+        right = (ImageView) v.findViewById(R.id.swipe_right);
         right.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -47,7 +61,7 @@ public class InformationTab extends Fragment{ //implements View.OnTouchListener 
             }
         });
 
-        left=(ImageView)v.findViewById(R.id.swipe_left);
+        left = (ImageView) v.findViewById(R.id.swipe_left);
         left.setOnClickListener(new View.OnClickListener()
 
         {
@@ -56,8 +70,6 @@ public class InformationTab extends Fragment{ //implements View.OnTouchListener 
                 changeImage(-1);
             }
         });
-        int resID = getResources().getIdentifier(IMAGE_NAME[0] , "drawable", getContext().getPackageName());
-        imgBar.setImageResource(resID);
         return v;
     }
 /*
@@ -87,14 +99,15 @@ public class InformationTab extends Fragment{ //implements View.OnTouchListener 
         return true;
     }*/
 
-    private void changeImage (int direction) {
-        String image;
-        if(pos+direction < IMAGE_NAME.length)
-            pos+=direction;
-        else
-            pos=0;
-        image = IMAGE_NAME[pos];
-        int resID = getResources().getIdentifier(image , "drawable", getContext().getPackageName());
-        imgBar.setImageResource(resID);
+    private void changeImage(int direction) {
+        if (direction < 0) {
+            if (pos > 0) {
+                Picasso.with(getContext()).load(baseUrl + imagenesBar.get(--pos)).into(imgBar);
+            }
+        } else if (direction > 0) {
+            if (pos < imagenesBar.size() - 1) {
+                Picasso.with(getContext()).load(baseUrl + imagenesBar.get(++pos)).into(imgBar);
+            }
+        }
     }
 }

@@ -98,7 +98,7 @@ public class Bar {
         this.principal = principal;
     }
 
-    public List getSecundaria() {
+    public List<String> getSecundaria() {
         return secundaria;
     }
 
@@ -106,7 +106,7 @@ public class Bar {
         this.secundaria = secundaria;
     }
 
-    public List getEventos() {
+    public List<String> getEventos() {
         return eventos;
     }
 
