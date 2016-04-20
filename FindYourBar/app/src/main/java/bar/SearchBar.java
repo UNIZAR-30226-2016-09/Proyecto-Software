@@ -58,8 +58,8 @@ public class SearchBar extends AppCompatActivity {
         Log.e("onc", "create");
         ArrayList<String> parametros = new ArrayList<String>();
         parametros.add("pepe");
-        Log.e("onc",parametros.get(0));
-        new getListaBares().execute(parametros);
+        Log.e("onc", parametros.get(0));
+        new getListaBares().execute();
     }
 
     @Override
@@ -116,7 +116,6 @@ public class SearchBar extends AppCompatActivity {
         }
     }
 
-
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.filterIcon) {
             getFilters();
@@ -125,7 +124,7 @@ public class SearchBar extends AppCompatActivity {
     }
 
     public void getFilters() {
-        Log.d("hi" + isNewList, "adf"+ isNewList);
+        Log.d("hi" + isNewList, "adf" + isNewList);
         Intent intent = FiltersActivity.newIntent(this, isNewList);
         startActivityForResult(intent, CHOOSE_FILTERS);
     }
@@ -136,129 +135,25 @@ public class SearchBar extends AppCompatActivity {
             isNewList = false;
             if (resultCode == RESULT_OK) {
                 HashMap<String, String> map = FiltersActivity.whatFiltersWhereSelected(data);
-                //Log.e("edad",map.get("Edad"));
-                ArrayList<String> parametros = new ArrayList<String>();
-                parametros.add("filtro");
-                parametros.add(map.get("Musica"));
-                parametros.add(map.get("Edad"));
-                parametros.add(map.get("HoraCierre"));
-                parametros.add(map.get("HoraApertura"));
-
-                new getListaBares().execute(parametros);
-                //List<Bar> baresFiltrados = filtrar(map.get("Musica"),
-                  //      map.get("Edad"), map.get("HoraCierre"), map.get("HoraApertura"));
-                /*new getListaBares.execute();
-                mAdapter.setBares();
-                mAdapter.notifyDataSetChanged();*/
+                String[] p = new String[]{map.get("Musica"),map.get("Edad"),map.get("HoraCierre"),map.get("HoraApertura")};
+                new getBaresFiltrados().execute(p);
             }
         }
     }
-/*
-    // TODO: mejorar este metodo
-    public List<Bar> filtrar(String musica, String edad, String horaCierre, String horaApertura){
-        List<Bar> aux = new ArrayList<>();
-        try {
-            Log.e("musicaElegida",musica);
-            aux = ConjuntoBares.getInstance().filtrarBares(musica, edad, horaCierre, horaApertura);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        List<Bar> aux1 = new ArrayList<>();
-        if (!musica.equals("all")) {
-            for (Bar b : aux) {
-                if (b.hasMusicGenre(musica)) {
-                    aux1.add(b);
-                }
-            }
-            aux = aux1;
-            aux1 = new ArrayList<>();
-        }
-        if (!edad.equals("all")) {
-            int edadI = Integer.parseInt(edad);
-            for (Bar b : aux) {
-                if (b.getEdad() >= edadI) {
-                    aux1.add(b);
 
-                }
-            }
-            aux = aux1;
-            aux1 = new ArrayList<>();
-        }
+    private class getListaBares extends AsyncTask<Void, Void, List<Bar>> {
 
-        if (!horaCierre.equals("all")) {
-            float hc = Float.parseFloat(horaCierre);
-            for (Bar b : aux) {
-                if (b.getHoraCierre() >= hc) {
-                    aux1.add(b);
-                }
-            }
-            aux = aux1;
-            aux1 = new ArrayList<>();
-        }
-
-        if (!horaApertura.equals("all")) {
-            float ha = Float.parseFloat(horaApertura);
-            for (Bar b : aux) {
-                if (ha == 0) {
-                    if ((b.getHoraApertura() <= 24 && b.getHoraApertura() > 18) || b.getHoraApertura() == 0) {
-                        aux1.add(b);
-                    }
-                } else {
-                    if (b.getHoraApertura() <= ha && b.getHoraApertura() > 18) {
-                        aux1.add(b);
-                    }
-                }
-
-            }
-            aux = aux1;
-        }
-
-        return aux;
-
-    }
-*/
-
-    private class getListaBares extends AsyncTask<ArrayList<String>, Void, List<Bar>> {
-        /*private String musica;
-        private String edad;
-        private String hCierre;
-        private String hApertura;
-        private Boolean filtro;
-
-        public getListaBares(Boolean filtro,String musica, String edad, String hCierre, String hApertura){
-            this.musica=musica;
-            this.edad=edad;
-            this.hCierre=hCierre;
-            this.hApertura=hApertura;
-            this.filtro=filtro;
-        }*/
         @Override
-        protected List<Bar> doInBackground(ArrayList<String>... parametros) {
-            Log.e("paramsBack",parametros[1].toString());
-            if(parametros[0].toString()=="filtro") {
-                List<Bar> aux = new ArrayList<>();
-                try {
-                    //Log.e("musicaElegida", musica);
-                    aux = ConjuntoBares.getInstance().filtrarBares(parametros[1].toString(),parametros[2].toString(),parametros[3].toString(),parametros[4].toString());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                return aux;
-            }else {
-                List<Bar> aux = new ArrayList<>();
-                try {
-                    aux = ConjuntoBares.getInstance().getBares();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                return aux;
+        protected List<Bar> doInBackground(Void... params) {
+            List<Bar> aux = new ArrayList<>();
+            try {
+                aux = ConjuntoBares.getInstance().getBares();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
+            return aux;
         }
 
         @Override
@@ -273,22 +168,32 @@ public class SearchBar extends AppCompatActivity {
                 mAdapter.notifyDataSetChanged();
             }
         }
-
-       /* public List<Bar> filtrar(String musica, String edad, String horaCierre, String horaApertura) {
-            List<Bar> aux = new ArrayList<>();
-            try {
-                Log.e("musicaElegida", musica);
-                aux = ConjuntoBares.getInstance().filtrarBares(musica, edad, horaCierre, horaApertura);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return aux;
-        }*/
-
     }
 
+    private class getBaresFiltrados extends AsyncTask<String, Void, List<Bar>> {
+
+        @Override
+        protected List<Bar> doInBackground(String... parametros) {
+                List<Bar> aux = new ArrayList<>();
+                try {
+                    aux = ConjuntoBares.getInstance().filtrarBares(parametros[0], parametros[1], parametros[2], parametros[3]);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return aux;
+        }
+
+        @Override
+        protected void onPostExecute(List<Bar> result) {
+            mBares = result;
+            mProgress.setVisibility(View.GONE);
+            mAdapter.setBares(result);
+            mAdapter.notifyDataSetChanged();
+        }
+
+    }
 
     private class BarHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView mNombre;
