@@ -100,6 +100,16 @@ public class ConjuntoBares {
         return parseJson(json);
     }
 
+    public List<Bar> filtrarBares(String musica, String edad, String horaCierre, String horaApertura) throws IOException, JSONException {
+        String url = "http://ps1516.ddns.net:80/getFiltros.php";
+        //String url = "http://192.168.1.38:5107/getFiltros.php";
+        Log.e("getJson","");
+        //String json = getJson(new String[]{url, musica, edad, horaCierre, horaApertura});
+        String json = getJson(new String[]{url, "Indie", "21", "4", "0"});
+        mBares = parseJson(json);
+        return mBares;
+    }
+
     /**
      * Pide al servidor el json con la informacion de los bares
      *
@@ -110,7 +120,17 @@ public class ConjuntoBares {
     private String getJson(String... params) throws IOException {
         HttpClient httpclient = new DefaultHttpClient();
         HttpPost httppost = new HttpPost(params[0]);
-        if (!params[1].equals("all")) {
+        Log.d("Antesfiltro","a");
+        if(params.length > 2){
+            List<NameValuePair> postValues = new ArrayList<NameValuePair>(2);
+            postValues.add(new BasicNameValuePair("tM", params[1]));
+            postValues.add(new BasicNameValuePair("edad", params[2]));
+            postValues.add(new BasicNameValuePair("hC", params[3]));
+            postValues.add(new BasicNameValuePair("hA", params[4]));
+            httppost.setEntity(new UrlEncodedFormEntity(postValues));
+            Log.e("filtro",params[1]);
+        }
+        else if (!params[1].equals("all")) {
             List<NameValuePair> postValues = new ArrayList<NameValuePair>(2);
             postValues.add(new BasicNameValuePair("nombre", params[1]));
             //Encapsulamos

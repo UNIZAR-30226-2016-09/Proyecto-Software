@@ -32,9 +32,9 @@ public class FiltersActivity extends AppCompatActivity {
     private static final String NEW_LIST = "NEW_LIST";
 
     // Valores de las distinas posiciones de los spinner
-    private static final String[] edad = {"all", "16", "18", "21"};
-    private static final String[] horaCierre = {"all", "3", "4", "5", "6.3"};
-    private static final String[] horaApertura = {"all", "22", "23", "0"};
+    private static final String[] edad = {"21", "16", "18", "21"};
+    private static final String[] horaCierre = {"3", "3", "4", "5", "6.3"};
+    private static final String[] horaApertura = {"0", "22", "23", "0"};
     private static final String[] music = {"all", "Pop/musica comercial", "Rap", "Rock/Heavy", "Latina", "Indie", "Electronica", "Años 60-80"};
 
     private static int[] previousSpinnerPositions = {0, 0, 0, 0};

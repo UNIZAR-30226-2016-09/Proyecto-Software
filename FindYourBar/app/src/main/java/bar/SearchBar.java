@@ -1,6 +1,7 @@
 package bar;
 
 import android.app.SearchManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,7 +11,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.os.AsyncTask;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -54,7 +55,11 @@ public class SearchBar extends AppCompatActivity {
         mProgress = (ProgressBar) findViewById(R.id.progressbar);
         mProgress.setVisibility(View.VISIBLE);
         handleIntent(getIntent());
-        new getListaBares().execute();
+        Log.e("onc", "create");
+        ArrayList<String> parametros = new ArrayList<String>();
+        parametros.add("pepe");
+        Log.e("onc",parametros.get(0));
+        new getListaBares().execute(parametros);
     }
 
     @Override
@@ -120,7 +125,7 @@ public class SearchBar extends AppCompatActivity {
     }
 
     public void getFilters() {
-        Log.d("hi" + isNewList, "adf" + isNewList);
+        Log.d("hi" + isNewList, "adf"+ isNewList);
         Intent intent = FiltersActivity.newIntent(this, isNewList);
         startActivityForResult(intent, CHOOSE_FILTERS);
     }
@@ -131,17 +136,35 @@ public class SearchBar extends AppCompatActivity {
             isNewList = false;
             if (resultCode == RESULT_OK) {
                 HashMap<String, String> map = FiltersActivity.whatFiltersWhereSelected(data);
-                List<Bar> baresFiltrados = filtrar(mBares, map.get("Musica"),
-                        map.get("Edad"), map.get("HoraCierre"), map.get("HoraApertura"));
-                mAdapter.setBares(baresFiltrados);
-                mAdapter.notifyDataSetChanged();
+                //Log.e("edad",map.get("Edad"));
+                ArrayList<String> parametros = new ArrayList<String>();
+                parametros.add("filtro");
+                parametros.add(map.get("Musica"));
+                parametros.add(map.get("Edad"));
+                parametros.add(map.get("HoraCierre"));
+                parametros.add(map.get("HoraApertura"));
+
+                new getListaBares().execute(parametros);
+                //List<Bar> baresFiltrados = filtrar(map.get("Musica"),
+                  //      map.get("Edad"), map.get("HoraCierre"), map.get("HoraApertura"));
+                /*new getListaBares.execute();
+                mAdapter.setBares();
+                mAdapter.notifyDataSetChanged();*/
             }
         }
     }
-
+/*
     // TODO: mejorar este metodo
-    public List<Bar> filtrar(List<Bar> bares, String musica, String edad, String horaCierre, String horaApertura) {
-        List<Bar> aux = bares;
+    public List<Bar> filtrar(String musica, String edad, String horaCierre, String horaApertura){
+        List<Bar> aux = new ArrayList<>();
+        try {
+            Log.e("musicaElegida",musica);
+            aux = ConjuntoBares.getInstance().filtrarBares(musica, edad, horaCierre, horaApertura);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         List<Bar> aux1 = new ArrayList<>();
         if (!musica.equals("all")) {
             for (Bar b : aux) {
@@ -193,22 +216,49 @@ public class SearchBar extends AppCompatActivity {
         }
 
         return aux;
+
     }
+*/
 
+    private class getListaBares extends AsyncTask<ArrayList<String>, Void, List<Bar>> {
+        /*private String musica;
+        private String edad;
+        private String hCierre;
+        private String hApertura;
+        private Boolean filtro;
 
-    private class getListaBares extends AsyncTask<Void, Void, List<Bar>> {
-
+        public getListaBares(Boolean filtro,String musica, String edad, String hCierre, String hApertura){
+            this.musica=musica;
+            this.edad=edad;
+            this.hCierre=hCierre;
+            this.hApertura=hApertura;
+            this.filtro=filtro;
+        }*/
         @Override
-        protected List<Bar> doInBackground(Void... params) {
-            List<Bar> aux = new ArrayList<>();
-            try {
-                aux = ConjuntoBares.getInstance().getBares();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
+        protected List<Bar> doInBackground(ArrayList<String>... parametros) {
+            Log.e("paramsBack",parametros[1].toString());
+            if(parametros[0].toString()=="filtro") {
+                List<Bar> aux = new ArrayList<>();
+                try {
+                    //Log.e("musicaElegida", musica);
+                    aux = ConjuntoBares.getInstance().filtrarBares(parametros[1].toString(),parametros[2].toString(),parametros[3].toString(),parametros[4].toString());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return aux;
+            }else {
+                List<Bar> aux = new ArrayList<>();
+                try {
+                    aux = ConjuntoBares.getInstance().getBares();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return aux;
             }
-            return aux;
         }
 
         @Override
@@ -223,7 +273,22 @@ public class SearchBar extends AppCompatActivity {
                 mAdapter.notifyDataSetChanged();
             }
         }
+
+       /* public List<Bar> filtrar(String musica, String edad, String horaCierre, String horaApertura) {
+            List<Bar> aux = new ArrayList<>();
+            try {
+                Log.e("musicaElegida", musica);
+                aux = ConjuntoBares.getInstance().filtrarBares(musica, edad, horaCierre, horaApertura);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return aux;
+        }*/
+
     }
+
 
     private class BarHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView mNombre;
@@ -254,6 +319,7 @@ public class SearchBar extends AppCompatActivity {
         @Override
         public BarHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater li = LayoutInflater.from(SearchBar.this);
+            // TODO: crear un layout para mostrar tambein una imagen del bar junto al nombre
             View view = li.inflate(R.layout.bar_list_item, parent, false);
             return new BarHolder(view);
         }
