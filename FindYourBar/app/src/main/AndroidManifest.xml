@@ -49,5 +49,8 @@
         <activity
             android:name="administrador.LoginActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name="administrador.SearchBarAdmin"
+            android:screenOrientation="portrait" />
     </application>
 </manifest>
