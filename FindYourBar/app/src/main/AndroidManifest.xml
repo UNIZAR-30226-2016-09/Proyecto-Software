@@ -45,5 +45,9 @@
         <activity
             android:name=".BarActivity2"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name="administrador.LoginActivity"
+            android:screenOrientation="portrait" />
     </application>
 </manifest>

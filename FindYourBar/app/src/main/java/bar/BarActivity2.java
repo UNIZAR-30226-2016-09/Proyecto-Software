@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import database.ConjuntoBares;
+
 
 public class BarActivity2 extends AppCompatActivity {
     private static final String BAR_ELEGIDO = "com.findyourbar.bar_elegido";

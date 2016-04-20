@@ -1,7 +1,6 @@
 package bar;
 
 import android.app.SearchManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,7 +21,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.os.AsyncTask;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -31,6 +30,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import database.ConjuntoBares;
 
 
 public class SearchBar extends AppCompatActivity {
@@ -119,7 +120,7 @@ public class SearchBar extends AppCompatActivity {
     }
 
     public void getFilters() {
-        Log.d("hi" + isNewList, "adf"+ isNewList);
+        Log.d("hi" + isNewList, "adf" + isNewList);
         Intent intent = FiltersActivity.newIntent(this, isNewList);
         startActivityForResult(intent, CHOOSE_FILTERS);
     }
@@ -224,7 +225,6 @@ public class SearchBar extends AppCompatActivity {
         }
     }
 
-
     private class BarHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView mNombre;
         public ImageView mImagen;
@@ -254,7 +254,6 @@ public class SearchBar extends AppCompatActivity {
         @Override
         public BarHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater li = LayoutInflater.from(SearchBar.this);
-            // TODO: crear un layout para mostrar tambein una imagen del bar junto al nombre
             View view = li.inflate(R.layout.bar_list_item, parent, false);
             return new BarHolder(view);
         }

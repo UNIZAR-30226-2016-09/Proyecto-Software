@@ -1,5 +1,14 @@
 <resources>
     <string name="app_name">FindYourBar</string>
+    <string name="borrar_bar">Borrar bar</string>
+    <string name="entrar">Entrar</string>
+    <string name="iniciar_sesion">Iniciar sesion</string>
+    <string name="error_contraseña_igualdad">Contraseña incorrecta</string>
+    <string name="error_contraseña_longitud">Requiere una longitud de 26 caracters</string>
+    <string name="hint_contraseña">Contraseña</string>
+    <string name="mostrar_todos_bares">Mostrar todos los bares</string>
+    <string name="administracion">Administracion</string>
+    <string name="editar_bar">Editar bar</string>
     <string name="menu_name_title">Nombre del bar</string>
     <string name="search_bar">Buscar bar</string>
     <string name="menu_opening_title">Horario de apertura</string>
