@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -49,16 +50,13 @@ public class SearchBar extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         isNewList = true;
         setContentView(R.layout.activity_search);
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         setTitle(R.string.titulo_bares);
         mList = (RecyclerView) findViewById(R.id.recyclerlist);
         mList.setLayoutManager(new LinearLayoutManager(this));
         mProgress = (ProgressBar) findViewById(R.id.progressbar);
         mProgress.setVisibility(View.VISIBLE);
         handleIntent(getIntent());
-        Log.e("onc", "create");
-        ArrayList<String> parametros = new ArrayList<String>();
-        parametros.add("pepe");
-        Log.e("onc", parametros.get(0));
         new getListaBares().execute();
     }
 
@@ -135,7 +133,7 @@ public class SearchBar extends AppCompatActivity {
             isNewList = false;
             if (resultCode == RESULT_OK) {
                 HashMap<String, String> map = FiltersActivity.whatFiltersWhereSelected(data);
-                String[] p = new String[]{map.get("Musica"),map.get("Edad"),map.get("HoraCierre"),map.get("HoraApertura")};
+                String[] p = new String[]{map.get("Musica"), map.get("Edad"), map.get("HoraCierre"), map.get("HoraApertura")};
                 new getBaresFiltrados().execute(p);
             }
         }
@@ -174,15 +172,15 @@ public class SearchBar extends AppCompatActivity {
 
         @Override
         protected List<Bar> doInBackground(String... parametros) {
-                List<Bar> aux = new ArrayList<>();
-                try {
-                    aux = ConjuntoBares.getInstance().filtrarBares(parametros[0], parametros[1], parametros[2], parametros[3]);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                return aux;
+            List<Bar> aux = new ArrayList<>();
+            try {
+                aux = ConjuntoBares.getInstance().filtrarBares(parametros[0], parametros[1], parametros[2], parametros[3]);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return aux;
         }
 
         @Override

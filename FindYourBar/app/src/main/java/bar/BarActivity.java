@@ -2,11 +2,22 @@ package bar;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import database.ConjuntoBares;
+import sliderTab.ContactMapTab;
+import sliderTab.EventTab;
+import sliderTab.InformationTab;
 import sliderTab.SlidingTabLayout;
 import sliderTab.ViewPagerAdapter;
 
@@ -14,35 +25,58 @@ import sliderTab.ViewPagerAdapter;
 public class BarActivity extends AppCompatActivity {
     private static final String BAR_ELEGIDO = "com.findyourbar.bar_elegido";
 
-    // Declaring Your View and Variables
-    ViewPager pager;
-    ViewPagerAdapter adapter;
-    SlidingTabLayout tabs;
-    CharSequence Titles[] = {"Información", "Contacto", "Eventos"};
-    int Numboftabs = 3;
+    private ViewPager pager;
+    private static final int Numboftabs = 3;
 
-    static String nombreBarElegido;
+    private static String nombreBarElegido;
+    private TabLayout mTabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bar);
+        mTabLayout = (TabLayout) findViewById(R.id.sliderTabs);
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         nombreBarElegido = getIntent().getCharSequenceExtra(BAR_ELEGIDO).toString();
         Bar bar = getNombreBar();
         setTitle(bar.getNombre());
 
-        // Creating The ViewPagerAdapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
-        adapter = new ViewPagerAdapter(getSupportFragmentManager(), Titles, Numboftabs);
-
-        // Assigning ViewPager View and setting the adapter
         pager = (ViewPager) findViewById(R.id.pager);
-        pager.setAdapter(adapter);
-
-        // Assiging the Sliding Tab Layout View
-        tabs = (SlidingTabLayout) findViewById(R.id.sliderTabs);
-        // Setting the ViewPager For the SlidingTabsLayout
-        tabs.setViewPager(pager);
+        List<Fragment> l = new ArrayList<>();
+        l.add(new InformationTab());
+        l.add(new ContactMapTab());
+        l.add(new EventTab());
+        CharSequence[] titles = getResources().getStringArray(R.array.pager_titles);
+        pager.setAdapter(new MyAdapter(getSupportFragmentManager(), l, titles));
+        mTabLayout.setupWithViewPager(pager);
     }
+
+    private static class MyAdapter extends FragmentPagerAdapter {
+        List<Fragment> l;
+        CharSequence[] titles;
+
+        public MyAdapter(FragmentManager fm, List<Fragment> l, CharSequence[] titles) {
+            super(fm);
+            this.l = l;
+            this.titles = titles;
+        }
+
+        @Override
+        public int getCount() {
+            return Numboftabs;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return l.get(position);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return titles[position];
+        }
+    }
+
 
     /**
      * Crea un nuevo intent con la informacion necesaria para el comienzo de esta actividad

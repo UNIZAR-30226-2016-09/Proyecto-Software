@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="actionbar_background">#2196F3</color>
+    <color name="colorAccent">#e91e63</color>
+    <color name="colorPrimaryDark">#1565c0</color>
+    <color name="colorPrimary">#2196F3</color>
+
     <color name="slider_background">#1565C0</color> <!--64B5F6-->
     <color name="light_background">#2196F3</color>
     <color name="dark_backgroud">#0D47A1</color>

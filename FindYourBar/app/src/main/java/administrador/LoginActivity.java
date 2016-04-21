@@ -16,15 +16,15 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().hide();
         setContentView(R.layout.activity_login);
         Button botonLogin = (Button) findViewById(R.id.boton_login);
         contrasena = (EditText) findViewById(R.id.et_contraseña);
         botonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(validarEntrada()) {
+                if (validarEntrada()) {
                     startActivity(new Intent(LoginActivity.this, SearchBarAdmin.class));
+                    finish();
                 }
             }
         });

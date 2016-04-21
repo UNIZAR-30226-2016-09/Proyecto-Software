@@ -11,6 +11,7 @@ import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -80,6 +81,7 @@ public class SearchBarAdmin extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         isNewList = true;
         setContentView(R.layout.activity_search);
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         setTitle(R.string.titulo_bares);
         mList = (RecyclerView) findViewById(R.id.recyclerlist);
         mList.setLayoutManager(new LinearLayoutManager(this));
@@ -163,70 +165,11 @@ public class SearchBarAdmin extends AppCompatActivity {
             isNewList = false;
             if (resultCode == RESULT_OK) {
                 HashMap<String, String> map = FiltersActivity.whatFiltersWhereSelected(data);
-                List<Bar> baresFiltrados = filtrar(mBares, map.get("Musica"),
-                        map.get("Edad"), map.get("HoraCierre"), map.get("HoraApertura"));
-                mAdapter.setBares(baresFiltrados);
-                mAdapter.notifyDataSetChanged();
+                String[] p = new String[]{map.get("Musica"), map.get("Edad"), map.get("HoraCierre"), map.get("HoraApertura")};
+                new getBaresFiltrados().execute(p);
             }
         }
     }
-
-    // TODO: mejorar este metodo
-    public List<Bar> filtrar(List<Bar> bares, String musica, String edad, String horaCierre, String horaApertura) {
-        List<Bar> aux = bares;
-        List<Bar> aux1 = new ArrayList<>();
-        if (!musica.equals("all")) {
-            for (Bar b : aux) {
-                if (b.hasMusicGenre(musica)) {
-                    aux1.add(b);
-                }
-            }
-            aux = aux1;
-            aux1 = new ArrayList<>();
-        }
-        if (!edad.equals("all")) {
-            int edadI = Integer.parseInt(edad);
-            for (Bar b : aux) {
-                if (b.getEdad() >= edadI) {
-                    aux1.add(b);
-
-                }
-            }
-            aux = aux1;
-            aux1 = new ArrayList<>();
-        }
-
-        if (!horaCierre.equals("all")) {
-            float hc = Float.parseFloat(horaCierre);
-            for (Bar b : aux) {
-                if (b.getHoraCierre() >= hc) {
-                    aux1.add(b);
-                }
-            }
-            aux = aux1;
-            aux1 = new ArrayList<>();
-        }
-
-        if (!horaApertura.equals("all")) {
-            float ha = Float.parseFloat(horaApertura);
-            for (Bar b : aux) {
-                if (ha == 0) {
-                    if ((b.getHoraApertura() <= 24 && b.getHoraApertura() > 18) || b.getHoraApertura() == 0) {
-                        aux1.add(b);
-                    }
-                } else {
-                    if (b.getHoraApertura() <= ha && b.getHoraApertura() > 18) {
-                        aux1.add(b);
-                    }
-                }
-
-            }
-            aux = aux1;
-        }
-
-        return aux;
-    }
-
 
     private class getListaBares extends AsyncTask<Void, Void, List<Bar>> {
 
@@ -255,6 +198,31 @@ public class SearchBarAdmin extends AppCompatActivity {
                 mAdapter.notifyDataSetChanged();
             }
         }
+    }
+
+    private class getBaresFiltrados extends AsyncTask<String, Void, List<Bar>> {
+
+        @Override
+        protected List<Bar> doInBackground(String... parametros) {
+            List<Bar> aux = new ArrayList<>();
+            try {
+                aux = ConjuntoBares.getInstance().filtrarBares(parametros[0], parametros[1], parametros[2], parametros[3]);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return aux;
+        }
+
+        @Override
+        protected void onPostExecute(List<Bar> result) {
+            mBares = result;
+            mProgress.setVisibility(View.GONE);
+            mAdapter.setBares(result);
+            mAdapter.notifyDataSetChanged();
+        }
+
     }
 
     private class BarHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {

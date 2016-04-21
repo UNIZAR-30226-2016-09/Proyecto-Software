@@ -40,19 +40,19 @@ public class InformationTab extends Fragment { //implements View.OnTouchListener
         descripcionBar = (TextView) v.findViewById(R.id.bar_descripcion_bar);
         tituloBar.setText(bar.getNombre());
         String horaApertura = String.format("%.2f h", bar.getHoraApertura());
-        horaApertura = horaApertura.replace(",",":");
+        horaApertura = horaApertura.replace(",", ":");
         String horaCierre = String.format("%.2f h", bar.getHoraCierre());
-        horaCierre = horaCierre.replace(",",":");
+        horaCierre = horaCierre.replace(",", ":");
         String musica = "";
-        for (int i=0; i<bar.getMusica().size(); i++){
-            if(i<bar.getMusica().size()-1)
+        for (int i = 0; i < bar.getMusica().size(); i++) {
+            if (i < bar.getMusica().size() - 1)
                 musica += bar.getMusica().get(i) + ", ";
             else
                 musica += bar.getMusica().get(i);
         }
-        descripcionBar.setText(bar.getDescripcion()+"\n\nEdad: "+bar.getEdad()+" años"
-                +"\nMúsica: "+ musica+"\nHora de apertura: "+horaApertura
-                +"\nHora de cierre: "+horaCierre);
+        descripcionBar.setText(bar.getDescripcion() + "\n\nEdad: " + bar.getEdad() + " años"
+                + "\nMúsica: " + musica + "\nHora de apertura: " + horaApertura
+                + "\nHora de cierre: " + horaCierre);
         imagenesBar = new ArrayList<>();
         imagenesBar.add(bar.getPrincipal());
         imagenesBar.addAll(bar.getSecundaria());

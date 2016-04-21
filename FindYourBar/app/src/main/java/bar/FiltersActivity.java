@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -44,6 +45,7 @@ public class FiltersActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.filter_list);
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         mSpinnerMusic = (Spinner) findViewById(R.id.spinner_music);
         mSpinnerAge = (Spinner) findViewById(R.id.spinner_age);
         mSpinnerClose = (Spinner) findViewById(R.id.spinner_close);

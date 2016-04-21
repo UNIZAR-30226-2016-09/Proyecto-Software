@@ -2,13 +2,17 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:visibility="visible">
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
 
     <TextView
         android:id="@+id/description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
         android:layout_marginBottom="50dp"
         android:layout_marginTop="50dp"
         android:gravity="center"
@@ -18,9 +22,9 @@
 
     <Button
         android:id="@+id/bSearch"
-        android:layout_below="@id/description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/description"
         android:layout_gravity="center"
         android:padding="24dp"
         android:text="@string/mostrar_todos_bares"
@@ -28,10 +32,10 @@
 
     <Button
         android:id="@+id/administracion"
-        android:layout_alignParentBottom="true"
+        style="?android:attr/borderlessButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="@string/administracion"
-        style="?android:attr/borderlessButtonStyle"/>
+        android:text="@string/administracion" />
 </RelativeLayout>

@@ -1,10 +1,18 @@
 <resources>
     <string name="app_name">FindYourBar</string>
     <string name="borrar_bar">Borrar bar</string>
+    <string-array name="pager_titles">
+        <item>Información</item>
+        <item>Contacto</item>
+        <item>Eventos</item>
+    </string-array>
     <string name="entrar">Entrar</string>
     <string name="iniciar_sesion">Iniciar sesion</string>
     <string name="error_contraseña_igualdad">Contraseña incorrecta</string>
     <string name="error_contraseña_longitud">Requiere una longitud de 26 caracters</string>
+    <string name="informacion">Información</string>
+    <string name="contacto">"Contacto</string>
+    <string name="eventos">Eventos</string>
     <string name="hint_contraseña">Contraseña</string>
     <string name="mostrar_todos_bares">Mostrar todos los bares</string>
     <string name="administracion">Administracion</string>
