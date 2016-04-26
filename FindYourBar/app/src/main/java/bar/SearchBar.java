@@ -210,8 +210,6 @@ public class SearchBar extends AppCompatActivity {
         }
     }
 
-    private static final String baseUrl = "http://ps1516.ddns.net/images";
-
     private class BarAdapter extends RecyclerView.Adapter<BarHolder> {
         private List<Bar> bares;
 
@@ -231,7 +229,7 @@ public class SearchBar extends AppCompatActivity {
         public void onBindViewHolder(BarHolder holder, int position) {
             Bar b = bares.get(position);
             holder.mNombre.setText(b.getNombre());
-            Picasso.with(SearchBar.this).load(baseUrl + b.getPrincipal()).into(holder.mImagen);
+            Picasso.with(SearchBar.this).load(b.getPrincipal()).into(holder.mImagen);
         }
 
         @Override

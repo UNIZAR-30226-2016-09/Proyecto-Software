@@ -26,7 +26,6 @@ import bar.R;
 public class InformationTab extends Fragment { //implements View.OnTouchListener {
 
     Bar bar = BarActivity.getNombreBar();
-    private static final String baseUrl = "http://ps1516.ddns.net/images";
     TextView tituloBar, descripcionBar;
     ImageView imgBar, right, left;
     List<String> imagenesBar;
@@ -59,7 +58,7 @@ public class InformationTab extends Fragment { //implements View.OnTouchListener
         imgBar = (ImageView) v.findViewById(R.id.imageView);
         Log.e("tamaño lista imagenes", "onCreateView: " + imagenesBar.size());
         if (imagenesBar.size() > 0) {
-            Picasso.with(getContext()).load(baseUrl + imagenesBar.get(0)).into(imgBar);
+            Picasso.with(getContext()).load(imagenesBar.get(0)).into(imgBar);
         }
 
 
@@ -112,11 +111,11 @@ public class InformationTab extends Fragment { //implements View.OnTouchListener
     private void changeImage(int direction) {
         if (direction < 0) {
             if (pos > 0) {
-                Picasso.with(getContext()).load(baseUrl + imagenesBar.get(--pos)).into(imgBar);
+                Picasso.with(getContext()).load(imagenesBar.get(--pos)).into(imgBar);
             }
         } else if (direction > 0) {
             if (pos < imagenesBar.size() - 1) {
-                Picasso.with(getContext()).load(baseUrl + imagenesBar.get(++pos)).into(imgBar);
+                Picasso.with(getContext()).load(imagenesBar.get(++pos)).into(imgBar);
             }
         }
     }
