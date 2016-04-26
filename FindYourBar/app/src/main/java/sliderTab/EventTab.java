@@ -26,7 +26,6 @@ import bar.R;
  * Created by Ana on 12/04/2016.
  */
 public class EventTab extends Fragment {
-    private static final String baseUrl = "http://ps1516.ddns.net/images";
     Bar bar = BarActivity.getNombreBar();
     ImageView eventBar, right, left;
     TextView textoEvento;
@@ -44,7 +43,7 @@ public class EventTab extends Fragment {
         left = (ImageView) v.findViewById(R.id.swipe_leftE);
 
         if (imagenesEventos.size() > 0) {
-            Picasso.with(getContext()).load(baseUrl + imagenesEventos.get(0)).into(eventBar);
+            Picasso.with(getContext()).load(imagenesEventos.get(0)).into(eventBar);
             textoEvento.setVisibility(View.GONE);
             eventBar.setVisibility(View.VISIBLE);
         }else{
@@ -71,11 +70,11 @@ public class EventTab extends Fragment {
     private void changeImage(int direction) {
         if (direction < 0) {
             if (pos > 0) {
-                Picasso.with(getContext()).load(baseUrl + imagenesEventos.get(--pos)).into(eventBar);
+                Picasso.with(getContext()).load(imagenesEventos.get(--pos)).into(eventBar);
             }
         } else if (direction > 0) {
             if (pos < imagenesEventos.size() - 1) {
-                Picasso.with(getContext()).load(baseUrl + imagenesEventos.get(++pos)).into(eventBar);
+                Picasso.with(getContext()).load(imagenesEventos.get(++pos)).into(eventBar);
             }
         }
     }
