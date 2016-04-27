@@ -209,7 +209,7 @@ public class SearchBar extends AppCompatActivity {
             startActivity(BarActivity.newIntent(SearchBar.this, mNombre.getText().toString()));
         }
     }
-    
+
     private class BarAdapter extends RecyclerView.Adapter<BarHolder> {
         private List<Bar> bares;
 
