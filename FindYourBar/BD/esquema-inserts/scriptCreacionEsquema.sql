@@ -25,21 +25,12 @@ CREATE TABLE IF NOT EXISTS `fyb`.`bar` (
   `descripcion` VARCHAR(500) NULL,
   `direccion` VARCHAR(200) NULL,
   `edad` INT NULL,
-  `horarioApertura` VARCHAR(5) NULL,
-  `horarioCierre` VARCHAR(5) NULL,
+  `horarioApertura` DOUBLE NULL,
+  `horarioCierre` DOUBLE NULL,
   `telefono` INT NULL,
   `email` VARCHAR(50) NULL,
   `facebook` VARCHAR(200) NULL,
   PRIMARY KEY (`nombre`))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `fyb`.`evento`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `fyb`.`evento` (
-  `evento` VARCHAR(200) NOT NULL,
-  PRIMARY KEY (`evento`))
 ENGINE = InnoDB;
 
 
@@ -55,16 +46,11 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `fyb`.`hace`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `fyb`.`hace` (
+CREATE TABLE IF NOT EXISTS `fyb`.`evento` (
   `evento` VARCHAR(200) NOT NULL,
   `nombre` VARCHAR(50) NOT NULL,
   PRIMARY KEY (`evento`, `nombre`),
   INDEX `nombre_idx` (`nombre` ASC),
-  CONSTRAINT `evento`
-    FOREIGN KEY (`evento`)
-    REFERENCES `fyb`.`evento` (`evento`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
   CONSTRAINT `bar`
     FOREIGN KEY (`nombre`)
     REFERENCES `fyb`.`bar` (`nombre`)
@@ -93,33 +79,18 @@ CREATE TABLE IF NOT EXISTS `fyb`.`hay` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
-
--- -----------------------------------------------------
--- Table `fyb`.`imagen`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `fyb`.`imagen` (
-  `imagenId` VARCHAR(100) NOT NULL,
-  `tipo` VARCHAR(50) NULL,
-  PRIMARY KEY (`imagenId`))
-ENGINE = InnoDB;
-
-
 -- -----------------------------------------------------
 -- Table `fyb`.`tiene`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `fyb`.`tiene` (
+CREATE TABLE IF NOT EXISTS `fyb`.`imagen` (
   `nombreId` VARCHAR(50) NOT NULL,
   `imagenId` VARCHAR(100) NOT NULL,
+  `tipo` VARCHAR(50) NULL,
   PRIMARY KEY (`nombreId`, `imagenId`),
   INDEX `imagen_idx` (`imagenId` ASC),
   CONSTRAINT `nombreId`
     FOREIGN KEY (`nombreId`)
     REFERENCES `fyb`.`bar` (`nombre`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `imagenId`
-    FOREIGN KEY (`imagenId`)
-    REFERENCES `fyb`.`imagen` (`imagenId`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;

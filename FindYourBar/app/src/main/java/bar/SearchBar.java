@@ -209,9 +209,7 @@ public class SearchBar extends AppCompatActivity {
             startActivity(BarActivity.newIntent(SearchBar.this, mNombre.getText().toString()));
         }
     }
-
-    //private static final String baseUrl = "http://ps1516.ddns.net/images";
-
+    
     private class BarAdapter extends RecyclerView.Adapter<BarHolder> {
         private List<Bar> bares;
 
