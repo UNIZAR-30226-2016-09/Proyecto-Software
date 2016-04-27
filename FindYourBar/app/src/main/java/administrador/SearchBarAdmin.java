@@ -8,22 +8,17 @@ import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
-
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 
@@ -39,42 +34,16 @@ import bar.R;
 import database.ConjuntoBares;
 
 
-public class SearchBarAdmin extends AppCompatActivity {
+public class SearchBarAdmin extends AppCompatActivity implements BarSelectionAdapter.BarHolder.ClickListener {
 
     private RecyclerView mList;
-    private BarAdapter mAdapter;
+    private BarSelectionAdapter mAdapter;
     private ProgressBar mProgress;
     private static final int CHOOSE_FILTERS = 1;
     private List<Bar> mBares;
     private boolean isNewList;
     private ActionMode mActionMode;
-    private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
-
-        @Override
-        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            MenuInflater inflater = mode.getMenuInflater();
-            inflater.inflate(R.menu.context_menu, menu);
-            return true;
-        }
-
-        @Override
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            return false;
-        }
-
-        @Override
-        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            switch (item.getItemId()) {
-                default:
-                    return false;
-            }
-        }
-
-        @Override
-        public void onDestroyActionMode(ActionMode mode) {
-            mActionMode = null;
-        }
-    };
+    private ActionMode.Callback mActionModeCallback = new MyActionMode();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +54,7 @@ public class SearchBarAdmin extends AppCompatActivity {
         setTitle(R.string.titulo_bares);
         mList = (RecyclerView) findViewById(R.id.recyclerlist);
         mList.setLayoutManager(new LinearLayoutManager(this));
+        mList.setItemAnimator(new DefaultItemAnimator());
         mProgress = (ProgressBar) findViewById(R.id.progressbar);
         mProgress.setVisibility(View.VISIBLE);
         handleIntent(getIntent());
@@ -109,7 +79,7 @@ public class SearchBarAdmin extends AppCompatActivity {
                 List<Bar> aux = ConjuntoBares.getInstance().getLocalBarList();
                 mBares = aux;
                 if (mAdapter == null) {
-                    mAdapter = new BarAdapter(aux);
+                    mAdapter = new BarSelectionAdapter(aux, SearchBarAdmin.this);
                     mList.setAdapter(mAdapter);
                 } else {
                     mAdapter.setBares(aux);
@@ -136,7 +106,7 @@ public class SearchBarAdmin extends AppCompatActivity {
             List<Bar> bares = ConjuntoBares.getInstance().getBar(query);
             mBares = bares;
             if (mAdapter == null) {
-                mAdapter = new BarAdapter(bares);
+                mAdapter = new BarSelectionAdapter(bares, this);
                 mList.setAdapter(mAdapter);
             } else {
                 mAdapter.setBares(bares);
@@ -171,6 +141,41 @@ public class SearchBarAdmin extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBarClicked(int position) {
+        if (mActionMode != null) {
+            toggleSelection(position);
+        } else {
+            startActivity(BarActivity.newIntent(SearchBarAdmin.this, mAdapter.getBarName(position)));
+        }
+    }
+
+    @Override
+    public boolean onBarLongClicked(int position) {
+        if (mActionMode == null) {
+            mActionMode = startSupportActionMode(mActionModeCallback);
+        }
+
+        toggleSelection(position);
+
+        return true;
+
+    }
+
+    private void toggleSelection(int position) {
+        mAdapter.toggleSelection(position);
+        int count = mAdapter.getSelectedItemCount();
+        if (count == 0) {
+            mActionMode.finish();
+        } else {
+            mActionMode.getMenu().findItem(R.id.edit_bar).setVisible(count == 1);
+            mActionMode.setTitle(String.valueOf(count));
+            mActionMode.invalidate();
+
+        }
+    }
+
+
     private class getListaBares extends AsyncTask<Void, Void, List<Bar>> {
 
         @Override
@@ -191,7 +196,7 @@ public class SearchBarAdmin extends AppCompatActivity {
             mBares = result;
             mProgress.setVisibility(View.GONE);
             if (mAdapter == null) {
-                mAdapter = new BarAdapter(result);
+                mAdapter = new BarSelectionAdapter(result, SearchBarAdmin.this);
                 mList.setAdapter(mAdapter);
             } else {
                 mAdapter.setBares(result);
@@ -225,60 +230,39 @@ public class SearchBarAdmin extends AppCompatActivity {
 
     }
 
-    private class BarHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
-        public TextView mNombre;
-        public ImageView mImagen;
-
-        public BarHolder(View item) {
-            super(item);
-            mNombre = (TextView) item.findViewById(R.id.list_nombre_bar);
-            mImagen = (ImageView) item.findViewById(R.id.list_imagen_bar);
-            item.setOnClickListener(this);
-            item.setOnLongClickListener(this);
-        }
-
+    private class MyActionMode implements ActionMode.Callback {
         @Override
-        public void onClick(View v) {
-            startActivity(BarActivity.newIntent(SearchBarAdmin.this, mNombre.getText().toString()));
-        }
-
-        @Override
-        public boolean onLongClick(View view) {
-            startSupportActionMode(mActionModeCallback);
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            MenuInflater inflater = mode.getMenuInflater();
+            inflater.inflate(R.menu.context_menu, menu);
             return true;
         }
-    }
 
-    private static final String baseUrl = "http://ps1516.ddns.net/images";
-
-    private class BarAdapter extends RecyclerView.Adapter<BarHolder> {
-        private List<Bar> bares;
-
-        public BarAdapter(List<Bar> bares) {
-            this.bares = bares;
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
         }
 
         @Override
-        public BarHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            LayoutInflater li = LayoutInflater.from(SearchBarAdmin.this);
-            View view = li.inflate(R.layout.bar_list_item, parent, false);
-            return new BarHolder(view);
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            switch (item.getItemId()) {
+                // TODO: añadir pantalla edicion bar
+                case R.id.edit_bar:
+                    return true;
+                // TODO: borrar los bares de la base de datos remota
+                case R.id.delete_bar:
+                    mAdapter.removeListBares(mAdapter.getSelectedItems());
+                    mActionMode.finish();
+                    return true;
+                default:
+                    return false;
+            }
         }
 
         @Override
-        public void onBindViewHolder(BarHolder holder, int position) {
-            Bar b = bares.get(position);
-            holder.mNombre.setText(b.getNombre());
-            Picasso.with(SearchBarAdmin.this).load(baseUrl + b.getPrincipal()).into(holder.mImagen);
-        }
-
-        @Override
-        public int getItemCount() {
-            return bares.size();
-        }
-
-        public void setBares(List<Bar> bares) {
-            this.bares = bares;
+        public void onDestroyActionMode(ActionMode mode) {
+            mAdapter.clearSelection();
+            mActionMode = null;
         }
     }
 }

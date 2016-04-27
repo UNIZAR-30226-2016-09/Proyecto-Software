@@ -210,7 +210,7 @@ public class SearchBar extends AppCompatActivity {
         }
     }
 
-    private static final String baseUrl = "http://ps1516.ddns.net/images";
+    //private static final String baseUrl = "http://ps1516.ddns.net/images";
 
     private class BarAdapter extends RecyclerView.Adapter<BarHolder> {
         private List<Bar> bares;
@@ -222,7 +222,6 @@ public class SearchBar extends AppCompatActivity {
         @Override
         public BarHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater li = LayoutInflater.from(SearchBar.this);
-            // TODO: crear un layout para mostrar tambein una imagen del bar junto al nombre
             View view = li.inflate(R.layout.bar_list_item, parent, false);
             return new BarHolder(view);
         }
@@ -231,7 +230,7 @@ public class SearchBar extends AppCompatActivity {
         public void onBindViewHolder(BarHolder holder, int position) {
             Bar b = bares.get(position);
             holder.mNombre.setText(b.getNombre());
-            Picasso.with(SearchBar.this).load(baseUrl + b.getPrincipal()).into(holder.mImagen);
+            Picasso.with(SearchBar.this).load(b.getPrincipal()).into(holder.mImagen);
         }
 
         @Override

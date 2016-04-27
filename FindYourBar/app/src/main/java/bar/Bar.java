@@ -103,7 +103,7 @@ public class Bar {
         return secundaria;
     }
 
-    public void setSecundaria(List secundaria) {
+    public void setSecundaria(List<String> secundaria) {
         this.secundaria = secundaria;
     }
 
@@ -111,7 +111,7 @@ public class Bar {
         return eventos;
     }
 
-    public void setEventos(List eventos) {
+    public void setEventos(List<String> eventos) {
         this.eventos = eventos;
     }
 
@@ -131,7 +131,7 @@ public class Bar {
         return musica;
     }
 
-    public void setMusica(List musica) {
+    public void setMusica(List<String> musica) {
         this.musica = musica;
     }
 
