@@ -2,12 +2,12 @@ package bar;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -18,18 +18,31 @@ import database.ConjuntoBares;
 import sliderTab.ContactMapTab;
 import sliderTab.EventTab;
 import sliderTab.InformationTab;
-import sliderTab.SlidingTabLayout;
-import sliderTab.ViewPagerAdapter;
 
 
 public class BarActivity extends AppCompatActivity {
     private static final String BAR_ELEGIDO = "com.findyourbar.bar_elegido";
-
-    private ViewPager pager;
     private static final int Numboftabs = 3;
-
     private static String nombreBarElegido;
+    private ViewPager pager;
     private TabLayout mTabLayout;
+
+    /**
+     * Crea un nuevo intent con la informacion necesaria para el comienzo de esta actividad
+     *
+     * @param context    contexto
+     * @param barElegido nombre del bar elegido
+     * @return un intent con la informacion sobre el bar que se ha elegido
+     */
+    public static Intent newIntent(Context context, String barElegido) {
+        Intent i = new Intent(context, BarActivity.class);
+        i.putExtra(BAR_ELEGIDO, barElegido);
+        return i;
+    }
+
+    public static Bar getNombreBar() {
+        return ConjuntoBares.getInstance().getBarExact(nombreBarElegido);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,24 +88,6 @@ public class BarActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             return titles[position];
         }
-    }
-
-
-    /**
-     * Crea un nuevo intent con la informacion necesaria para el comienzo de esta actividad
-     *
-     * @param context    contexto
-     * @param barElegido nombre del bar elegido
-     * @return un intent con la informacion sobre el bar que se ha elegido
-     */
-    public static Intent newIntent(Context context, String barElegido) {
-        Intent i = new Intent(context, BarActivity.class);
-        i.putExtra(BAR_ELEGIDO, barElegido);
-        return i;
-    }
-
-    public static Bar getNombreBar() {
-        return ConjuntoBares.getInstance().getBarExact(nombreBarElegido);
     }
 }
 

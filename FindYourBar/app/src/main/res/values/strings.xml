@@ -8,6 +8,7 @@
     </string-array>
     <string name="entrar">Entrar</string>
     <string name="iniciar_sesion">Iniciar sesion</string>
+    <string name="error_conexion">Error conexión</string>
     <string name="error_contraseña_igualdad">Contraseña incorrecta</string>
     <string name="error_contraseña_longitud">Requiere una longitud de 26 caracters</string>
     <string name="informacion">Información</string>
@@ -20,7 +21,8 @@
     <string name="menu_name_title">Nombre del bar</string>
     <string name="search_bar">Buscar bar</string>
     <string name="menu_opening_title">Horario de apertura</string>
-    <string name="app_description">Tu app para encontrar todos los bares de copas en Zaragoza</string>
+    <string name="app_description">Tu app para encontrar todos los bares de copas en Zaragoza
+    </string>
     <string name="action_settings">Ajustes</string>
     <string name="no_bar">No hay bares</string>
     <string name="no_eventos">No hay eventos</string>
@@ -71,7 +73,6 @@
     <string name="cancelar">Cancelar</string>
     <string name="quitar_filtros">Quitar filtros</string>
     <string name="buscar">Buscar</string>
-    <string name="error_coger_datos">Ha ocurrido un error</string>
     <string name="reintentar">Reintentar</string>
     <string name="filtros">Filtros</string>
     <string name="acept">Aceptar</string>

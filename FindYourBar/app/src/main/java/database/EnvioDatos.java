@@ -1,8 +1,5 @@
 package database;
 
-import android.os.AsyncTask;
-import android.util.Log;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -14,6 +11,8 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -62,7 +61,7 @@ public class EnvioDatos {
     /**
      * Recibe el tipo de musica
      */
-    public static void enviarMusica(String dato){
+    public static void enviarMusica(String dato) {
         String url = "http://ps1516.ddns.net:80/getMusica.php";
         //JsonReadTask task = new JsonReadTask();
         // passes values for the urls string array
@@ -72,7 +71,7 @@ public class EnvioDatos {
     /**
      * Recibe la hora de apertura
      */
-    public static void enviarHoraApertura(String dato1){
+    public static void enviarHoraApertura(String dato1) {
         String url = "http://ps1516.ddns.net:80/getHA.php";
         //JsonReadTask task = new JsonReadTask();
         // passes values for the urls string array
@@ -82,7 +81,7 @@ public class EnvioDatos {
     /**
      * Recibe la hora de cierre
      */
-    public static void enviarHoraCierre(String dato){
+    public static void enviarHoraCierre(String dato) {
         String url = "http://ps1516.ddns.net:80/getHC.php";
         //JsonReadTask task = new JsonReadTask();
         // passes values for the urls string array

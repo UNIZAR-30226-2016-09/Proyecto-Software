@@ -1,16 +1,14 @@
 package administrador;
 
-import android.graphics.Color;
+import com.squareup.picasso.Picasso;
+
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,38 +18,38 @@ import bar.Bar;
 import bar.R;
 
 public class BarSelectionAdapter extends RecyclerView.Adapter<BarSelectionAdapter.BarHolder> {
-    private List<Bar> bares;
-    private SparseBooleanArray baresSeleccionados;
-    private BarHolder.ClickListener listener;
+    private List<Bar> mBares;
+    private SparseBooleanArray mBaresSeleccionados;
+    private BarHolder.ClickListener mListener;
 
     public BarSelectionAdapter(List<Bar> bares, BarHolder.ClickListener listener) {
-        this.bares = bares;
-        baresSeleccionados = new SparseBooleanArray();
-        this.listener = listener;
+        this.mBares = bares;
+        mBaresSeleccionados = new SparseBooleanArray();
+        this.mListener = listener;
 
     }
 
     public String getBarName(int position) {
-        return bares.get(position).getNombre();
+        return mBares.get(position).getNombre();
     }
 
     @Override
     public BarHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater li = LayoutInflater.from(parent.getContext());
         View view = li.inflate(R.layout.bar_list_item_admin, parent, false);
-        return new BarHolder(view, listener);
+        return new BarHolder(view, mListener);
     }
 
     @Override
     public void onBindViewHolder(BarHolder holder, int position) {
-        Bar b = bares.get(position);
+        Bar b = mBares.get(position);
         holder.mNombre.setText(b.getNombre());
         Picasso.with(holder.mImagen.getContext()).load(b.getPrincipal()).into(holder.mImagen);
         holder.selectOverlay.setVisibility(isSelected(position) ? View.VISIBLE : View.INVISIBLE);
     }
 
     public void removeBar(int position) {
-        bares.remove(position);
+        mBares.remove(position);
         notifyItemRemoved(position);
     }
 
@@ -59,8 +57,8 @@ public class BarSelectionAdapter extends RecyclerView.Adapter<BarSelectionAdapte
         Collections.sort(itemPos);
         Collections.reverse(itemPos);
         for (Integer i : itemPos) {
-            bares.remove(i.intValue());
-            baresSeleccionados.delete(i.intValue());
+            mBares.remove(i.intValue());
+            mBaresSeleccionados.delete(i);
         }
         notifyDataSetChanged();
     }
@@ -68,11 +66,11 @@ public class BarSelectionAdapter extends RecyclerView.Adapter<BarSelectionAdapte
 
     @Override
     public int getItemCount() {
-        return bares.size();
+        return mBares.size();
     }
 
     public void setBares(List<Bar> bares) {
-        this.bares = bares;
+        this.mBares = bares;
     }
 
     public boolean isSelected(int position) {
@@ -80,31 +78,31 @@ public class BarSelectionAdapter extends RecyclerView.Adapter<BarSelectionAdapte
     }
 
     public void toggleSelection(int position) {
-        if (baresSeleccionados.get(position, false)) {
-            baresSeleccionados.delete(position);
+        if (mBaresSeleccionados.get(position, false)) {
+            mBaresSeleccionados.delete(position);
         } else {
-            baresSeleccionados.put(position, true);
+            mBaresSeleccionados.put(position, true);
         }
         notifyItemChanged(position);
     }
 
     public void clearSelection() {
         List<Integer> selection = getSelectedItems();
-        baresSeleccionados.clear();
+        mBaresSeleccionados.clear();
         for (Integer i : selection) {
             notifyItemChanged(i);
         }
     }
 
     public int getSelectedItemCount() {
-        return baresSeleccionados.size();
+        return mBaresSeleccionados.size();
     }
 
 
     public List<Integer> getSelectedItems() {
-        List<Integer> items = new ArrayList<>(baresSeleccionados.size());
-        for (int i = 0; i < baresSeleccionados.size(); ++i) {
-            items.add(baresSeleccionados.keyAt(i));
+        List<Integer> items = new ArrayList<>(mBaresSeleccionados.size());
+        for (int i = 0; i < mBaresSeleccionados.size(); ++i) {
+            items.add(mBaresSeleccionados.keyAt(i));
         }
         return items;
     }
@@ -138,29 +136,10 @@ public class BarSelectionAdapter extends RecyclerView.Adapter<BarSelectionAdapte
             return true;
         }
 
-        /*@Override
-        public void onClick(View v) {
-            startActivity(BarActivity.newIntent(SearchBarAdmin.this, mNombre.getText().toString()));
-        }
-
-        @Override
-        public boolean onLongClick(View view) {
-            if (mActionMode == null)
-                mActionMode = startSupportActionMode(mActionModeCallback);
-            view.setBackgroundColor(Color.parseColor("#e91e63"));
-            Log.d("hello", "shiet" + getAdapterPosition());
-            for (int i = 0; i < marcado.size(); i++) {
-                Log.d("nuse", "nas " + marcado.get(i));
-            }
-            marcado.put(getAdapterPosition(), true);
-            //view.setBackgroundColor(Color.parseColor("#e91e63"));
-            return true;
-        }*/
-
         public interface ClickListener {
-            public void onBarClicked(int position);
+            void onBarClicked(int position);
 
-            public boolean onBarLongClicked(int position);
+            boolean onBarLongClicked(int position);
         }
 
     }

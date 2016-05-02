@@ -11,19 +11,19 @@ import bar.R;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private EditText contrasena;
+    private EditText mContrasena;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         Button botonLogin = (Button) findViewById(R.id.boton_login);
-        contrasena = (EditText) findViewById(R.id.et_contraseña);
+        mContrasena = (EditText) findViewById(R.id.et_contraseña);
         botonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (validarEntrada()) {
-                    startActivity(new Intent(LoginActivity.this, SearchBarAdmin.class));
+                    startActivity(new Intent(LoginActivity.this, SearchBarAdminActivity.class));
                     finish();
                 }
             }
@@ -31,17 +31,30 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Valida la entrada del admin
+     *
+     * @return true si la contraseña es valida, false en caso contrario
+     */
     private boolean validarEntrada() {
-        String str = contrasena.getText().toString();
-        if (!str.equals("password")) {
-            contrasena.setError(getResources().getString(R.string.error_contraseña_igualdad));
+        String str = mContrasena.getText().toString();
+        if (!authAdmin(str)) {
+            mContrasena.setError(getResources().getString(R.string.error_contraseña_igualdad));
             return false;
-            //} else if (str.length() != 7) {
-            //    contrasena.setError(getResources().getString(R.string.error_contraseña_longitud));
-            //    return false;
         } else {
-            contrasena.setError(null);
+            mContrasena.setError(null);
             return true;
         }
+    }
+
+    /**
+     * TODO: cambiar la contraseña o el metodo de autentificacion
+     * Autentifica al administrador
+     *
+     * @param password contraseña a autentificar
+     * @return true si la contraseña es valida, false en caso contrario
+     */
+    private boolean authAdmin(String password) {
+        return password.equals("password");
     }
 }

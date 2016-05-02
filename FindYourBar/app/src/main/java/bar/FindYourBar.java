@@ -14,18 +14,14 @@ import administrador.LoginActivity;
  */
 public class FindYourBar extends AppCompatActivity implements View.OnClickListener {
 
-    private static final String ADMIN_SIGN_IN = "ADMIN_SIGN_IN";
-
     /**
-     * Called when the activity is first created.
+     * LLamado cuando la actividad es creada
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_findyourbar);
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
-
-
         Button searchWindowButton = (Button) findViewById(R.id.bSearch);
         Button adminButton = (Button) findViewById(R.id.administracion);
         adminButton.setOnClickListener(new View.OnClickListener() {
@@ -38,22 +34,21 @@ public class FindYourBar extends AppCompatActivity implements View.OnClickListen
     }
 
     /**
-     * Listen to search button click events
+     * Callback para cuando se haga click
      */
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bSearch:
-                //Call method to open search window at the app
-                searchWindow();
+                startSearchBarActivity();
                 break;
         }
     }
 
     /**
-     * Create an activity of SearchBar to visualize all the bar and let search by options
+     * Crea una actividad que muestra todos los bares y permite buscar
      */
-    private void searchWindow() {
-        Intent intent = new Intent(this, SearchBar.class); // creamos el intent
+    private void startSearchBarActivity() {
+        Intent intent = new Intent(this, SearchBarActivity.class);
         startActivity(intent);
     }
 }

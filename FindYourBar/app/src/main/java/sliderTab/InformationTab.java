@@ -1,5 +1,7 @@
 package sliderTab;
 
+import com.squareup.picasso.Picasso;
+
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,8 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,16 +23,17 @@ import bar.R;
  * Created by Ana on 12/04/2016.
  */
 
-public class InformationTab extends Fragment { //implements View.OnTouchListener {
+public class InformationTab extends Fragment {
 
-    Bar bar = BarActivity.getNombreBar();
-    TextView tituloBar, descripcionBar;
-    ImageView imgBar, right, left;
-    List<String> imagenesBar;
-    int pos = 0;
+    private Bar bar = BarActivity.getNombreBar();
+    private TextView tituloBar, descripcionBar;
+    private ImageView imgBar, right, left;
+    private List<String> imagenesBar;
+    private int pos = 0;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.information_tab, container, false);
 
         tituloBar = (TextView) v.findViewById(R.id.bar_nombre_bar);
@@ -79,35 +80,31 @@ public class InformationTab extends Fragment { //implements View.OnTouchListener
                 changeImage(-1);
             }
         });
+        updateLeftRightChevron();
         return v;
     }
-/*
-    public boolean onTouch(View v, MotionEvent event)
-    {
-        switch (event.getAction())
-        {
-            case MotionEvent.ACTION_DOWN:
-            {
-                // Here u can write code which is executed after the user touch on the screen
-                imgBar.setImageResource(R.drawable.bar1);
-                break;
-            }
-            case MotionEvent.ACTION_UP:
-            {
-                // Here u can write code which is executed after the user release the touch on the screen
-                imgBar.setImageResource(R.drawable.bar2);
-                break;
-            }
-            case MotionEvent.ACTION_MOVE:
-            {
-                // Here u can write code which is executed when user move the finger on the screen
-                imgBar.setImageResource(R.drawable.bar3);
-                break;
-            }
-        }
-        return true;
-    }*/
 
+    /**
+     * Muestra o no las flechas para cambiar de imagen
+     */
+    private void updateLeftRightChevron() {
+        left.setVisibility(View.VISIBLE);
+        right.setVisibility(View.VISIBLE);
+        if (pos == 0) {
+            left.setVisibility(View.GONE);
+        }
+        // si no hay mas imagenes a la derecha
+        if (pos == imagenesBar.size() - 1 || imagenesBar.size() == 0) {
+            right.setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     * Cambia la imagen a mostrar
+     *
+     * @param direction si negativo cambia a la imagen que hay a la izquierda, si positivo cambia
+     *                  a la imagen que hay a la derecha
+     */
     private void changeImage(int direction) {
         if (direction < 0) {
             if (pos > 0) {
@@ -118,5 +115,6 @@ public class InformationTab extends Fragment { //implements View.OnTouchListener
                 Picasso.with(getContext()).load(imagenesBar.get(++pos)).into(imgBar);
             }
         }
+        updateLeftRightChevron();
     }
 }

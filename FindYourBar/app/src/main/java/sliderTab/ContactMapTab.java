@@ -5,47 +5,44 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.Map;
-
-import bar.*;
+import bar.Bar;
+import bar.BarActivity;
+import bar.MapActivity;
+import bar.R;
 
 /**
  * Created by Ana on 12/04/2016.
  */
 public class ContactMapTab extends Fragment {
-    Bar bar = BarActivity.getNombreBar();
-    TextView dirBar, tlfBar, emailfBar, fbBar;
+    private Bar mBar = BarActivity.getNombreBar();
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.contact_map_tab, container, false);
-
-        dirBar = (TextView) v.findViewById(R.id.bar_direccion);
-        tlfBar = (TextView) v.findViewById(R.id.bar_telefono);
+        TextView dirBar = (TextView) v.findViewById(R.id.bar_direccion);
+        Button tlfBar = (Button) v.findViewById(R.id.bar_telefono);
         tlfBar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 call();
             }
         });
-        emailfBar = (TextView) v.findViewById(R.id.bar_email);
+        Button emailfBar = (Button) v.findViewById(R.id.bar_email);
         emailfBar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = bar.getEmail();
-                send(email);
+                send(mBar.getEmail());
             }
         });
-        fbBar = (TextView) v.findViewById(R.id.bar_facebook);
+        Button fbBar = (Button) v.findViewById(R.id.bar_facebook);
         fbBar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,23 +56,40 @@ public class ContactMapTab extends Fragment {
                 openMap();
             }
         });
+        dirBar.setText(mBar.getDireccion());
+        tlfBar.setText(mBar.getTelefono());
+        emailfBar.setText(mBar.getEmail());
+        fbBar.setText(mBar.getFacebook());
 
-        dirBar.setText(bar.getDireccion());
-        tlfBar.setText(bar.getTelefono());
-        emailfBar.setText(bar.getEmail());
-        fbBar.setText(bar.getFacebook());
+        if (mBar.getFacebook().isEmpty()) {
+            fbBar.setVisibility(View.GONE);
+        }
+
+        if (mBar.getTelefono().isEmpty()) {
+            tlfBar.setVisibility(View.GONE);
+        }
+
+        if (mBar.getEmail().isEmpty()) {
+            emailfBar.setVisibility(View.GONE);
+        }
         return v;
     }
 
+    /**
+     * Abre el navegador o facebook para ver la pagina de facebook del mBar
+     */
     private void openFacebook() {
-        String facebook = bar.getFacebook();
+        String facebook = mBar.getFacebook();
         Intent i = new Intent(Intent.ACTION_VIEW);
         i.setData(Uri.parse(facebook));
         startActivity(i);
     }
 
+    /**
+     * Abre la actividad para llamar con el telefono del mBar marcado
+     */
     private void call() {
-        String telefono = bar.getTelefono();
+        String telefono = mBar.getTelefono();
         if (isTelephonyEnabled()) {
             Intent intentP = new Intent(Intent.ACTION_DIAL);
             intentP.setData(Uri.parse("tel:" + telefono));
@@ -83,21 +97,25 @@ public class ContactMapTab extends Fragment {
         }
     }
 
-    //Comprueba si hay conectividad telefónica en el dispositivo
+    /**
+     * Comprueba si hay conectividad telefónica en el dispositivo
+     */
     private boolean isTelephonyEnabled() {
-        TelephonyManager tm = (TelephonyManager) getContext().getSystemService(getContext().TELEPHONY_SERVICE);
+        TelephonyManager tm = (TelephonyManager) getContext().getSystemService(
+                getContext().TELEPHONY_SERVICE);
         return tm != null && tm.getSimState() == TelephonyManager.SIM_STATE_READY;
     }
 
+    /**
+     * Crea la actividad que muestra el mapa con la localizacion del mBar
+     */
     private void openMap() {
-        /*String direccion = bar.getDireccion();
-        Intent intentD = new Intent(android.content.Intent.ACTION_VIEW,
-                Uri.parse("google.navigation:q=" + direccion));
-        intentD.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
-        this.startActivity(intentD);*/
-        startActivity(MapActivity.newIntent(getContext(), bar.getDireccion() + ", Zaragoza"));
+        startActivity(MapActivity.newIntent(getContext(), mBar.getDireccion() + ", Zaragoza"));
     }
 
+    /**
+     * Crea una actividad para abrir el correo
+     */
     private void send(String subject) {
         Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
         emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, subject);

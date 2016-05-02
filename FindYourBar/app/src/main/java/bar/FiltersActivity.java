@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -14,32 +12,52 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public class FiltersActivity extends AppCompatActivity {
-
-    private Spinner mSpinnerMusic;
-    private Spinner mSpinnerAge;
-    private Spinner mSpinnerClose;
-    private Spinner mSpinnerOpen;
 
     private static final String MUSIC_SELECTED = "MUSIC_SELECTED";
     private static final String AGE_SELECTED = "AGE_SELECTED";
     private static final String CLOSE_SELECTED = "CLOSE_SELECTED";
     private static final String OPEN_SELECTED = "OPEN_SELECTED";
     private static final String NEW_LIST = "NEW_LIST";
-
     // Valores de las distinas posiciones de los spinner
-    private static final String[] edad = {"21", "16", "18", "21"};
-    private static final String[] horaCierre = {"3", "3", "4", "5", "6.3"};
-    private static final String[] horaApertura = {"0", "22", "23", "0"};
-    private static final String[] music = {"all", "Pop/musica comercial", "Rap", "Rock/Heavy", "Latina", "Indie", "Electronica", "Años 60-80"};
+    private static final String[] EDAD = {"21", "16", "18", "21"};
+    private static final String[] HORA_CIERRE = {"3", "3", "4", "5", "6.3"};
+    private static final String[] HORA_APERTURA = {"0", "22", "23", "0"};
+    private static final String[] MUSIC = {"all", "Pop/musica comercial", "Rap", "Rock/Heavy",
+            "Latina", "Indie", "Electronica", "Años 60-80"};
+    private static int[] mPreviousSpinnerPositions = {0, 0, 0, 0};
+    private Spinner mSpinnerMusic;
+    private Spinner mSpinnerAge;
+    private Spinner mSpinnerClose;
+    private Spinner mSpinnerOpen;
 
-    private static int[] previousSpinnerPositions = {0, 0, 0, 0};
+    /**
+     * Usado para la creacion del intent que para comunicarse con esta actividad
+     */
+    public static Intent newIntent(Context context, boolean isNewList) {
+        Intent intent = new Intent(context, FiltersActivity.class);
+        intent.putExtra(NEW_LIST, isNewList);
+        return intent;
+    }
 
+    /**
+     * Devuelve un hasmap con los valores de los filtors selecionados. Las llaves son: "Musica",
+     * "Edad",
+     * "HoraCierre" y "HoraApertura". Un valor de "all" significa que al usuario le da igual ese
+     * parametro
+     * de filtro
+     */
+    public static HashMap<String, String> whatFiltersWhereSelected(Intent intent) {
+        HashMap<String, String> aux = new HashMap<>();
+        aux.put("Musica", intent.getStringExtra(MUSIC_SELECTED));
+        aux.put("Edad", intent.getStringExtra(AGE_SELECTED));
+        aux.put("HoraCierre", intent.getStringExtra(CLOSE_SELECTED));
+        aux.put("HoraApertura", intent.getStringExtra(OPEN_SELECTED));
+        return aux;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -96,10 +114,10 @@ public class FiltersActivity extends AppCompatActivity {
      * Pone la posicion de los spinner a la posicion anterior
      */
     public void setSpinnerPositionToPrevious() {
-        mSpinnerMusic.setSelection(previousSpinnerPositions[0]);
-        mSpinnerAge.setSelection(previousSpinnerPositions[1]);
-        mSpinnerClose.setSelection(previousSpinnerPositions[2]);
-        mSpinnerOpen.setSelection(previousSpinnerPositions[3]);
+        mSpinnerMusic.setSelection(mPreviousSpinnerPositions[0]);
+        mSpinnerAge.setSelection(mPreviousSpinnerPositions[1]);
+        mSpinnerClose.setSelection(mPreviousSpinnerPositions[2]);
+        mSpinnerOpen.setSelection(mPreviousSpinnerPositions[3]);
 
     }
 
@@ -107,40 +125,10 @@ public class FiltersActivity extends AppCompatActivity {
      * Guarda la posicion actual de los spinner
      */
     public void setPreviousSpinnerPositions() {
-        previousSpinnerPositions[0] = mSpinnerMusic.getSelectedItemPosition();
-        previousSpinnerPositions[1] = mSpinnerAge.getSelectedItemPosition();
-        previousSpinnerPositions[2] = mSpinnerClose.getSelectedItemPosition();
-        previousSpinnerPositions[3] = mSpinnerOpen.getSelectedItemPosition();
-    }
-
-    /**
-     * Usado para la creacion del intent que para comunicarse con esta actividad
-     *
-     * @param context
-     * @param isNewList
-     * @return
-     */
-    public static Intent newIntent(Context context, boolean isNewList) {
-        Intent intent = new Intent(context, FiltersActivity.class);
-        intent.putExtra(NEW_LIST, isNewList);
-        return intent;
-    }
-
-    /**
-     * Devuelve un hasmap con los valores de los filtors selecionados. Las llaves son: "Musica", "Edad",
-     * "HoraCierre" y "HoraApertura". Un valor de "all" significa que al usuario le da igual ese parametro
-     * de filtro
-     *
-     * @param intent
-     * @return
-     */
-    public static HashMap<String, String> whatFiltersWhereSelected(Intent intent) {
-        HashMap<String, String> aux = new HashMap<>();
-        aux.put("Musica", intent.getStringExtra(MUSIC_SELECTED));
-        aux.put("Edad", intent.getStringExtra(AGE_SELECTED));
-        aux.put("HoraCierre", intent.getStringExtra(CLOSE_SELECTED));
-        aux.put("HoraApertura", intent.getStringExtra(OPEN_SELECTED));
-        return aux;
+        mPreviousSpinnerPositions[0] = mSpinnerMusic.getSelectedItemPosition();
+        mPreviousSpinnerPositions[1] = mSpinnerAge.getSelectedItemPosition();
+        mPreviousSpinnerPositions[2] = mSpinnerClose.getSelectedItemPosition();
+        mPreviousSpinnerPositions[3] = mSpinnerOpen.getSelectedItemPosition();
     }
 
     /**
@@ -148,10 +136,10 @@ public class FiltersActivity extends AppCompatActivity {
      */
     public void setFiltersSelected() {
         Intent data = new Intent();
-        data.putExtra(MUSIC_SELECTED, music[mSpinnerMusic.getSelectedItemPosition()]);
-        data.putExtra(AGE_SELECTED, edad[mSpinnerAge.getSelectedItemPosition()]);
-        data.putExtra(CLOSE_SELECTED, horaCierre[mSpinnerClose.getSelectedItemPosition()]);
-        data.putExtra(OPEN_SELECTED, horaApertura[mSpinnerOpen.getSelectedItemPosition()]);
+        data.putExtra(MUSIC_SELECTED, MUSIC[mSpinnerMusic.getSelectedItemPosition()]);
+        data.putExtra(AGE_SELECTED, EDAD[mSpinnerAge.getSelectedItemPosition()]);
+        data.putExtra(CLOSE_SELECTED, HORA_CIERRE[mSpinnerClose.getSelectedItemPosition()]);
+        data.putExtra(OPEN_SELECTED, HORA_APERTURA[mSpinnerOpen.getSelectedItemPosition()]);
         setResult(RESULT_OK, data);
     }
 

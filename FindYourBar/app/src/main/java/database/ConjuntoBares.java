@@ -35,20 +35,6 @@ public class ConjuntoBares {
         mBares = new ArrayList<>();
     }
 
-    public void addBar(Bar b) {
-        mBares.add(b);
-    }
-
-    public List<Bar> getLocalBarList() {
-        return mBares;
-    }
-
-    public static void verBares() {
-        for (Bar b : mBares) {
-            Log.e("nombreBar", b.getNombre());
-        }
-    }
-
     public static ConjuntoBares getInstance() {
         if (sConjuntoBares == null) {
             sConjuntoBares = new ConjuntoBares();
@@ -56,9 +42,20 @@ public class ConjuntoBares {
         return sConjuntoBares;
     }
 
+    public List<Bar> getLocalBarList() {
+        return mBares;
+    }
+
+    /**
+     * Devuelve una lista de bares de la base de datos remota
+     *
+     * @return lista con todos los bares
+     * @throws IOException   errores de conexion con la base de datos
+     * @throws JSONException erroes de parsing de la informacion
+     */
     public List<Bar> getBares() throws IOException, JSONException {
         String url = "http://ps1516.ddns.net:80/getBares.php";
-        String json = getJson(new String[]{url, "all"});
+        String json = getJson(url, "all");
         mBares = parseJson(json);
         return mBares;
     }
@@ -96,13 +93,26 @@ public class ConjuntoBares {
 
     public List<Bar> enviarBares(String dato) throws IOException, JSONException {
         String url = "http://ps1516.ddns.net:80/getNames.php";
-        String json = getJson(new String[]{url, dato});
+        String json = getJson(url, dato);
         return parseJson(json);
     }
 
-    public List<Bar> filtrarBares(String musica, String edad, String horaCierre, String horaApertura) throws IOException, JSONException {
+    /**
+     * Devuelve una lista de bares de la base de datos remota con los parametros igual a los
+     * especificados
+     *
+     * @param musica       musica del bar
+     * @param edad         edad de entrada del bar
+     * @param horaCierre   hora de cierre del bar
+     * @param horaApertura hora de apertura del bar
+     * @return lista con los bares filtrados
+     * @throws IOException   errores de conexion
+     * @throws JSONException erroes de parsing de la informacion
+     */
+    public List<Bar> filtrarBares(String musica, String edad, String horaCierre, String horaApertura)
+            throws IOException, JSONException {
         String url = "http://ps1516.ddns.net:80/getFiltros.php";
-        String json = getJson(new String[]{url, musica, edad, horaCierre, horaApertura});
+        String json = getJson(url, musica, edad, horaCierre, horaApertura);
         mBares = parseJson(json);
         return mBares;
     }
@@ -112,38 +122,33 @@ public class ConjuntoBares {
      *
      * @param params array con la url del servidor y que informacion pedir
      * @return json con la infomacion del servidor
-     * @throws IOException
      */
     private String getJson(String... params) throws IOException {
         HttpClient httpclient = new DefaultHttpClient();
         HttpPost httppost = new HttpPost(params[0]);
-        if(params.length > 2){
-            List<NameValuePair> postValues = new ArrayList<NameValuePair>(2);
+        if (params.length > 2) {
+            List<NameValuePair> postValues = new ArrayList<>(2);
             postValues.add(new BasicNameValuePair("tM", params[1]));
             postValues.add(new BasicNameValuePair("edad", params[2]));
             postValues.add(new BasicNameValuePair("hC", params[3]));
             postValues.add(new BasicNameValuePair("hA", params[4]));
             httppost.setEntity(new UrlEncodedFormEntity(postValues));
-        }
-        else if (!params[1].equals("all")) {
-            List<NameValuePair> postValues = new ArrayList<NameValuePair>(2);
+        } else if (!params[1].equals("all")) {
+            List<NameValuePair> postValues = new ArrayList<>(2);
             postValues.add(new BasicNameValuePair("nombre", params[1]));
             //Encapsulamos
             httppost.setEntity(new UrlEncodedFormEntity(postValues));
         }
         HttpResponse response = httpclient.execute(httppost);
-        String jsonResult = inputStreamToString(
-                response.getEntity().getContent()).toString();
-        return jsonResult;
+        return inputStreamToString(response.getEntity().getContent()).toString();
     }
 
 
     /**
-     * Parse el json para
+     * Parse el json para coger la informacion de los bares
      *
      * @param json cadena a parsear
      * @return lista de los bares
-     * @throws JSONException
      */
     private List<Bar> parseJson(String json) throws JSONException {
         List<Bar> bares = new ArrayList<>();
@@ -166,19 +171,19 @@ public class ConjuntoBares {
             String imaPrincipal = jsonChildNode.optString("imagenId");
             JSONArray imagenesArray = jsonChildNode.optJSONArray("secundaria");
             for (int j = 0; j < imagenesArray.length(); j++) {
-                String ruta = (String) imagenesArray.getString(j);
+                String ruta = imagenesArray.getString(j);
                 Log.e("ruta", ruta);
                 arrayImagenes.add(ruta);
             }
             JSONArray eventosArray = jsonChildNode.optJSONArray("eventos");
             for (int j = 0; j < eventosArray.length(); j++) {
-                String evento = (String) eventosArray.getString(j);
+                String evento = eventosArray.getString(j);
                 Log.e("evento", evento);
                 arrayEventos.add(evento);
             }
             JSONArray musicaArray = jsonChildNode.optJSONArray("musica");
             for (int k = 0; k < musicaArray.length(); k++) {
-                String musica = (String) musicaArray.getString(k);
+                String musica = musicaArray.getString(k);
                 Log.e("musica", musica);
                 arrayMusica.add(musica);
             }
@@ -197,15 +202,12 @@ public class ConjuntoBares {
      * @param is InputStream a transformar
      * @return String del InputStream
      */
-    private StringBuilder inputStreamToString(InputStream is) {
-        String rLine = "";
+    private StringBuilder inputStreamToString(InputStream is) throws IOException {
+        String rLine;
         StringBuilder answer = new StringBuilder();
         BufferedReader rd = new BufferedReader(new InputStreamReader(is));
-        try {
-            while ((rLine = rd.readLine()) != null) {
-                answer.append(rLine);
-            }
-        } catch (IOException e) {
+        while ((rLine = rd.readLine()) != null) {
+            answer.append(rLine);
         }
         return answer;
     }

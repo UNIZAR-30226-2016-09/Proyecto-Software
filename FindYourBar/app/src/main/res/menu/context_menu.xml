@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/edit_bar"
-        android:icon="@drawable/ic_mode_edit_white_24dp"
-        android:title="@string/editar_bar" />
+            android:id="@+id/edit_bar"
+            android:icon="@drawable/ic_mode_edit_white_24dp"
+            android:title="@string/editar_bar"/>
     <item
-        android:id="@+id/delete_bar"
-        android:icon="@drawable/ic_delete_white_24dp"
-        android:title="@string/borrar_bar" />
+            android:id="@+id/delete_bar"
+            android:icon="@drawable/ic_delete_white_24dp"
+            android:title="@string/borrar_bar"/>
 </menu>

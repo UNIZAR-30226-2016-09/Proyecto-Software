@@ -1,7 +1,6 @@
 package bar;
 
 import java.util.List;
-import java.util.StringTokenizer;
 
 /**
  * Clase que repsresenta un bar y toda la infomarcion asociada a el
@@ -19,7 +18,8 @@ public class Bar {
     private float horaCierre;
     private float horaApertura;
     private List<String> musica;
-
+    private String telefono;
+    private String email;
 
     public Bar(String nombre, String descripcion, String direccion, String telefono, String email,
                String facebook, String principal, List<String> secundaria, List<String> eventos, int edad,
@@ -41,9 +41,6 @@ public class Bar {
 
     /**
      * Devuelve verdad si el bar contiene el tipo de musica especificado
-     *
-     * @param genre
-     * @return
      */
     public boolean hasMusicGenre(String genre) {
         return musica.contains(genre);
@@ -87,9 +84,6 @@ public class Bar {
     public String getTelefono() {
         return telefono;
     }
-
-    private String telefono;
-    private String email;
 
     public String getPrincipal() {
         return principal;
