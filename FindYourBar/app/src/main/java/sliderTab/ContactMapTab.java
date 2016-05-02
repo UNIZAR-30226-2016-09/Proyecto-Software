@@ -116,10 +116,13 @@ public class ContactMapTab extends Fragment {
     /**
      * Crea una actividad para abrir el correo
      */
-    private void send(String subject) {
-        Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
-        emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, subject);
-        emailIntent.setType("text/plain");
-        this.startActivity(Intent.createChooser(emailIntent, "Enviando email..."));
+    private void send(String... direcciones) {
+        Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+        emailIntent.setData(Uri.parse("mailto:"));
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, direcciones);
+        if (emailIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+            startActivity(emailIntent);
+        }
+
     }
 }

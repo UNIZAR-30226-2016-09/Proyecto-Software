@@ -12,6 +12,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -43,12 +44,12 @@ public class SearchBarActivity extends AppCompatActivity {
     private BarAdapter mAdapter;
     private ProgressBar mProgress;
     private List<Bar> mBares;
-    private boolean isNewList;
+    private boolean mIsNewList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        isNewList = true;
+        mIsNewList = true;
         setContentView(R.layout.activity_search);
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         setTitle(R.string.titulo_bares);
@@ -74,7 +75,7 @@ public class SearchBarActivity extends AppCompatActivity {
 
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
-                isNewList = true;
+                mIsNewList = true;
                 List<Bar> aux = ConjuntoBares.getInstance().getLocalBarList();
                 mBares = aux;
                 if (mAdapter == null) {
@@ -105,7 +106,7 @@ public class SearchBarActivity extends AppCompatActivity {
      */
     private void handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            isNewList = true;
+            mIsNewList = true;
             String query = intent.getStringExtra(SearchManager.QUERY);
             List<Bar> bares = ConjuntoBares.getInstance().getBar(query);
             mBares = bares;
@@ -130,19 +131,28 @@ public class SearchBarActivity extends AppCompatActivity {
      * Crea la actividad FiltersActivity para coger los filtros que el usuario elija
      */
     public void getFilters() {
-        Intent intent = FiltersActivity.newIntent(this, isNewList);
+        Intent intent = FiltersActivity.newIntent(this, mIsNewList);
         startActivityForResult(intent, CHOOSE_FILTERS);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CHOOSE_FILTERS) {
-            isNewList = false;
+            mIsNewList = false;
             if (resultCode == RESULT_OK) {
                 HashMap<String, String> map = FiltersActivity.whatFiltersWhereSelected(data);
-                String[] p = new String[]{map.get("Musica"), map.get("Edad"), map.get("HoraCierre"),
-                        map.get("HoraApertura")};
-                new DescargarBaresFiltrados().execute(p);
+                //String[] p = new String[]{map.get("Musica"), map.get("Edad"), map.get("HoraCierre"),
+                //        map.get("HoraApertura")};
+                //new DescargarBaresFiltrados().execute(p);
+                List<Bar> baresFiltrados = filtrar(mBares, map.get("Musica"), map.get("Edad"),
+                        map.get("HoraCierre"), map.get("HoraApertura"));
+                if (mAdapter == null) {
+                    mAdapter = new BarAdapter(baresFiltrados);
+                    mList.setAdapter(mAdapter);
+                } else {
+                    mAdapter.setBares(baresFiltrados);
+                    mAdapter.notifyDataSetChanged();
+                }
             }
         }
     }
@@ -242,6 +252,63 @@ public class SearchBarActivity extends AppCompatActivity {
             }
 
         }
+    }
+
+
+    public List<Bar> filtrar(List<Bar> bares, String musica, String edad, String horaCierre,
+                             String horaApertura) {
+        List<Bar> aux = bares;
+        List<Bar> aux1 = new ArrayList<>();
+        if (!musica.equals("all")) {
+            for (Bar b : aux) {
+                if (b.hasMusicGenre(musica)) {
+                    aux1.add(b);
+                }
+            }
+            aux = aux1;
+            aux1 = new ArrayList<>();
+        }
+        if (!edad.equals("all")) {
+            int edadI = Integer.parseInt(edad);
+            for (Bar b : aux) {
+                if (b.getEdad() >= edadI) {
+                    aux1.add(b);
+
+                }
+            }
+            aux = aux1;
+            aux1 = new ArrayList<>();
+        }
+
+        if (!horaCierre.equals("all")) {
+            float hc = Float.parseFloat(horaCierre);
+            for (Bar b : aux) {
+                if (b.getHoraCierre() >= hc) {
+                    aux1.add(b);
+                }
+            }
+            aux = aux1;
+            aux1 = new ArrayList<>();
+        }
+
+        if (!horaApertura.equals("all")) {
+            float ha = Float.parseFloat(horaApertura);
+            for (Bar b : aux) {
+                if (ha == 0) {
+                    if ((b.getHoraApertura() <= 24 && b.getHoraApertura() > 18) || b.getHoraApertura() == 0) {
+                        aux1.add(b);
+                    }
+                } else {
+                    if (b.getHoraApertura() <= ha && b.getHoraApertura() > 18) {
+                        aux1.add(b);
+                    }
+                }
+
+            }
+            aux = aux1;
+        }
+
+        return aux;
     }
 
     private class BarHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
