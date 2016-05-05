@@ -21,11 +21,9 @@ import sliderTab.InformationTab;
 
 
 public class BarActivity extends AppCompatActivity {
-    private static final String BAR_ELEGIDO = "com.findyourbar.bar_elegido";
-    private static final int Numboftabs = 3;
-    private static String nombreBarElegido;
-    private ViewPager pager;
-    private TabLayout mTabLayout;
+    protected static final String BAR_ELEGIDO = "com.findyourbar.bar_elegido";
+    protected static final int NUM_OF_TABS = 3;
+    protected static String nombreBarElegido;
 
     /**
      * Crea un nuevo intent con la informacion necesaria para el comienzo de esta actividad
@@ -48,13 +46,13 @@ public class BarActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bar);
-        mTabLayout = (TabLayout) findViewById(R.id.sliderTabs);
+        TabLayout mTabLayout = (TabLayout) findViewById(R.id.sliderTabs);
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         nombreBarElegido = getIntent().getCharSequenceExtra(BAR_ELEGIDO).toString();
         Bar bar = getNombreBar();
         setTitle(bar.getNombre());
 
-        pager = (ViewPager) findViewById(R.id.pager);
+        ViewPager pager = (ViewPager) findViewById(R.id.pager);
         List<Fragment> l = new ArrayList<>();
         l.add(new InformationTab());
         l.add(new ContactMapTab());
@@ -64,7 +62,7 @@ public class BarActivity extends AppCompatActivity {
         mTabLayout.setupWithViewPager(pager);
     }
 
-    private static class MyAdapter extends FragmentPagerAdapter {
+    public static class MyAdapter extends FragmentPagerAdapter {
         List<Fragment> l;
         CharSequence[] titles;
 
@@ -76,7 +74,7 @@ public class BarActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return Numboftabs;
+            return l.size();
         }
 
         @Override

@@ -1,7 +1,5 @@
 package administrador;
 
-import com.squareup.picasso.Picasso;
-
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
@@ -9,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,7 +44,11 @@ public class BarSelectionAdapter extends RecyclerView.Adapter<BarSelectionAdapte
     public void onBindViewHolder(BarHolder holder, int position) {
         Bar b = mBares.get(position);
         holder.mNombre.setText(b.getNombre());
-        Picasso.with(holder.mImagen.getContext()).load(b.getPrincipal()).into(holder.mImagen);
+        if (!b.getPrincipal().isEmpty()) {
+            Picasso.with(holder.mImagen.getContext()).load(b.getPrincipal()).into(holder.mImagen);
+        } else {
+            holder.mImagen.setImageDrawable(null);
+        }
         holder.selectOverlay.setVisibility(isSelected(position) ? View.VISIBLE : View.INVISIBLE);
     }
 
@@ -62,7 +66,6 @@ public class BarSelectionAdapter extends RecyclerView.Adapter<BarSelectionAdapte
         }
         notifyDataSetChanged();
     }
-
 
     @Override
     public int getItemCount() {

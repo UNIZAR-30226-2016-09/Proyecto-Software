@@ -12,7 +12,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -39,18 +38,22 @@ import database.ConjuntoBares;
  */
 public class SearchBarActivity extends AppCompatActivity {
 
-    private static final int CHOOSE_FILTERS = 1;
-    private RecyclerView mList;
-    private BarAdapter mAdapter;
-    private ProgressBar mProgress;
-    private List<Bar> mBares;
-    private boolean mIsNewList;
+    protected static final int CHOOSE_FILTERS = 1;
+    protected RecyclerView mList;
+    protected BarAdapter mAdapter;
+    protected ProgressBar mProgress;
+    protected List<Bar> mBares;
+    protected boolean mIsNewList;
+    protected View v;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mIsNewList = true;
-        setContentView(R.layout.activity_search);
+        LayoutInflater inflater = getLayoutInflater();
+
+        v = inflater.inflate(R.layout.activity_search, null);
+        setContentView(v);
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         setTitle(R.string.titulo_bares);
         mList = (RecyclerView) findViewById(R.id.recyclerlist);
@@ -59,6 +62,16 @@ public class SearchBarActivity extends AppCompatActivity {
         mProgress.setVisibility(View.VISIBLE);
         handleIntent(getIntent());
         new DescargarListaBares().execute();
+    }
+
+    protected void updateAdapter(List<Bar> bares) {
+        if (mAdapter == null) {
+            mAdapter = new BarAdapter(bares, SearchBarActivity.this);
+            mList.setAdapter(mAdapter);
+        } else {
+            mAdapter.setBares(bares);
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -78,13 +91,7 @@ public class SearchBarActivity extends AppCompatActivity {
                 mIsNewList = true;
                 List<Bar> aux = ConjuntoBares.getInstance().getLocalBarList();
                 mBares = aux;
-                if (mAdapter == null) {
-                    mAdapter = new BarAdapter(aux);
-                    mList.setAdapter(mAdapter);
-                } else {
-                    mAdapter.setBares(aux);
-                    mAdapter.notifyDataSetChanged();
-                }
+                updateAdapter(aux);
                 return true;
             }
         });
@@ -104,19 +111,13 @@ public class SearchBarActivity extends AppCompatActivity {
      *
      * @param intent intent
      */
-    private void handleIntent(Intent intent) {
+    protected void handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             mIsNewList = true;
             String query = intent.getStringExtra(SearchManager.QUERY);
             List<Bar> bares = ConjuntoBares.getInstance().getBar(query);
             mBares = bares;
-            if (mAdapter == null) {
-                mAdapter = new BarAdapter(bares);
-                mList.setAdapter(mAdapter);
-            } else {
-                mAdapter.setBares(bares);
-                mAdapter.notifyDataSetChanged();
-            }
+            updateAdapter(bares);
         }
     }
 
@@ -146,13 +147,7 @@ public class SearchBarActivity extends AppCompatActivity {
                 //new DescargarBaresFiltrados().execute(p);
                 List<Bar> baresFiltrados = filtrar(mBares, map.get("Musica"), map.get("Edad"),
                         map.get("HoraCierre"), map.get("HoraApertura"));
-                if (mAdapter == null) {
-                    mAdapter = new BarAdapter(baresFiltrados);
-                    mList.setAdapter(mAdapter);
-                } else {
-                    mAdapter.setBares(baresFiltrados);
-                    mAdapter.notifyDataSetChanged();
-                }
+                updateAdapter(baresFiltrados);
             }
         }
     }
@@ -160,9 +155,13 @@ public class SearchBarActivity extends AppCompatActivity {
     /**
      * Descarga la lista de bares de la base de datos remota y los muestra
      */
-    private class DescargarListaBares extends AsyncTask<Void, Void, List<Bar>> {
+    public class DescargarListaBares extends AsyncTask<Void, Void, List<Bar>> {
 
         private Exception e = null;
+
+        public DescargarListaBares() {
+
+        }
 
         @Override
         protected List<Bar> doInBackground(Void... params) {
@@ -183,7 +182,7 @@ public class SearchBarActivity extends AppCompatActivity {
             mProgress.setVisibility(View.GONE);
             // TODO: usar instance of para distinguir de que tipo de excepcion se trata
             if (e != null) {
-                Snackbar.make(mList, R.string.error_conexion, Snackbar.LENGTH_INDEFINITE).
+                Snackbar.make(v, R.string.error_conexion, Snackbar.LENGTH_INDEFINITE).
                         setAction(R.string.reintentar, new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -192,13 +191,7 @@ public class SearchBarActivity extends AppCompatActivity {
                             }
                         }).show();
             } else {
-                if (mAdapter == null) {
-                    mAdapter = new BarAdapter(result);
-                    mList.setAdapter(mAdapter);
-                } else {
-                    mAdapter.setBares(result);
-                    mAdapter.notifyDataSetChanged();
-                }
+                updateAdapter(result);
             }
         }
     }
@@ -208,7 +201,7 @@ public class SearchBarActivity extends AppCompatActivity {
     /**
      * Descarga la lista de bares filtrados de la base de datos remota y los muestra
      */
-    private class DescargarBaresFiltrados extends AsyncTask<String, Void, List<Bar>> {
+    protected class DescargarBaresFiltrados extends AsyncTask<String, Void, List<Bar>> {
 
         private Exception e = null;
 
@@ -233,7 +226,7 @@ public class SearchBarActivity extends AppCompatActivity {
             mProgress.setVisibility(View.GONE);
 
             if (e != null) {
-                Snackbar.make(mList, R.string.error_conexion, Snackbar.LENGTH_INDEFINITE).
+                Snackbar.make(mProgress, R.string.error_conexion, Snackbar.LENGTH_INDEFINITE).
                         setAction(R.string.reintentar, new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -242,21 +235,15 @@ public class SearchBarActivity extends AppCompatActivity {
                             }
                         }).show();
             } else {
-                if (mAdapter == null) {
-                    mAdapter = new BarAdapter(result);
-                    mList.setAdapter(mAdapter);
-                } else {
-                    mAdapter.setBares(result);
-                    mAdapter.notifyDataSetChanged();
-                }
+                updateAdapter(result);
             }
 
         }
     }
 
 
-    public List<Bar> filtrar(List<Bar> bares, String musica, String edad, String horaCierre,
-                             String horaApertura) {
+    public static List<Bar> filtrar(List<Bar> bares, String musica, String edad, String horaCierre,
+                                    String horaApertura) {
         List<Bar> aux = bares;
         List<Bar> aux1 = new ArrayList<>();
         if (!musica.equals("all")) {
@@ -311,42 +298,50 @@ public class SearchBarActivity extends AppCompatActivity {
         return aux;
     }
 
-    private class BarHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class BarHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView mNombre;
         public ImageView mImagen;
+        public Context mContext;
 
-        public BarHolder(View item) {
+        public BarHolder(View item, Context context) {
             super(item);
             mNombre = (TextView) item.findViewById(R.id.list_nombre_bar);
             mImagen = (ImageView) item.findViewById(R.id.list_imagen_bar);
             item.setOnClickListener(this);
+            mContext = context;
         }
 
         @Override
         public void onClick(View v) {
-            startActivity(BarActivity.newIntent(SearchBarActivity.this, mNombre.getText().toString()));
+            mContext.startActivity(BarActivity.newIntent(mContext, mNombre.getText().toString()));
         }
     }
 
-    private class BarAdapter extends RecyclerView.Adapter<BarHolder> {
+    public static class BarAdapter extends RecyclerView.Adapter<BarHolder> {
         private List<Bar> bares;
+        private Context mContext;
 
-        public BarAdapter(List<Bar> bares) {
+        public BarAdapter(List<Bar> bares, Context context) {
             this.bares = bares;
+            mContext = context;
         }
 
         @Override
         public BarHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            LayoutInflater li = LayoutInflater.from(SearchBarActivity.this);
+            LayoutInflater li = LayoutInflater.from(mContext);
             View view = li.inflate(R.layout.bar_list_item, parent, false);
-            return new BarHolder(view);
+            return new BarHolder(view, mContext);
         }
 
         @Override
         public void onBindViewHolder(BarHolder holder, int position) {
             Bar b = bares.get(position);
             holder.mNombre.setText(b.getNombre());
-            Picasso.with(SearchBarActivity.this).load(b.getPrincipal()).into(holder.mImagen);
+            if (!b.getPrincipal().isEmpty()) {
+                Picasso.with(mContext).load(b.getPrincipal()).into(holder.mImagen);
+            } else {
+                holder.mImagen.setImageDrawable(null);
+            }
         }
 
         @Override

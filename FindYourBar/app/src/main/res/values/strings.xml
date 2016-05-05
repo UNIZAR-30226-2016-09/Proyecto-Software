@@ -8,6 +8,8 @@
     </string-array>
     <string name="entrar">Entrar</string>
     <string name="iniciar_sesion">Iniciar sesion</string>
+    <string name="nombre_del_bar">Nombre del bar</string>
+    <string name="descripcion_del_bar">Descripcion del bar</string>
     <string name="error_conexion">Error conexión</string>
     <string name="error_contraseña_igualdad">Contraseña incorrecta</string>
     <string name="error_contraseña_longitud">Requiere una longitud de 26 caracters</string>
@@ -76,4 +78,15 @@
     <string name="reintentar">Reintentar</string>
     <string name="filtros">Filtros</string>
     <string name="acept">Aceptar</string>
+    <string name="direccion_del_bar">Dirección:</string>
+    <string name="email_del_bar">Email:</string>
+    <string name="facebook_del_bar">Facebook:</string>
+    <string name="crear">Crear</string>
+    <string name="añadir_imagen">Añadir imagen</string>
+    <string name="url_de_la_imagen">URL de la imagen</string>
+    <string name="url">URL</string>
+    <string name="edad_minima_del_bar">Edad minima</string>
+    <string name="tipo_musica_del_bar">Tipo musica</string>
+    <string name="horario_apertura_del_bar">Horario apertura</string>
+    <string name="horario_cierre_del_bar">Horario cierre</string>
 </resources>

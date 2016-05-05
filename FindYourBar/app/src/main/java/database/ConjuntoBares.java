@@ -1,7 +1,5 @@
 package database;
 
-import android.util.Log;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
@@ -117,6 +115,29 @@ public class ConjuntoBares {
         return mBares;
     }
 
+    public void addBar(Bar bar) throws IOException {
+        String url = "http://ps1516.ddns.net:80/addBar.php";
+        HttpClient httpClient = new DefaultHttpClient();
+        HttpPost httpPost = new HttpPost(url);
+        List<NameValuePair> postValues = new ArrayList<>();
+        postValues.add(new BasicNameValuePair("nombre", bar.getNombre()));
+        httpPost.setEntity(new UrlEncodedFormEntity(postValues));
+        httpClient.execute(httpPost);
+        mBares.add(bar);
+
+    }
+
+    public void removeBar(String nombre) throws IOException {
+        String url = "http://ps1516.ddns.net:80/deleteBar.php";
+        HttpClient httpClient = new DefaultHttpClient();
+        HttpPost httpPost = new HttpPost(url);
+        List<NameValuePair> postValues = new ArrayList<>();
+        postValues.add(new BasicNameValuePair("nombre", nombre));
+        httpPost.setEntity(new UrlEncodedFormEntity(postValues));
+        httpClient.execute(httpPost);
+
+    }
+
     /**
      * Pide al servidor el json con la informacion de los bares
      *
@@ -172,23 +193,18 @@ public class ConjuntoBares {
             JSONArray imagenesArray = jsonChildNode.optJSONArray("secundaria");
             for (int j = 0; j < imagenesArray.length(); j++) {
                 String ruta = imagenesArray.getString(j);
-                Log.e("ruta", ruta);
                 arrayImagenes.add(ruta);
             }
             JSONArray eventosArray = jsonChildNode.optJSONArray("eventos");
             for (int j = 0; j < eventosArray.length(); j++) {
                 String evento = eventosArray.getString(j);
-                Log.e("evento", evento);
                 arrayEventos.add(evento);
             }
             JSONArray musicaArray = jsonChildNode.optJSONArray("musica");
             for (int k = 0; k < musicaArray.length(); k++) {
                 String musica = musicaArray.getString(k);
-                Log.e("musica", musica);
                 arrayMusica.add(musica);
             }
-            Log.e("nombre", name);
-            Log.e("imagen", imaPrincipal);
             bares.add(new Bar(name, des, dir, tl, e, fb, imaPrincipal, arrayImagenes, arrayEventos,
                     Integer.parseInt(ed), Float.parseFloat(hc), Float.parseFloat(ha), arrayMusica));
         }

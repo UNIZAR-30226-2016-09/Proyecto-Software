@@ -1,7 +1,5 @@
 package sliderTab;
 
-import com.squareup.picasso.Picasso;
-
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +26,6 @@ import bar.R;
 public class InformationTab extends Fragment {
 
     private Bar bar = BarActivity.getNombreBar();
-    private TextView tituloBar, descripcionBar;
     private ImageView imgBar, right, left;
     private List<String> imagenesBar;
     private int pos = 0;
@@ -36,8 +35,8 @@ public class InformationTab extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.information_tab, container, false);
 
-        tituloBar = (TextView) v.findViewById(R.id.bar_nombre_bar);
-        descripcionBar = (TextView) v.findViewById(R.id.bar_descripcion_bar);
+        TextView tituloBar = (TextView) v.findViewById(R.id.bar_nombre_bar);
+        TextView descripcionBar = (TextView) v.findViewById(R.id.bar_descripcion_bar);
         tituloBar.setText(bar.getNombre());
         String horaApertura = String.format("%.2f h", bar.getHoraApertura());
         horaApertura = horaApertura.replace(",", ":");
@@ -59,7 +58,10 @@ public class InformationTab extends Fragment {
         imgBar = (ImageView) v.findViewById(R.id.imageView);
         Log.e("tamaño lista imagenes", "onCreateView: " + imagenesBar.size());
         if (imagenesBar.size() > 0) {
-            Picasso.with(getContext()).load(imagenesBar.get(0)).into(imgBar);
+            Log.d("TAG", "onCreateView: " + imagenesBar.get(0));
+            if (!imagenesBar.get(0).isEmpty()) {
+                Picasso.with(getContext()).load(imagenesBar.get(0)).into(imgBar);
+            }
         }
 
 
