@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -49,18 +50,25 @@ public class SearchBarActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        init();
+    }
+
+    /**
+     * Inicializa la actividad
+     */
+    protected void init() {
         mIsNewList = true;
         LayoutInflater inflater = getLayoutInflater();
-
         v = inflater.inflate(R.layout.activity_search, null);
         setContentView(v);
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         setTitle(R.string.titulo_bares);
         mList = (RecyclerView) findViewById(R.id.recyclerlist);
         mList.setLayoutManager(new LinearLayoutManager(this));
+        mList.setItemAnimator(new DefaultItemAnimator());
         mProgress = (ProgressBar) findViewById(R.id.progressbar);
         mProgress.setVisibility(View.VISIBLE);
-        handleIntent(getIntent());
+        //handleIntent(getIntent());
         new DescargarListaBares().execute();
     }
 

@@ -1,4 +1,4 @@
-package sliderTab;
+package bar;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -12,13 +12,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import bar.Bar;
-import bar.BarActivity;
-import bar.MapActivity;
-import bar.R;
-
 /**
- * Created by Ana on 12/04/2016.
+ * Pestaña que muestra la informacion de contacto de un bar
  */
 public class ContactMapTab extends Fragment {
     private Bar mBar = BarActivity.getNombreBar();

@@ -1,4 +1,4 @@
-package sliderTab;
+package bar;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,12 +14,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import bar.Bar;
-import bar.BarActivity;
-import bar.R;
-
 /**
- * Created by Ana on 12/04/2016.
+ * Pestaña que muestra las imagenes sobre los eventos de un bar
  */
 public class EventTab extends Fragment {
     private Bar mBar = BarActivity.getNombreBar();

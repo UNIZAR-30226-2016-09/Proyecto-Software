@@ -68,6 +68,11 @@
             android:screenOrientation="portrait" />
 
         <activity
+            android:name="administrador.CreateBarActivity"
+            android:label="@string/nombre_del_bar"
+            android:screenOrientation="portrait" />
+
+        <activity
             android:name="administrador.ModifyBarActivity"
             android:label="@string/nombre_del_bar"
             android:screenOrientation="portrait" />

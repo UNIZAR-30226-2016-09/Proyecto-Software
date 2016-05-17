@@ -15,15 +15,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import database.ConjuntoBares;
-import sliderTab.ContactMapTab;
-import sliderTab.EventTab;
-import sliderTab.InformationTab;
 
-
+/**
+ * Pantalla que muestra la informacion de un bar
+ */
 public class BarActivity extends AppCompatActivity {
     protected static final String BAR_ELEGIDO = "com.findyourbar.bar_elegido";
-    protected static final int NUM_OF_TABS = 3;
-    protected static String nombreBarElegido;
+    protected static String mNombreBarElegido;
 
     /**
      * Crea un nuevo intent con la informacion necesaria para el comienzo de esta actividad
@@ -39,7 +37,7 @@ public class BarActivity extends AppCompatActivity {
     }
 
     public static Bar getNombreBar() {
-        return ConjuntoBares.getInstance().getBarExact(nombreBarElegido);
+        return ConjuntoBares.getInstance().getBarExact(mNombreBarElegido);
     }
 
     @Override
@@ -48,7 +46,7 @@ public class BarActivity extends AppCompatActivity {
         setContentView(R.layout.activity_bar);
         TabLayout mTabLayout = (TabLayout) findViewById(R.id.sliderTabs);
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
-        nombreBarElegido = getIntent().getCharSequenceExtra(BAR_ELEGIDO).toString();
+        mNombreBarElegido = getIntent().getCharSequenceExtra(BAR_ELEGIDO).toString();
         Bar bar = getNombreBar();
         setTitle(bar.getNombre());
 
@@ -62,29 +60,33 @@ public class BarActivity extends AppCompatActivity {
         mTabLayout.setupWithViewPager(pager);
     }
 
-    public static class MyAdapter extends FragmentPagerAdapter {
-        List<Fragment> l;
-        CharSequence[] titles;
 
-        public MyAdapter(FragmentManager fm, List<Fragment> l, CharSequence[] titles) {
+    /**
+     * Adapter con los fragments de las pestañas
+     */
+    public static class MyAdapter extends FragmentPagerAdapter {
+        private List<Fragment> mFragmentList;
+        private CharSequence[] mTitles;
+
+        public MyAdapter(FragmentManager fm, List<Fragment> fragmentList, CharSequence[] titles) {
             super(fm);
-            this.l = l;
-            this.titles = titles;
+            mFragmentList = fragmentList;
+            mTitles = titles;
         }
 
         @Override
         public int getCount() {
-            return l.size();
+            return mFragmentList.size();
         }
 
         @Override
         public Fragment getItem(int position) {
-            return l.get(position);
+            return mFragmentList.get(position);
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return titles[position];
+            return mTitles[position];
         }
     }
 }

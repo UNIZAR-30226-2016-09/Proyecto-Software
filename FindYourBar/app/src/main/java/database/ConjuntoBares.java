@@ -1,5 +1,8 @@
 package database;
 
+
+import android.util.Log;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
@@ -57,6 +60,37 @@ public class ConjuntoBares {
         mBares = parseJson(json);
         return mBares;
     }
+
+    public List<String> getMusica() throws IOException, JSONException {
+        String url = "http://ps1516.ddns.net:80/getTipoMusica.php";
+        String json = getJson(url, "all");
+        return parseJsonMusic(json);
+
+    }
+
+    private List<String> parseJsonMusic(String json) throws JSONException {
+        List<String> generosMusica = new ArrayList<>();
+        JSONObject jsonResponse = new JSONObject(json);
+        JSONArray jsonMainNode = jsonResponse.optJSONArray("Musica");
+        for (int i = 0; i < jsonMainNode.length(); i++) {
+            JSONObject jsonChildNode = jsonMainNode.getJSONObject(i);
+            String genero = jsonChildNode.optString("musica");
+            generosMusica.add(genero);
+        }
+        return generosMusica;
+
+    }
+
+
+    private String getJsonMusica(String url) throws IOException {
+        HttpClient httpclient = new DefaultHttpClient();
+        HttpPost httppost = new HttpPost(url);
+        List<NameValuePair> postValues = new ArrayList<>(2);
+        httppost.setEntity(new UrlEncodedFormEntity(postValues));
+        HttpResponse response = httpclient.execute(httppost);
+        return inputStreamToString(response.getEntity().getContent()).toString();
+    }
+
 
     /**
      * Devuelve una lista con bares cuyos nombres contienen el parametro "nombre"
@@ -121,6 +155,24 @@ public class ConjuntoBares {
         HttpPost httpPost = new HttpPost(url);
         List<NameValuePair> postValues = new ArrayList<>();
         postValues.add(new BasicNameValuePair("nombre", bar.getNombre()));
+        postValues.add(new BasicNameValuePair("descripcion", bar.getDescripcion()));
+        postValues.add(new BasicNameValuePair("direccion", bar.getDireccion()));
+        postValues.add(new BasicNameValuePair("edad", String.valueOf(bar.getEdad())));
+        postValues.add(new BasicNameValuePair("horarioApertura", String.valueOf(bar.getHoraApertura())));
+        postValues.add(new BasicNameValuePair("horarioCierre", String.valueOf(bar.getHoraApertura())));
+        for (String s : bar.getMusica()) {
+            postValues.add(new BasicNameValuePair("musica[]", s));
+        }
+        postValues.add(new BasicNameValuePair("imgPrinci", bar.getPrincipal()));
+        for (String s : bar.getSecundaria()) {
+            Log.e("afd", "addBar: " + s);
+            postValues.add(new BasicNameValuePair("imgSecun[]", s));
+        }
+        postValues.add(new BasicNameValuePair("telefono", bar.getTelefono()));
+        postValues.add(new BasicNameValuePair("email", bar.getEmail()));
+        for (String s : bar.getEventos()) {
+            postValues.add(new BasicNameValuePair("evento[]", s));
+        }
         httpPost.setEntity(new UrlEncodedFormEntity(postValues));
         httpClient.execute(httpPost);
         mBares.add(bar);
@@ -135,6 +187,11 @@ public class ConjuntoBares {
         postValues.add(new BasicNameValuePair("nombre", nombre));
         httpPost.setEntity(new UrlEncodedFormEntity(postValues));
         httpClient.execute(httpPost);
+        for (int i = 0; i < mBares.size(); i++) {
+            if (mBares.get(i).getNombre().equals(nombre)) {
+                mBares.remove(i);
+            }
+        }
 
     }
 

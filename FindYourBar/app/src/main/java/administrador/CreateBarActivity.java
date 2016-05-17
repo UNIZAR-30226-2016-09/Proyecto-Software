@@ -1,14 +1,16 @@
 package administrador;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -21,29 +23,30 @@ import bar.BarActivity;
 import bar.R;
 import database.ConjuntoBares;
 
-public class ModifyBarActivity extends CreateBarActivity {
 
-    protected Bar bar;
-    protected static final String NOMBRE_BAR = "NOMBRE_BAR";
-    protected InformationModifyAdminTab mInformation;
-    protected ContactMapModifyAdminTab mContactMap;
-    protected EventModifyAdminTab mEvent;
+public class CreateBarActivity extends AppCompatActivity implements InformationAdminTab.OnTitleChanged {
+
+    protected InformationAdminTab mInformation;
+    protected ContactMapAdminTab mContactMap;
+    protected EventAdminTab mEvent;
 
     @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        init();
+    }
+
+    /**
+     * Inicializa la actividad
+     */
     protected void init() {
-        Intent intent = getIntent();
-        String nombreBar = intent.getStringExtra(NOMBRE_BAR);
-        bar = ConjuntoBares.getInstance().getBarExact(nombreBar);
         setContentView(R.layout.activity_modify_bar_admin);
         TabLayout mTabLayout = (TabLayout) findViewById(R.id.sliderTabs);
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         ViewPager pager = (ViewPager) findViewById(R.id.pager);
-        mInformation = new InformationModifyAdminTab();
-        mInformation.setBar(bar);
-        mContactMap = new ContactMapModifyAdminTab();
-        mContactMap.setBar(bar);
-        mEvent = new EventModifyAdminTab();
-        mEvent.setBar(bar);
+        mInformation = new InformationAdminTab();
+        mContactMap = new ContactMapAdminTab();
+        mEvent = new EventAdminTab();
         List<Fragment> l = new ArrayList<>();
         l.add(mInformation);
         l.add(mContactMap);
@@ -54,18 +57,13 @@ public class ModifyBarActivity extends CreateBarActivity {
         mTabLayout.setupWithViewPager(pager);
     }
 
-
-    public Bar getBar() {
-        return bar;
-    }
-
-    public static Intent newIntent(Context context, String nombreBar) {
-        Intent intent = new Intent(context, ModifyBarActivity.class);
-        intent.putExtra(NOMBRE_BAR, nombreBar);
-        return intent;
-    }
-
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.crear_bar_admin, menu);
+        return true;
+    }
+
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.cancelar_creacion_bar) {
             finish();
@@ -89,10 +87,6 @@ public class ModifyBarActivity extends CreateBarActivity {
                         mContactMap.getFacebook(), imgPrincipal, imgSecundarias, mEvent.getListImagenes(),
                         mInformation.getEdad(), mInformation.getHoraCierre(), mInformation.getHoraApertura(),
                         mInformation.getListMusica());
-                if (mInformation.getListMusica()==null) {
-                    Log.e("TAG", "onOptionsItemSelected: " + " nulsdakfj45");
-                }
-                new BorrarListaBares().execute(bar.getNombre());
                 new AnadirBar().execute(bar);
             } else {
                 Snackbar.make(getCurrentFocus(), R.string.corrija_lor_errores, Snackbar.LENGTH_LONG).show();
@@ -102,25 +96,9 @@ public class ModifyBarActivity extends CreateBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
-    public class BorrarListaBares extends AsyncTask<String, Void, Void> {
-
-        @Override
-        protected Void doInBackground(String... params) {
-            try {
-                for (String param : params) {
-                    ConjuntoBares.getInstance().removeBar(param);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-
-        }
+    @Override
+    public void onTitleChanged(CharSequence title) {
+        setTitle(title.toString());
     }
 
     public class AnadirBar extends AsyncTask<Bar, Void, Void> {
@@ -154,3 +132,5 @@ public class ModifyBarActivity extends CreateBarActivity {
     }
 
 }
+
+

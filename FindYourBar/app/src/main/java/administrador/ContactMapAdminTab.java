@@ -12,10 +12,10 @@ import bar.R;
 
 public class ContactMapAdminTab extends Fragment {
 
-    private TextInputEditText mDireccion;
-    private TextInputEditText mTelefono;
-    private TextInputEditText mEmail;
-    private TextInputEditText mFacebook;
+    protected TextInputEditText mDireccion;
+    protected TextInputEditText mTelefono;
+    protected TextInputEditText mEmail;
+    protected TextInputEditText mFacebook;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -26,6 +26,20 @@ public class ContactMapAdminTab extends Fragment {
         mEmail = (TextInputEditText) v.findViewById(R.id.email_bar_admin);
         mFacebook = (TextInputEditText) v.findViewById(R.id.facebook_bar_admin);
         return v;
+    }
+
+    public boolean validarEntrada() {
+        return validarTelefono();
+    }
+
+    public boolean validarTelefono() {
+        int length = mTelefono.getText().toString().length();
+        if (length > 0 && length != 9) {
+            mTelefono.setError(getResources().getString(R.string.telefono_tiene_9_cifras));
+            return false;
+        } else {
+            return true;
+        }
     }
 
     public String getDireccion() {
@@ -41,6 +55,6 @@ public class ContactMapAdminTab extends Fragment {
     }
 
     public String getFacebook() {
-        return mFacebook.getText().toString()   ;
+        return mFacebook.getText().toString();
     }
 }

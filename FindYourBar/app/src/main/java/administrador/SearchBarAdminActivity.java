@@ -2,7 +2,6 @@ package administrador;
 
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -34,8 +33,7 @@ public class SearchBarAdminActivity extends SearchBarActivity implements BarSele
     private BarSelectionAdapter mAdapter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void init() {
         mIsNewList = true;
         LayoutInflater inflater = getLayoutInflater();
         v = inflater.inflate(R.layout.activity_search_bar_admin, null);
@@ -43,30 +41,23 @@ public class SearchBarAdminActivity extends SearchBarActivity implements BarSele
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         setTitle(R.string.titulo_bares);
         mList = (RecyclerView) findViewById(R.id.recyclerlist);
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_add_bar);
-        v = fab;
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(SearchBarAdminActivity.this, ModifyBarActivity.class);
-                startActivity(intent);
-            }
-        });
         mList.setLayoutManager(new LinearLayoutManager(this));
         mList.setItemAnimator(new DefaultItemAnimator());
         mProgress = (ProgressBar) findViewById(R.id.progressbar);
         mProgress.setVisibility(View.VISIBLE);
-        handleIntent(getIntent());
+        //handleIntent(getIntent());
         new DescargarListaBares().execute();
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_add_bar);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(SearchBarAdminActivity.this, CreateBarActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        updateAdapter(ConjuntoBares.getInstance().getLocalBarList());
-
-    }
-
+    
     @Override
     protected void updateAdapter(List<Bar> bares) {
         if (mAdapter == null) {
@@ -126,8 +117,10 @@ public class SearchBarAdminActivity extends SearchBarActivity implements BarSele
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             switch (item.getItemId()) {
-                // TODO: añadir pantalla edicion bar
                 case R.id.edit_bar:
+                    Intent i = ModifyBarActivity.newIntent(SearchBarAdminActivity.this,
+                            mAdapter.getBarName(mAdapter.getSelectedItems().get(0)));
+                    startActivity(i);
                     return true;
                 case R.id.delete_bar:
                     borrarBares();

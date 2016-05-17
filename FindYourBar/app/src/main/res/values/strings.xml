@@ -89,4 +89,11 @@
     <string name="tipo_musica_del_bar">Tipo musica</string>
     <string name="horario_apertura_del_bar">Horario apertura</string>
     <string name="horario_cierre_del_bar">Horario cierre</string>
+    <string name="no_puede_estar_vacio">No puede estar vacio</string>
+    <string name="edad_mayor_15_años">La edad ha de ser mayor que 15 años</string>
+    <string name="telefono_tiene_9_cifras">Ha de tener 9 cifras</string>
+    <string name="corrija_lor_errores">Corrija los errores primero</string>
+    <string name="no_es_hora_valida">No es una hora valida</string>
+    <string name="selecciona_generos_musica">Selecciona generos musica</string>
+    <string name="añadir_genero_musica">Añadir</string>
 </resources>
