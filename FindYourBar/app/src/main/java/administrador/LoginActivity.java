@@ -48,13 +48,13 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     /**
-     * TODO: cambiar la contraseña o el metodo de autentificacion
+     * TODO: cambiar la contraseña o el metodo de autentificacion. Hashing de la contraseña para mayor seguridad
      * Autentifica al administrador
      *
      * @param password contraseña a autentificar
      * @return true si la contraseña es valida, false en caso contrario
      */
     private boolean authAdmin(String password) {
-        return password.equals("password");
+        return password.equals("f<XSHV-]9JN_=9\\\\g&LeV");
     }
 }

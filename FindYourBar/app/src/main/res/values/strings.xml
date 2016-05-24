@@ -96,4 +96,7 @@
     <string name="no_es_hora_valida">No es una hora valida</string>
     <string name="selecciona_generos_musica">Selecciona generos musica</string>
     <string name="añadir_genero_musica">Añadir</string>
+    <string name="esta_seguro">¿Esta seguro?</string>
+    <string name="si">Si</string>
+    <string name="no">No</string>
 </resources>

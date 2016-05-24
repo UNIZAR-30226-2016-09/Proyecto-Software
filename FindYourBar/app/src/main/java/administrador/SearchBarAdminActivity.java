@@ -120,6 +120,8 @@ public class SearchBarAdminActivity extends SearchBarActivity implements BarSele
     }
 
     private class MyActionMode implements ActionMode.Callback {
+        private static final String CONFIRMATION_DIALOG = "CONFIRMATION_DIALOG";
+
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             MenuInflater inflater = mode.getMenuInflater();
@@ -142,9 +144,16 @@ public class SearchBarAdminActivity extends SearchBarActivity implements BarSele
                     startActivity(i);
                     return true;
                 case R.id.delete_bar:
-                    borrarBares();
-                    mAdapter.removeListBares(mAdapter.getSelectedItems());
-                    mActionMode.finish();
+                    ConfirmationDialog confirmationDialog = new ConfirmationDialog();
+                    confirmationDialog.setOnYesClickListener(new ConfirmationDialog.OnYesClickListener() {
+                        @Override
+                        public void onYesClickListener() {
+                            borrarBares();
+                            mAdapter.removeListBares(mAdapter.getSelectedItems());
+                            mActionMode.finish();
+                        }
+                    });
+                    confirmationDialog.show(getSupportFragmentManager(), CONFIRMATION_DIALOG);
                     return true;
                 default:
                     return false;
