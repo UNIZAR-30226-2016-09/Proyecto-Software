@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Clase que repsresenta un bar y toda la infomarcion asociada a el
  */
-public class Bar {
+public class Bar implements Comparable<Bar> {
 
     private String nombre;
     private String descripcion;
@@ -129,4 +129,8 @@ public class Bar {
         this.musica = musica;
     }
 
+    @Override
+    public int compareTo(Bar bar) {
+        return nombre.compareTo(bar.getNombre());
+    }
 }

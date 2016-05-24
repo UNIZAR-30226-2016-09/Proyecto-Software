@@ -2,6 +2,7 @@ package administrador;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,10 +43,7 @@ public class InformationModifyAdminTab extends InformationAdminTab {
         mHoraCierre.setText(String.valueOf(mBar.getHoraCierre()));
         mHoraApertura.setText(String.valueOf(mBar.getHoraApertura()));
         mMusicSelection = mBar.getMusica();
-        String musica = "";
-        for (String m : mBar.getMusica()) {
-            musica += m + ", ";
-        }
+        String musica = TextUtils.join(", ", mBar.getMusica());
         mMusica.setText(musica);
 
     }

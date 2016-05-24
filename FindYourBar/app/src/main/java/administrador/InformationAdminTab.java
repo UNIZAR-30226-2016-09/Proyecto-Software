@@ -5,9 +5,10 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
+import android.support.v4.text.TextUtilsCompat;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,7 +44,7 @@ public class InformationAdminTab extends Fragment implements UrlDialog.OnUrlSele
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        Log.d("TAG", "onCreateView: shier");
+        mMusicSelection = new ArrayList<>();
         View v = inflater.inflate(R.layout.information_admin_tab, container, false);
         mNombreTextView = (TextView) v.findViewById(R.id.nombre_bar_mostrar_admin);
         mNombre = (TextInputEditText) v.findViewById(R.id.nombre_bar_admin);
@@ -149,15 +150,14 @@ public class InformationAdminTab extends Fragment implements UrlDialog.OnUrlSele
     @Override
     public void onMusicSelected(String[] musica, boolean[] seleccion) {
         List<String> musicSelected = new ArrayList<>();
-        String sep = ", ";
-        String aux = "";
+        List<String> aux = new ArrayList<>();
         for (int i = 0; i < seleccion.length; i++) {
             if (seleccion[i]) {
-                aux += musica[i] + sep;
+                aux.add(musica[i]);
                 musicSelected.add(musica[i]);
             }
         }
-        mMusica.setText(aux);
+        mMusica.setText(TextUtils.join(", ", aux));
         mMusicSelection = musicSelected;
     }
 
@@ -179,11 +179,21 @@ public class InformationAdminTab extends Fragment implements UrlDialog.OnUrlSele
     }
 
     public float getHoraCierre() {
-        return Float.valueOf(mHoraCierre.getText().toString());
+        String hc = mHoraCierre.getText().toString();
+        if (hc.isEmpty()) {
+            return -1;
+        } else {
+            return Float.valueOf(hc);
+        }
     }
 
     public float getHoraApertura() {
-        return Float.valueOf(mHoraApertura.getText().toString());
+        String ha = mHoraApertura.getText().toString();
+        if (ha.isEmpty()) {
+            return -1;
+        } else {
+            return Float.valueOf(ha);
+        }
     }
 
     public List<String> getListImagenes() {

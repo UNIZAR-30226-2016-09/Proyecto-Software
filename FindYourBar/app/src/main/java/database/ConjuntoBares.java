@@ -1,8 +1,6 @@
 package database;
 
 
-import android.util.Log;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
@@ -158,14 +156,17 @@ public class ConjuntoBares {
         postValues.add(new BasicNameValuePair("descripcion", bar.getDescripcion()));
         postValues.add(new BasicNameValuePair("direccion", bar.getDireccion()));
         postValues.add(new BasicNameValuePair("edad", String.valueOf(bar.getEdad())));
-        postValues.add(new BasicNameValuePair("horarioApertura", String.valueOf(bar.getHoraApertura())));
-        postValues.add(new BasicNameValuePair("horarioCierre", String.valueOf(bar.getHoraApertura())));
+        if (bar.getHoraApertura() > 0) {
+            postValues.add(new BasicNameValuePair("horarioApertura", String.valueOf(bar.getHoraApertura())));
+        }
+        if (bar.getHoraCierre() > 0) {
+            postValues.add(new BasicNameValuePair("horarioCierre", String.valueOf(bar.getHoraCierre())));
+        }
         for (String s : bar.getMusica()) {
             postValues.add(new BasicNameValuePair("musica[]", s));
         }
         postValues.add(new BasicNameValuePair("imgPrinci", bar.getPrincipal()));
         for (String s : bar.getSecundaria()) {
-            Log.e("afd", "addBar: " + s);
             postValues.add(new BasicNameValuePair("imgSecun[]", s));
         }
         postValues.add(new BasicNameValuePair("telefono", bar.getTelefono()));
@@ -176,8 +177,8 @@ public class ConjuntoBares {
         httpPost.setEntity(new UrlEncodedFormEntity(postValues));
         httpClient.execute(httpPost);
         mBares.add(bar);
-
     }
+
 
     public void removeBar(String nombre) throws IOException {
         String url = "http://ps1516.ddns.net:80/deleteBar.php";

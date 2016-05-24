@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -81,7 +80,6 @@ public class CreateBarActivity extends AppCompatActivity implements InformationA
                         imgSecundarias.add(imagenes.get(i));
                     }
                 }
-                Log.e("TAG", "onOptionsItemSelected: " + imgPrincipal);
                 Bar bar = new Bar(mInformation.getNombreBar(), mInformation.getDescripcionBar(),
                         mContactMap.getDireccion(), mContactMap.getPhone(), mContactMap.getEmail(),
                         mContactMap.getFacebook(), imgPrincipal, imgSecundarias, mEvent.getListImagenes(),

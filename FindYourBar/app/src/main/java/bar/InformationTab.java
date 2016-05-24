@@ -50,12 +50,9 @@ public class InformationTab extends Fragment {
                 + "\nMúsica: " + musica + "\nHora de apertura: " + horaApertura
                 + "\nHora de cierre: " + horaCierre);
         mImagenesBar = new ArrayList<>();
-        Log.e("agenesasdfadfasdf", "onCreateView: " + mBar.getPrincipal());
         if (!mBar.getPrincipal().isEmpty()) {
             mImagenesBar.add(mBar.getPrincipal());
         }
-        for (String s : mBar.getSecundaria())
-            Log.e("dunno", "dunno" + s);
         mImagenesBar.addAll(mBar.getSecundaria());
         mImgBar = (ImageView) v.findViewById(R.id.imageView);
         Log.e("tamaño lista imagenes", "onCreateView: " + mImagenesBar.size());

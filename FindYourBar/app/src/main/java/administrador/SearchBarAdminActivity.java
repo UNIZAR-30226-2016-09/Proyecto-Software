@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 
 import bar.Bar;
@@ -34,6 +35,12 @@ public class SearchBarAdminActivity extends SearchBarActivity implements BarSele
 
     @Override
     protected void init() {
+        mQuery = "";
+        mMapFilters = new HashMap<>();
+        mMapFilters.put("Musica", "all");
+        mMapFilters.put("Edad", "all");
+        mMapFilters.put("HoraCierre", "all");
+        mMapFilters.put("HoraApertura", "all");
         mIsNewList = true;
         LayoutInflater inflater = getLayoutInflater();
         v = inflater.inflate(R.layout.activity_search_bar_admin, null);
@@ -52,12 +59,23 @@ public class SearchBarAdminActivity extends SearchBarActivity implements BarSele
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(SearchBarAdminActivity.this, CreateBarActivity.class);
+                if (mActionMode != null) {
+                    mActionMode.finish();
+                }
                 startActivity(intent);
             }
         });
 
     }
-    
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        List<Bar> baresFiltrados = filtrar(ConjuntoBares.getInstance().getLocalBarList(), mQuery, mMapFilters.get("Musica"), mMapFilters.get("Edad"),
+                mMapFilters.get("HoraCierre"), mMapFilters.get("HoraApertura"));
+        updateAdapter(baresFiltrados);
+    }
+
     @Override
     protected void updateAdapter(List<Bar> bares) {
         if (mAdapter == null) {
@@ -120,6 +138,7 @@ public class SearchBarAdminActivity extends SearchBarActivity implements BarSele
                 case R.id.edit_bar:
                     Intent i = ModifyBarActivity.newIntent(SearchBarAdminActivity.this,
                             mAdapter.getBarName(mAdapter.getSelectedItems().get(0)));
+                    mActionMode.finish();
                     startActivity(i);
                     return true;
                 case R.id.delete_bar:

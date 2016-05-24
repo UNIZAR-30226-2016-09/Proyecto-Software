@@ -45,6 +45,8 @@ public class SearchBarActivity extends AppCompatActivity {
     protected ProgressBar mProgress;
     protected List<Bar> mBares;
     protected boolean mIsNewList;
+    protected String mQuery;
+    protected HashMap<String, String> mMapFilters;
     protected View v;
 
     @Override
@@ -57,6 +59,12 @@ public class SearchBarActivity extends AppCompatActivity {
      * Inicializa la actividad
      */
     protected void init() {
+        mQuery = "";
+        mMapFilters = new HashMap<>();
+        mMapFilters.put("Musica", "all");
+        mMapFilters.put("Edad", "all");
+        mMapFilters.put("HoraCierre", "all");
+        mMapFilters.put("HoraApertura", "all");
         mIsNewList = true;
         LayoutInflater inflater = getLayoutInflater();
         v = inflater.inflate(R.layout.activity_search, null);
@@ -97,9 +105,10 @@ public class SearchBarActivity extends AppCompatActivity {
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
                 mIsNewList = true;
-                List<Bar> aux = ConjuntoBares.getInstance().getLocalBarList();
-                mBares = aux;
-                updateAdapter(aux);
+                //List<Bar> aux = ConjuntoBares.getInstance().getLocalBarList();
+                //mBares = aux;
+                //updateAdapter(aux);
+                new DescargarListaBares().execute();
                 return true;
             }
         });
@@ -123,6 +132,7 @@ public class SearchBarActivity extends AppCompatActivity {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             mIsNewList = true;
             String query = intent.getStringExtra(SearchManager.QUERY);
+            mQuery = query;
             List<Bar> bares = ConjuntoBares.getInstance().getBar(query);
             mBares = bares;
             updateAdapter(bares);
@@ -150,11 +160,13 @@ public class SearchBarActivity extends AppCompatActivity {
             mIsNewList = false;
             if (resultCode == RESULT_OK) {
                 HashMap<String, String> map = FiltersActivity.whatFiltersWhereSelected(data);
+                mMapFilters = map;
                 //String[] p = new String[]{map.get("Musica"), map.get("Edad"), map.get("HoraCierre"),
                 //        map.get("HoraApertura")};
                 //new DescargarBaresFiltrados().execute(p);
-                List<Bar> baresFiltrados = filtrar(mBares, map.get("Musica"), map.get("Edad"),
-                        map.get("HoraCierre"), map.get("HoraApertura"));
+                List<Bar> baresFiltrados = filtrar(ConjuntoBares.getInstance().getLocalBarList(),
+                        mQuery, map.get("Musica"), map.get("Edad"), map.get("HoraCierre"),
+                        map.get("HoraApertura"));
                 updateAdapter(baresFiltrados);
             }
         }
@@ -250,7 +262,7 @@ public class SearchBarActivity extends AppCompatActivity {
     }
 
 
-    public static List<Bar> filtrar(List<Bar> bares, String musica, String edad, String horaCierre,
+    public static List<Bar> filtrar(List<Bar> bares, String nombre, String musica, String edad, String horaCierre,
                                     String horaApertura) {
         List<Bar> aux = bares;
         List<Bar> aux1 = new ArrayList<>();
@@ -302,8 +314,14 @@ public class SearchBarActivity extends AppCompatActivity {
             }
             aux = aux1;
         }
+        List<Bar> ret = new ArrayList<>();
+        for (Bar b : aux) {
+            if (b.getNombre().toLowerCase().contains(nombre.toLowerCase())) {
+                ret.add(b);
+            }
+        }
 
-        return aux;
+        return ret;
     }
 
     public static class BarHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

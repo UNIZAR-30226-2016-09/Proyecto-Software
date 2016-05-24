@@ -29,7 +29,8 @@
                 android:layout_marginTop="@dimen/activity_horizontal_margin"
                 android:text="@string/nombre_del_bar"
                 android:textAllCaps="true"
-                android:textAppearance="?android:textAppearanceMedium" />
+                android:textAppearance="?android:textAppearanceMedium"
+                android:textColor="@color/colorPrimary" />
 
 
             <android.support.design.widget.TextInputLayout
@@ -92,11 +93,11 @@
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_marginBottom="8dp"
                     android:layout_marginLeft="@dimen/activity_vertical_margin"
                     android:layout_marginRight="@dimen/activity_vertical_margin"
-                    android:layout_marginTop="8dp">
+                    android:layout_marginTop="8dp"
+                    android:layout_weight="1">
 
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/musica_bar_admin"
@@ -116,6 +117,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:layout_marginRight="@dimen/activity_vertical_margin"
                     android:text="@string/añadir_genero_musica" />
 
             </LinearLayout>

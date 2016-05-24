@@ -8,9 +8,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -83,17 +81,13 @@ public class ModifyBarActivity extends CreateBarActivity {
                         imgSecundarias.add(imagenes.get(i));
                     }
                 }
-                Log.e("TAG", "onOptionsItemSelected: " + imgPrincipal);
-                Bar bar = new Bar(mInformation.getNombreBar(), mInformation.getDescripcionBar(),
+                Bar b = new Bar(mInformation.getNombreBar(), mInformation.getDescripcionBar(),
                         mContactMap.getDireccion(), mContactMap.getPhone(), mContactMap.getEmail(),
                         mContactMap.getFacebook(), imgPrincipal, imgSecundarias, mEvent.getListImagenes(),
                         mInformation.getEdad(), mInformation.getHoraCierre(), mInformation.getHoraApertura(),
                         mInformation.getListMusica());
-                if (mInformation.getListMusica()==null) {
-                    Log.e("TAG", "onOptionsItemSelected: " + " nulsdakfj45");
-                }
                 new BorrarListaBares().execute(bar.getNombre());
-                new AnadirBar().execute(bar);
+                new AnadirBar().execute(b);
             } else {
                 Snackbar.make(getCurrentFocus(), R.string.corrija_lor_errores, Snackbar.LENGTH_LONG).show();
             }
@@ -101,7 +95,6 @@ public class ModifyBarActivity extends CreateBarActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
 
     public class BorrarListaBares extends AsyncTask<String, Void, Void> {
 
@@ -120,36 +113,6 @@ public class ModifyBarActivity extends CreateBarActivity {
         @Override
         protected void onPostExecute(Void result) {
 
-        }
-    }
-
-    public class AnadirBar extends AsyncTask<Bar, Void, Void> {
-
-        private Exception e = null;
-
-        @Override
-        protected Void doInBackground(Bar... params) {
-            try {
-                ConjuntoBares.getInstance().addBar(params[0]);
-            } catch (IOException e) {
-                this.e = e;
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            if (e != null) {
-                Snackbar.make(getCurrentFocus(), R.string.error_conexion, Snackbar.LENGTH_INDEFINITE).
-                        setAction(R.string.reintentar, new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                new AnadirBar().execute();
-                            }
-                        }).show();
-            } else {
-                finish();
-            }
         }
     }
 
