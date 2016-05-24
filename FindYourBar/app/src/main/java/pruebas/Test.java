@@ -206,7 +206,7 @@ public class Test extends AppCompatActivity {
         boolean fin = true;
         int i=1;
         int length = 0;
-        while (fin && length<10000){
+        while (fin && length<100000){
             try {
                 length = i*200;
                 List<String> s = new ArrayList<String>(); s.add(null);
