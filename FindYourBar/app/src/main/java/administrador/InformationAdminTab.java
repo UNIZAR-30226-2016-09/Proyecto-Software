@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
-import android.support.v4.text.TextUtilsCompat;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -21,7 +20,9 @@ import java.util.List;
 import bar.R;
 import utils.ImageFlipper;
 
-
+/**
+ * Pestaña que pide al usuario la informacion general del bar
+ */
 public class InformationAdminTab extends Fragment implements UrlDialog.OnUrlSelectedListener, MusicSelectionDialog.OnMusicSelected {
 
     protected static final String URL_DIALOG_FRAGMENT = "URL_DIALOG_FRAGMENT";
@@ -91,10 +92,20 @@ public class InformationAdminTab extends Fragment implements UrlDialog.OnUrlSele
         return v;
     }
 
+    /**
+     * Valida toda la informacion que el usuario pueda introducir
+     *
+     * @return verdadero si todos los campos introducidos son validos falso si alguno esta mal puesto
+     */
     public boolean validarEntrada() {
         return validarNombre() & validarEdad() & validarHoras();
     }
 
+    /**
+     * Valida que el nombre es valido
+     *
+     * @return verdadero si el nombre no esta vacio y false en caso contrario
+     */
     public boolean validarNombre() {
         String nombre = mNombre.getText().toString();
         if (nombre.isEmpty()) {
@@ -105,6 +116,11 @@ public class InformationAdminTab extends Fragment implements UrlDialog.OnUrlSele
         }
     }
 
+    /**
+     * Valida que la edad introducida es valida
+     *
+     * @return verdadero si la edad es >= 15 y false en caso contrario
+     */
     public boolean validarEdad() {
         String edadStr = mEdad.getText().toString();
         if (edadStr.isEmpty()) {
@@ -121,6 +137,11 @@ public class InformationAdminTab extends Fragment implements UrlDialog.OnUrlSele
         }
     }
 
+    /**
+     * Valida que las horas introducidas son validas
+     *
+     * @return verdadero si las horas son validas(estan entre 0 y 23) y false en caso contrario
+     */
     public boolean validarHoras() {
         TextInputEditText horas[] = {mHoraApertura, mHoraCierre};
         boolean ret = true;
@@ -136,6 +157,9 @@ public class InformationAdminTab extends Fragment implements UrlDialog.OnUrlSele
         return ret;
     }
 
+    /**
+     * Muestra el dialogo que pide la URL de la imagen del bar
+     */
     protected void mostrarDialogoUrl() {
         UrlDialog urlDialog = new UrlDialog();
         urlDialog.setTargetFragment(InformationAdminTab.this, -1);

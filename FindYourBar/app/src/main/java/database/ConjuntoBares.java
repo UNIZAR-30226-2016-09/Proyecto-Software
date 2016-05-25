@@ -1,6 +1,8 @@
 package database;
 
 
+import android.util.Log;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
@@ -22,7 +24,8 @@ import java.util.List;
 import bar.Bar;
 
 /**
- * Clase que va a guardar la lista de bares.
+ * Clase que va a guardar la lista de bares y que posee varios metodos para interaccionar con el
+ * servidor
  */
 public class ConjuntoBares {
 
@@ -79,7 +82,6 @@ public class ConjuntoBares {
 
     }
 
-
     private String getJsonMusica(String url) throws IOException {
         HttpClient httpclient = new DefaultHttpClient();
         HttpPost httppost = new HttpPost(url);
@@ -121,12 +123,6 @@ public class ConjuntoBares {
         return null;
     }
 
-    public List<Bar> enviarBares(String dato) throws IOException, JSONException {
-        String url = "http://ps1516.ddns.net:80/getNames.php";
-        String json = getJson(url, dato);
-        return parseJson(json);
-    }
-
     /**
      * Devuelve una lista de bares de la base de datos remota con los parametros igual a los
      * especificados
@@ -147,7 +143,15 @@ public class ConjuntoBares {
         return mBares;
     }
 
-    public void addBar(Bar bar) throws IOException {
+    /**
+     * Añade un bar al servidor
+     *
+     * @param bar Bar a introducir
+     * @return verdadero en caso de que el bar se haya añadido correctamente. Falso en caso de que
+     * en el servidor ya exista un bar con ese mismo nombre
+     * @throws IOException errores de conexion
+     */
+    public boolean addBar(Bar bar) throws IOException {
         String url = "http://ps1516.ddns.net:80/addBar.php";
         HttpClient httpClient = new DefaultHttpClient();
         HttpPost httpPost = new HttpPost(url);
@@ -175,11 +179,25 @@ public class ConjuntoBares {
             postValues.add(new BasicNameValuePair("evento[]", s));
         }
         httpPost.setEntity(new UrlEncodedFormEntity(postValues));
-        httpClient.execute(httpPost);
-        mBares.add(bar);
+        HttpResponse response = httpClient.execute(httpPost);
+        String resp = inputStreamToString(response.getEntity().getContent()).toString();
+        Log.e("TAG", "addBar: " + resp);
+        if (resp.equals("1")) {
+            Log.e("TAGasd", "addBar: " + resp);
+            return false;
+        } else {
+            mBares.add(bar);
+            return true;
+        }
     }
 
 
+    /**
+     * Borra del servidor un bar
+     *
+     * @param nombre nombre del bar a borrar
+     * @throws IOException en caso de fallo de conexion a internet o fallo de conexion con el servidor
+     */
     public void removeBar(String nombre) throws IOException {
         String url = "http://ps1516.ddns.net:80/deleteBar.php";
         HttpClient httpClient = new DefaultHttpClient();
@@ -191,6 +209,7 @@ public class ConjuntoBares {
         for (int i = 0; i < mBares.size(); i++) {
             if (mBares.get(i).getNombre().equals(nombre)) {
                 mBares.remove(i);
+                return;
             }
         }
 

@@ -15,6 +15,9 @@ import android.widget.Spinner;
 
 import java.util.HashMap;
 
+/**
+ * Pantalla que pide al usuario los filtros por los que deseea filtrar los bares
+ */
 public class FiltersActivity extends AppCompatActivity {
 
     private static final String MUSIC_SELECTED = "MUSIC_SELECTED";

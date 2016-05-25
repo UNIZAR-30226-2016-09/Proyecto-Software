@@ -261,7 +261,18 @@ public class SearchBarActivity extends AppCompatActivity {
         }
     }
 
-
+    /**
+     * Filta una lista de bares por los parametros deseados
+     *
+     * @param bares        lista de bares a filtrar
+     * @param nombre       nombre del bar a filtrar. Filtra aquellos bares que tienen un nombre parecido a
+     *                     este no un nombre exacto
+     * @param musica       tipo de musica del bar
+     * @param edad         edad minima de entrada
+     * @param horaCierre   hora de cierre del bar
+     * @param horaApertura hora de apertura del bar
+     * @return
+     */
     public static List<Bar> filtrar(List<Bar> bares, String nombre, String musica, String edad, String horaCierre,
                                     String horaApertura) {
         List<Bar> aux = bares;
@@ -324,6 +335,9 @@ public class SearchBarActivity extends AppCompatActivity {
         return ret;
     }
 
+    /**
+     * ViewHolder del RecyclerView
+     */
     public static class BarHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView mNombre;
         public ImageView mImagen;
@@ -343,12 +357,15 @@ public class SearchBarActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Adaptador del RecyclerView
+     */
     public static class BarAdapter extends RecyclerView.Adapter<BarHolder> {
-        private List<Bar> bares;
+        private List<Bar> mBars;
         private Context mContext;
 
         public BarAdapter(List<Bar> bares, Context context) {
-            this.bares = bares;
+            mBars = bares;
             mContext = context;
         }
 
@@ -361,7 +378,7 @@ public class SearchBarActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(BarHolder holder, int position) {
-            Bar b = bares.get(position);
+            Bar b = mBars.get(position);
             holder.mNombre.setText(b.getNombre());
             if (!b.getPrincipal().isEmpty()) {
                 Picasso.with(mContext).load(b.getPrincipal()).into(holder.mImagen);
@@ -372,11 +389,11 @@ public class SearchBarActivity extends AppCompatActivity {
 
         @Override
         public int getItemCount() {
-            return bares.size();
+            return mBars.size();
         }
 
         public void setBares(List<Bar> bares) {
-            this.bares = bares;
+            mBars = bares;
         }
     }
 }

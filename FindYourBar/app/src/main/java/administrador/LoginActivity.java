@@ -3,12 +3,16 @@ package administrador;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import bar.R;
 
+/**
+ * Pantalla para hacer login al administrador
+ */
 public class LoginActivity extends AppCompatActivity {
 
     private EditText mContrasena;
@@ -38,6 +42,7 @@ public class LoginActivity extends AppCompatActivity {
      */
     private boolean validarEntrada() {
         String str = mContrasena.getText().toString();
+        Log.e("TAG", "validarEntrada: " + str);
         if (!authAdmin(str)) {
             mContrasena.setError(getResources().getString(R.string.error_contraseña_igualdad));
             return false;
@@ -55,6 +60,6 @@ public class LoginActivity extends AppCompatActivity {
      * @return true si la contraseña es valida, false en caso contrario
      */
     private boolean authAdmin(String password) {
-        return password.equals("f<XSHV-]9JN_=9\\\\g&LeV");
+        return password.equals("f<XSHV-]9JN_=9\\g&LeV");
     }
 }

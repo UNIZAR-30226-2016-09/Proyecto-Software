@@ -22,12 +22,15 @@ import bar.BarActivity;
 import bar.R;
 import database.ConjuntoBares;
 
-
+/**
+ * Pantalla para la creacion de un bar
+ */
 public class CreateBarActivity extends AppCompatActivity implements InformationAdminTab.OnTitleChanged {
 
     protected InformationAdminTab mInformation;
     protected ContactMapAdminTab mContactMap;
     protected EventAdminTab mEvent;
+    protected Bar mBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,12 +83,12 @@ public class CreateBarActivity extends AppCompatActivity implements InformationA
                         imgSecundarias.add(imagenes.get(i));
                     }
                 }
-                Bar bar = new Bar(mInformation.getNombreBar(), mInformation.getDescripcionBar(),
+                mBar = new Bar(mInformation.getNombreBar(), mInformation.getDescripcionBar(),
                         mContactMap.getDireccion(), mContactMap.getPhone(), mContactMap.getEmail(),
                         mContactMap.getFacebook(), imgPrincipal, imgSecundarias, mEvent.getListImagenes(),
                         mInformation.getEdad(), mInformation.getHoraCierre(), mInformation.getHoraApertura(),
                         mInformation.getListMusica());
-                new AnadirBar().execute(bar);
+                new AnadirBar().execute(mBar);
             } else {
                 Snackbar.make(getCurrentFocus(), R.string.corrija_lor_errores, Snackbar.LENGTH_LONG).show();
             }
@@ -99,33 +102,42 @@ public class CreateBarActivity extends AppCompatActivity implements InformationA
         setTitle(title.toString());
     }
 
-    public class AnadirBar extends AsyncTask<Bar, Void, Void> {
+    /**
+     * Hilo para conectarse con el servidor y añadir un bar
+     */
+    public class AnadirBar extends AsyncTask<Bar, Void, Boolean> {
 
         private Exception e = null;
 
         @Override
-        protected Void doInBackground(Bar... params) {
+        protected Boolean doInBackground(Bar... params) {
+            Boolean aux = false;
             try {
-                ConjuntoBares.getInstance().addBar(params[0]);
+                aux = ConjuntoBares.getInstance().addBar(params[0]);
             } catch (IOException e) {
                 this.e = e;
             }
-            return null;
+            return aux;
         }
 
         @Override
-        protected void onPostExecute(Void result) {
+        protected void onPostExecute(Boolean result) {
             if (e != null) {
                 Snackbar.make(getCurrentFocus(), R.string.error_conexion, Snackbar.LENGTH_INDEFINITE).
                         setAction(R.string.reintentar, new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                new AnadirBar().execute();
+                                new AnadirBar().execute(mBar);
                             }
                         }).show();
+            } else if (!result) {
+                Snackbar.make(getCurrentFocus(), R.string.error_nombre_ya_existe,
+                        Snackbar.LENGTH_LONG).show();
             } else {
                 finish();
             }
+
+
         }
     }
 

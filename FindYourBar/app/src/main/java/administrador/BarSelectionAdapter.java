@@ -17,6 +17,9 @@ import java.util.List;
 import bar.Bar;
 import bar.R;
 
+/**
+ * Adapter para un RecyclerView que soporta seleccion multiple
+ */
 public class BarSelectionAdapter extends RecyclerView.Adapter<BarSelectionAdapter.BarHolder> {
     private List<Bar> mBares;
     private SparseBooleanArray mBaresSeleccionados;
@@ -57,6 +60,11 @@ public class BarSelectionAdapter extends RecyclerView.Adapter<BarSelectionAdapte
         notifyItemRemoved(position);
     }
 
+    /**
+     * Borra los bares del adaptador
+     *
+     * @param itemPos list con las posiciones de los elementos a borrar
+     */
     public void removeListBares(List<Integer> itemPos) {
         Collections.sort(itemPos);
         Collections.reverse(itemPos);
@@ -72,14 +80,30 @@ public class BarSelectionAdapter extends RecyclerView.Adapter<BarSelectionAdapte
         return mBares.size();
     }
 
+    /**
+     * Establece los datos a mostrar
+     *
+     * @param bares lista con los bares
+     */
     public void setBares(List<Bar> bares) {
         this.mBares = bares;
     }
 
+    /**
+     * Devuelve si un elemento esta marcado
+     *
+     * @param position posicion del elemento en cuestion
+     * @return true si esta marcado false en caso contrario
+     */
     public boolean isSelected(int position) {
         return getSelectedItems().contains(position);
     }
 
+    /**
+     * Alterna el estado (marcado o no) de un elemento
+     *
+     * @param position posicion del elemento en cuestion
+     */
     public void toggleSelection(int position) {
         if (mBaresSeleccionados.get(position, false)) {
             mBaresSeleccionados.delete(position);
@@ -89,6 +113,9 @@ public class BarSelectionAdapter extends RecyclerView.Adapter<BarSelectionAdapte
         notifyItemChanged(position);
     }
 
+    /**
+     * Pone todos los elementos como no marcados
+     */
     public void clearSelection() {
         List<Integer> selection = getSelectedItems();
         mBaresSeleccionados.clear();
@@ -97,11 +124,20 @@ public class BarSelectionAdapter extends RecyclerView.Adapter<BarSelectionAdapte
         }
     }
 
+    /**
+     * Devuelve el numero de elementos que estan marcados
+     *
+     * @return numero de elementos marcados
+     */
     public int getSelectedItemCount() {
         return mBaresSeleccionados.size();
     }
 
-
+    /**
+     * Devuelve una lista con las posiciones de todos los elementos marcados
+     *
+     * @return lista con las posiciones de todos los elementos marcados
+     */
     public List<Integer> getSelectedItems() {
         List<Integer> items = new ArrayList<>(mBaresSeleccionados.size());
         for (int i = 0; i < mBaresSeleccionados.size(); ++i) {
@@ -110,6 +146,9 @@ public class BarSelectionAdapter extends RecyclerView.Adapter<BarSelectionAdapte
         return items;
     }
 
+    /**
+     * ViewHolder del RecyclerView
+     */
     public static class BarHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         public TextView mNombre;
         public ImageView mImagen;

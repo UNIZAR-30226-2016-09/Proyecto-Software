@@ -99,4 +99,5 @@
     <string name="esta_seguro">¿Esta seguro?</string>
     <string name="si">Si</string>
     <string name="no">No</string>
+    <string name="error_nombre_ya_existe">Un bar con ese nombre ya existe</string>
 </resources>

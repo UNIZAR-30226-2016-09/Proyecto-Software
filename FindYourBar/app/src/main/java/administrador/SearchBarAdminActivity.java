@@ -27,6 +27,10 @@ import bar.SearchBarActivity;
 import database.ConjuntoBares;
 
 
+/**
+ * Pantalla que muestra todos los bares y permite la busqueda y el filtrado de los mismos; permite ademas añadir
+ * un nuevo bar
+ */
 public class SearchBarAdminActivity extends SearchBarActivity implements BarSelectionAdapter.BarHolder.ClickListener {
 
     private ActionMode mActionMode;
@@ -55,6 +59,7 @@ public class SearchBarAdminActivity extends SearchBarActivity implements BarSele
         //handleIntent(getIntent());
         new DescargarListaBares().execute();
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_add_bar);
+        v = fab;
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -119,6 +124,10 @@ public class SearchBarAdminActivity extends SearchBarActivity implements BarSele
         }
     }
 
+    /**
+     * Clase que representa la barra contextual que se muestra cuando el usuario seleeciona un
+     * bar para su edicion o borrado
+     */
     private class MyActionMode implements ActionMode.Callback {
         private static final String CONFIRMATION_DIALOG = "CONFIRMATION_DIALOG";
 
@@ -160,7 +169,9 @@ public class SearchBarAdminActivity extends SearchBarActivity implements BarSele
             }
         }
 
-
+        /**
+         * Borra los barres seleecionados por el usuario
+         */
         private void borrarBares() {
             List<Integer> aux = mAdapter.getSelectedItems();
             String[] nombreBares = new String[mAdapter.getSelectedItemCount()];
@@ -178,6 +189,9 @@ public class SearchBarAdminActivity extends SearchBarActivity implements BarSele
         }
     }
 
+    /**
+     * Hilo que borra del servidor los bares seleccionados por el usuario
+     */
     public class BorrarListaBares extends AsyncTask<String, Void, Void> {
 
         @Override

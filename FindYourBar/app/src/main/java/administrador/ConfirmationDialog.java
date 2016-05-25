@@ -9,6 +9,9 @@ import android.support.v7.app.AlertDialog;
 
 import bar.R;
 
+/**
+ * Dialogo de confirmacion para el borrado de los bares
+ */
 public class ConfirmationDialog extends DialogFragment {
 
     private OnYesClickListener mOnYesClickListener;
